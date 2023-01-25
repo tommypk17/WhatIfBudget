@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatIfBudget.Data", "WhatIf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatIfBudget.Common", "WhatIfBudget.Common\WhatIfBudget.Common.csproj", "{27CBB7F0-D03D-405F-B42D-A1328A8FBBBA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4835D3A5-8C21-4233-9C0F-0CF408305729}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatIfBudget.API.Test", "WhatIfBudget.API.Test\WhatIfBudget.API.Test.csproj", "{37C31BD8-635B-4E94-A83D-867C8683817C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,9 +49,16 @@ Global
 		{27CBB7F0-D03D-405F-B42D-A1328A8FBBBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27CBB7F0-D03D-405F-B42D-A1328A8FBBBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27CBB7F0-D03D-405F-B42D-A1328A8FBBBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37C31BD8-635B-4E94-A83D-867C8683817C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37C31BD8-635B-4E94-A83D-867C8683817C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37C31BD8-635B-4E94-A83D-867C8683817C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37C31BD8-635B-4E94-A83D-867C8683817C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{37C31BD8-635B-4E94-A83D-867C8683817C} = {4835D3A5-8C21-4233-9C0F-0CF408305729}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D9EA1AB2-7A9A-4732-944B-9C054F93BD46}
