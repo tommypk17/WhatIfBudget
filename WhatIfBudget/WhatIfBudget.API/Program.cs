@@ -1,9 +1,25 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
+using WhatIfBudget.Data.DAL;
+using WhatIfBudget.Logic;
+using WhatIfBudget.Logic.Interfaces;
+using WhatIfBudget.Services;
+using WhatIfBudget.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext"));
+});
+
+//Services
+builder.Services.AddScoped<IIncomeService, IncomeService>();
+
+//Logic
+builder.Services.AddScoped<IIncomeLogic, IncomeLogic>();
 
 builder.Services.AddControllers();
 

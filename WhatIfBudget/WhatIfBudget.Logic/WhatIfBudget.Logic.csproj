@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WhatIfBudget.Data\WhatIfBudget.Data.csproj" />
+    <ProjectReference Include="..\WhatIfBudget.Services\WhatIfBudget.Services.csproj" />
+  </ItemGroup>
+
 </Project>
