@@ -204,3 +204,5 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+/WhatIfBudget/WhatIfBudget.App/ClientApp/.vscode
+/WhatIfBudget/WhatIfBudget.App/ClientApp/src/environments/environment.local.ts
