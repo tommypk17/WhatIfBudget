@@ -11,6 +11,11 @@ namespace WhatIfBudget.Logic.Interfaces
     public interface IIncomeLogic
     {
         public IList<IResponseObject> GetUserIncome(Guid userId);
-        public IList<IResponseObject> AddNewUserIncome(Income userIncome);
+
+        public IList<IResponseObject> AddUserIncome(Income incomeToAdd);
+
+        public IList<IResponseObject> ModifyUserIncome(Income incomeToModify);
+
+        public IList<IResponseObject> DeleteUserIncome(Income incomeToRemove);
     }
 }

@@ -29,8 +29,9 @@ namespace WhatIfBudget.Logic
                                                                     Frequency = x.Frequency
                                                                 }).ToList();
         }
-        public IList<IResponseObject> AddNewUserIncome(Income newUserIncome)
+        public IList<IResponseObject> AddUserIncome(Income incomeToAdd)
         {
+            _incomeService.AddNewIncome(incomeToAdd);
             throw new NotImplementedException();
             //if (newUserIncome.Amount > 0)
             //{
@@ -41,6 +42,18 @@ namespace WhatIfBudget.Logic
             //{
             //    throw new ArgumentOutOfRangeException();
             //}
+        }
+
+        public IList<IResponseObject> ModifyUserIncome(Income incomeToModify)
+        {
+            _incomeService.UpdateIncome(incomeToModify);
+            throw new NotImplementedException();
+        }
+
+        public IList<IResponseObject> DeleteUserIncome(Income incomeToRemove)
+        {
+            _incomeService.DeleteIncome(incomeToRemove);
+            throw new NotImplementedException();
         }
     }
 }

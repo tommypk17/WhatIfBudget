@@ -30,7 +30,22 @@ namespace WhatIfBudget.API.Controllers
         [HttpPost]
         public IActionResult Post(Income apiIncome)
         {
-            return StatusCode(StatusCodes.Status200OK, _incomeLogic.AddNewUserIncome(apiIncome));
+            _incomeLogic.AddUserIncome(apiIncome);
+            return StatusCode(StatusCodes.Status200OK);
+        }
+
+        [HttpPut]
+        public IActionResult Put(Income apiIncome)
+        {
+            _incomeLogic.ModifyUserIncome(apiIncome);
+            return StatusCode(StatusCodes.Status200OK);
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(Income apiIncome)
+        {
+            _incomeLogic.DeleteUserIncome(apiIncome);
+            return StatusCode(StatusCodes.Status200OK);
         }
     }
 }

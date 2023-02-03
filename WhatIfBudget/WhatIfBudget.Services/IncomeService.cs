@@ -27,5 +27,17 @@ namespace WhatIfBudget.Services
             _ctx.Incomes.Add(newIncome);
             _ctx.SaveChanges();
         }
+
+        public void UpdateIncome(Income modifiedIncome)
+        {
+            _ctx.Incomes.Update(modifiedIncome);
+            _ctx.SaveChanges();
+        }
+
+        public void DeleteIncome(Income toRemove)
+        {
+            _ctx.Incomes.Remove(toRemove);
+            _ctx.SaveChanges();
+        }
     }
 }
