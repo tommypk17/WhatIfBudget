@@ -23,6 +23,7 @@ import {
 import { environment } from '../environments/environment';
 import { AuthService } from './services/auth.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { SharedModule } from './shared/shared.module';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
@@ -66,7 +67,8 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    MsalModule
+    MsalModule,
+    SharedModule
 
   ],
   providers: [

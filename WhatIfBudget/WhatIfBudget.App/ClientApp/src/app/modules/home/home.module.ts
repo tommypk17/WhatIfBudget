@@ -7,6 +7,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { LoginBlockComponent } from './components/login-block/login-block.component';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
   declarations: [
