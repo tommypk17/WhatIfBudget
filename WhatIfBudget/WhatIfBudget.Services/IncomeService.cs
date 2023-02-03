@@ -25,6 +25,7 @@ namespace WhatIfBudget.Services
         public void AddNewIncome(Income newIncome)
         {
             _ctx.Incomes.Add(newIncome);
+            _ctx.SaveChanges();
         }
     }
 }
