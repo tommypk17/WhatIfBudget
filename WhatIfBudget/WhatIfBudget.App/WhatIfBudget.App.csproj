@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\environments\environment.local.ts" />
+    <Folder Include="ClientApp\src\app\services\" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WhatIfBudget.Common.Models;
 using WhatIfBudget.Logic.Interfaces;
 using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
@@ -18,7 +19,12 @@ namespace WhatIfBudget.API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return StatusCode(StatusCodes.Status200OK, _incomeLogic.GetUserIncome());
+            //grab the user from the passed auth token
+            var currentUser = AuthUser.Current(User);
+            //pass the ID from the auth token to the logic function
+            var res = _incomeLogic.GetUserIncome(currentUser.Id);
+            //return a status of 200 with all the current user's income
+            return StatusCode(StatusCodes.Status200OK, res);
         }
 
         [HttpPost]

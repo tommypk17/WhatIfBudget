@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WhatIfBudget.Common.Interfaces;
 using WhatIfBudget.Logic.Interfaces;
+using WhatIfBudget.Logic.Models;
 using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
 
@@ -17,9 +18,16 @@ namespace WhatIfBudget.Logic
             _incomeService = incomeService;
         }
 
-        public IList<IResponseObject> GetUserIncome()
+        public IList<IResponseObject> GetUserIncome(Guid userId)
         {
-            throw new NotImplementedException();
+            return (IList<IResponseObject>)_incomeService.GetAllIncome()
+                                                            .Where(x => x.UserId == userId)
+                                                            .Select(x => (IResponseObject)new UserIncome()
+                                                                {
+                                                                    Id = x.Id,
+                                                                    Amount = x.Amount,
+                                                                    Frequency = x.Frequency
+                                                                }).ToList();
         }
         public IList<IResponseObject> AddNewUserIncome(Income newUserIncome)
         {
