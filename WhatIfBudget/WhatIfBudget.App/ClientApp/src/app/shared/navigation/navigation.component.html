@@ -3,5 +3,6 @@
   <button pButton class="m-1" label="Incomes" icon="pi pi-money-bill" routerLink="/incomes"></button>
   <button pButton class="m-1" label="Expenses" icon="pi pi-chart-pie" routerLink="/expenses"></button>
   <button pButton class="m-1" label="Goals" icon="pi pi-chart-line" routerLink="/goals"></button>
-  <button pButton class="m-1" label="Profile" icon="pi pi-user" routerLink="/Profile"></button>
+  <p-menu #menu [popup]="true" [model]="items"></p-menu>
+  <button type="button" pButton class="m-1" icon="pi pi-list" label="Show" (click)="menu.toggle($event)"></button>
 </div>

@@ -5,6 +5,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { MenuModule } from 'primeng/menu';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     RouterModule,
     MenubarModule,
     ButtonModule,
-    SplitButtonModule
+    SplitButtonModule,
+    MenuModule
   ],
   exports: [
     NavigationComponent
