@@ -10,5 +10,11 @@ namespace WhatIfBudget.Services.Interfaces
     public interface IIncomeService
     {
         public IList<Income> GetAllIncome();
+
+        public Income? AddNewIncome(Income newIncome);
+
+        public Income? UpdateIncome(Income modifiedIncome);
+
+        public Income? DeleteIncome(int id);
     }
 }
