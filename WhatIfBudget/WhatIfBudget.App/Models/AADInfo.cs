@@ -6,4 +6,5 @@ public class AADInfo
     public string Authority { get; set; }
     public string RedirectUri { get; set; }
     public string KnownAuthorities { get; set; }
+    public string DefaultScope { get; set; }
 }

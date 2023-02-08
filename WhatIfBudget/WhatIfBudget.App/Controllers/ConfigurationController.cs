@@ -27,6 +27,7 @@ namespace WhatIfBudget.App.Controllers
                 Authority = _config.GetSection("AzureAd:Authority").Get<string>(),
                 RedirectUri = _config.GetSection("AzureAd:RedirectUri").Get<string>(),
                 KnownAuthorities = _config.GetSection("AzureAd:KnownAuthorities").Get<string>(),
+                DefaultScope = _config.GetSection("AzureAd:DefaultScope").Get<string>(),
             };
             return StatusCode(StatusCodes.Status200OK, res);
         }
