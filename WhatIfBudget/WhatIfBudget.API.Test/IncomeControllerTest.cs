@@ -5,7 +5,6 @@ using Moq;
 using Newtonsoft.Json.Linq;
 using System.Security.Claims;
 using WhatIfBudget.API.Controllers;
-using WhatIfBudget.Common.Interfaces;
 using WhatIfBudget.Data.Models;
 using WhatIfBudget.Logic;
 using WhatIfBudget.Logic.Interfaces;
@@ -21,7 +20,7 @@ namespace WhatIfBudget.API.Test
         {
             //mock income logic
             var mockIncomeLogic = new Mock<IIncomeLogic>();
-            mockIncomeLogic.Setup(x => x.GetUserIncome(Guid.Empty)).Returns((IList<IResponseObject>)new List<IResponseObject>()
+            mockIncomeLogic.Setup(x => x.GetUserIncome(Guid.Empty)).Returns(new List<UserIncome>()
                 {
                     new UserIncome() { Id = 1, Amount = 100, Frequency = 0 },
                     new UserIncome() { Id = 2, Amount = 100, Frequency = 0 },
@@ -38,7 +37,7 @@ namespace WhatIfBudget.API.Test
                 }
             };
 
-            var expectedValue = (IList<IResponseObject>)new List<IResponseObject>()
+            var expectedValue = new List<UserIncome>()
                     {
                         new UserIncome() { Id = 1, Amount = 100, Frequency = 0},
                         new UserIncome() { Id = 2, Amount = 100, Frequency = 0 },

@@ -4,6 +4,7 @@ using WhatIfBudget.Common.Models;
 using WhatIfBudget.Logic.Interfaces;
 using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
+using WhatIfBudget.Logic.Models;
 
 namespace WhatIfBudget.API.Controllers
 {
@@ -28,9 +29,12 @@ namespace WhatIfBudget.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(Income apiIncome)
+        public IActionResult Post(UserIncome apiIncome)
         {
-            var res = _incomeLogic.AddUserIncome(apiIncome);
+            //grab the user from the passed auth token
+            var currentUser = AuthUser.Current(User);
+
+            var res = _incomeLogic.AddUserIncome(currentUser.Id, apiIncome);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);
@@ -42,9 +46,12 @@ namespace WhatIfBudget.API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put(Income apiIncome)
+        public IActionResult Put(UserIncome apiIncome)
         {
-            var res = _incomeLogic.ModifyUserIncome(apiIncome);
+            //grab the user from the passed auth token
+            var currentUser = AuthUser.Current(User);
+
+            var res = _incomeLogic.ModifyUserIncome(currentUser.Id, apiIncome);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);
@@ -58,7 +65,10 @@ namespace WhatIfBudget.API.Controllers
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var res = _incomeLogic.DeleteUserIncome(id);
+            //grab the user from the passed auth token
+            var currentUser = AuthUser.Current(User);
+
+            var res = _incomeLogic.DeleteUserIncome(currentUser.Id, id);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);
