@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,22 +23,50 @@ namespace WhatIfBudget.Services
             return _ctx.Incomes.ToList();
         }
 
-        public void AddNewIncome(Income newIncome)
+        public Income AddNewIncome(Income income)
         {
-            _ctx.Incomes.Add(newIncome);
-            _ctx.SaveChanges();
+            _ctx.Incomes.Add(income);
+            try
+            {
+                _ctx.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                return null;
+            }
+            return _ctx.Incomes.FirstOrDefault(x=> x.Id == income.Id);
         }
 
-        public void UpdateIncome(Income modifiedIncome)
+        public Income UpdateIncome(Income income)
         {
-            _ctx.Incomes.Update(modifiedIncome);
-            _ctx.SaveChanges();
+            _ctx.Incomes.Update(income);
+            try
+            {
+                _ctx.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                return null;
+            }
+            return _ctx.Incomes.FirstOrDefault(x=> x.Id == income.Id);
         }
 
-        public void DeleteIncome(Income toRemove)
+        public Income DeleteIncome(int id)
         {
-            _ctx.Incomes.Remove(toRemove);
-            _ctx.SaveChanges();
+            var Income = _ctx.Incomes.FirstOrDefault(x => x.Id == id); 
+            if (Income != null)
+            {
+                _ctx.Incomes.Remove(Income);
+            }
+            try
+            {
+                _ctx.SaveChanges();
+                return Income;
+             }
+            catch(DbUpdateException ex)
+            {
+                return null;
+            }
         }
     }
 }

@@ -29,31 +29,50 @@ namespace WhatIfBudget.Logic
                                                                     Frequency = x.Frequency
                                                                 }).ToList();
         }
-        public IList<IResponseObject> AddUserIncome(Income incomeToAdd)
+        public IResponseObject AddUserIncome(Income income)
         {
-            _incomeService.AddNewIncome(incomeToAdd);
-            throw new NotImplementedException();
-            //if (newUserIncome.Amount > 0)
-            //{
-            //    _incomeService.AddNewIncome(newUserIncome);
-            //    throw new NotImplementedException();
-            //}
-            //else
-            //{
-            //    throw new ArgumentOutOfRangeException();
-            //}
+            var dbIncome = _incomeService.AddNewIncome(income);
+            if (dbIncome == null)
+            {
+                throw new NullReferenceException();
+            }
+            return new UserIncome()
+            {
+                Id = dbIncome.Id,
+                Amount = dbIncome.Amount,
+                Frequency = dbIncome.Frequency
+            };
+                        
         }
 
-        public IList<IResponseObject> ModifyUserIncome(Income incomeToModify)
+        public IResponseObject ModifyUserIncome(Income income)
         {
-            _incomeService.UpdateIncome(incomeToModify);
-            throw new NotImplementedException();
+            var dbIncome = _incomeService.UpdateIncome(income);
+            if (dbIncome == null)
+            {
+                throw new NullReferenceException();
+            }
+            return new UserIncome()
+            {
+                Id = dbIncome.Id,
+                Amount = dbIncome.Amount,
+                Frequency = dbIncome.Frequency
+            };
         }
 
-        public IList<IResponseObject> DeleteUserIncome(Income incomeToRemove)
+        public IResponseObject DeleteUserIncome(int id)
         {
-            _incomeService.DeleteIncome(incomeToRemove);
-            throw new NotImplementedException();
+            var dbIncome = _incomeService.DeleteIncome(id);
+            if (dbIncome == null)
+            {
+                throw new NullReferenceException();
+            }
+            return new UserIncome()
+            {
+                Id = dbIncome.Id,
+                Amount = dbIncome.Amount,
+                Frequency = dbIncome.Frequency
+            };
         }
     }
 }
