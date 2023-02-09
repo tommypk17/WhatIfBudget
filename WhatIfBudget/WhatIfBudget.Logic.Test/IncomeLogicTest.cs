@@ -5,6 +5,7 @@ using WhatIfBudget.Logic.Interfaces;
 using WhatIfBudget.Services;
 using WhatIfBudget.Logic.Models;
 using WhatIfBudget.Data.Models;
+using WhatIfBudget.Common.Enumerations;
 
 namespace WhatIfBudget.Logic.Test
 {
@@ -44,6 +45,41 @@ namespace WhatIfBudget.Logic.Test
             };
 
             var actual = incomeLogic.GetUserIncomes(Guid.Empty);
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void AddUserIncome_CollectionAreEqual()
+        {
+            var mock = new Mock<IIncomeService>();
+
+            mock.Setup(x => x.AddNewIncome(It.IsAny<Income>())).Returns(
+                    new Income()
+                    {
+                        Id = 1,
+                        Amount = 100,
+                        Frequency = EFrequency.None,
+                        UserId = Guid.Empty,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                );
+            var incomeLogic = new IncomeLogic(mock.Object);
+
+            var expected = new UserIncome()
+            {
+                Id = 1,
+                Amount = 100,
+                Frequency = EFrequency.None,
+            };
+
+            var actual = incomeLogic.AddUserIncome(Guid.Empty, new UserIncome()
+            {
+                Id = 1,
+                Amount = 100,
+                Frequency = EFrequency.None,
+            });
 
             actual.Should().BeEquivalentTo(expected);
         }

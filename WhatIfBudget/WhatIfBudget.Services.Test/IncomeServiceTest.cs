@@ -13,6 +13,14 @@ namespace WhatIfBudget.Services.Test
         private IIncomeService _incomeService;
         private AppDbContext _ctx;
 
+        [TestCleanup()]
+        public void TestCleanUp()
+        {
+            var allIncomes = _ctx.Incomes.ToList();
+            _ctx.Incomes.RemoveRange(allIncomes);
+            _ctx.SaveChanges();
+        }
+
         public IncomeServiceTest()
         {
             DbContextOptions<AppDbContext> options;
@@ -31,6 +39,37 @@ namespace WhatIfBudget.Services.Test
             var expected = (List<Income>)Helper_SeedIncomes();
 
             var actual = (List<Income>)_incomeService.GetAllIncome();
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void AddNewIncome_CollectionAreEqual()
+        {
+            var expected = new List<Income>
+            {
+                new Income()
+                {
+                    Id = 11,
+                    Amount = 11 * 102,
+                    Frequency = EFrequency.None,
+                    UserId = Guid.Empty,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                }
+            };
+
+            _incomeService.AddNewIncome(new Income()
+            {
+                Id = 11,
+                Amount = 11 * 102,
+                Frequency = EFrequency.None,
+                UserId = Guid.Empty,
+                CreatedOn = DateTime.MinValue,
+                UpdatedOn = DateTime.MinValue
+            });
+
+            var actual = _ctx.Incomes.Where(x => x.UserId == Guid.Empty).ToList();
 
             actual.Should().BeEquivalentTo(expected);
         }
