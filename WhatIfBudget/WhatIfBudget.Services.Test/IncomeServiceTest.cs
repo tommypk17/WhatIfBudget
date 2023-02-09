@@ -110,6 +110,21 @@ namespace WhatIfBudget.Services.Test
             Assert.AreEqual(actual.UserId, expected.UserId);
         }
 
+        [TestMethod]
+        public void DeleteIncome_CollectionAreEqual()
+        {
+            Helper_SeedDB();
+            var expected = (List<Income>)Helper_SeedIncomes();
+            var toRemove = expected.First();
+            expected.Remove(toRemove);
+
+            _incomeService.DeleteIncome(toRemove.Id);
+
+            var actual = _ctx.Incomes.ToList();
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
         public void Helper_SeedDB()
         {
             _ctx.Incomes.AddRange(Helper_SeedIncomes());

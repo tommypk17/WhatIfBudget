@@ -119,5 +119,35 @@ namespace WhatIfBudget.Logic.Test
             actual.Should().BeEquivalentTo(expected);
         }
 
+        [TestMethod]
+        public void DeleteUserIncome_CollectionAreEqual()
+        {
+            var mock = new Mock<IIncomeService>();
+
+            mock.Setup(x => x.DeleteIncome(It.IsAny<int>())).Returns(
+                    new Income()
+                    {
+                        Id = 1,
+                        Amount = 101,
+                        Frequency = EFrequency.None,
+                        UserId = Guid.Empty,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                );
+            var incomeLogic = new IncomeLogic(mock.Object);
+
+            var expected = new UserIncome()
+            {
+                Id = 1,
+                Amount = 101,
+                Frequency = EFrequency.None,
+            };
+
+            var actual = incomeLogic.DeleteUserIncome(Guid.Empty, 1);
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
     }
 }
