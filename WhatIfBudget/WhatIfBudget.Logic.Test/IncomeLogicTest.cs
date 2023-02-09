@@ -4,7 +4,6 @@ using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Logic.Interfaces;
 using WhatIfBudget.Services;
 using WhatIfBudget.Logic.Models;
-using WhatIfBudget.Common.Interfaces;
 using WhatIfBudget.Data.Models;
 
 namespace WhatIfBudget.Logic.Test
