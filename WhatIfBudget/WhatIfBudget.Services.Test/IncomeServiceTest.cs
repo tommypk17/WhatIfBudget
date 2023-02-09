@@ -74,6 +74,42 @@ namespace WhatIfBudget.Services.Test
             actual.Should().BeEquivalentTo(expected);
         }
 
+        [TestMethod]
+        public void UpdateIncome_CollectionAreEqual()
+        {
+            _ctx.Incomes.Add(new Income()
+            {
+                Id = 1,
+                Amount = 1,
+                Frequency = EFrequency.None,
+                UserId = Guid.Empty,
+            });
+            _ctx.SaveChanges();
+            _ctx.ChangeTracker.Clear();
+
+            var expected = new Income()
+            {
+                Id = 1,
+                Amount = 100,
+                Frequency = EFrequency.None,
+                UserId = Guid.Empty,
+            };
+
+            var actual = _incomeService.UpdateIncome(new Income()
+            {
+                Id = 1,
+                Amount = 100,
+                Frequency = EFrequency.None,
+                UserId = Guid.Empty,
+            });
+            Assert.IsNotNull(actual);
+
+            Assert.AreEqual(actual.Id, expected.Id);
+            Assert.AreEqual(actual.Amount, expected.Amount);
+            Assert.AreEqual(actual.Frequency, expected.Frequency);
+            Assert.AreEqual(actual.UserId, expected.UserId);
+        }
+
         public void Helper_SeedDB()
         {
             _ctx.Incomes.AddRange(Helper_SeedIncomes());

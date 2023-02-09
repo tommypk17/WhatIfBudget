@@ -84,5 +84,40 @@ namespace WhatIfBudget.Logic.Test
             actual.Should().BeEquivalentTo(expected);
         }
 
+        [TestMethod]
+        public void ModifyUserIncome_CollectionAreEqual()
+        {
+            var mock = new Mock<IIncomeService>();
+
+            mock.Setup(x => x.UpdateIncome(It.IsAny<Income>())).Returns(
+                    new Income()
+                    {
+                        Id = 1,
+                        Amount = 101,
+                        Frequency = EFrequency.None,
+                        UserId = Guid.Empty,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                );
+            var incomeLogic = new IncomeLogic(mock.Object);
+
+            var expected = new UserIncome()
+            {
+                Id = 1,
+                Amount = 101,
+                Frequency = EFrequency.None,
+            };
+
+            var actual = incomeLogic.ModifyUserIncome(Guid.Empty, new UserIncome()
+            {
+                Id = 1,
+                Amount = 101,
+                Frequency = EFrequency.None,
+            });
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
     }
 }

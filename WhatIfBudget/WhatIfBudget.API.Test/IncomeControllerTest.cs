@@ -85,6 +85,36 @@ namespace WhatIfBudget.API.Test
             actual.Should().BeEquivalentTo(expected);
         }
 
+        [TestMethod]
+        public void Put_UserIncomeUpdated()
+        {
+            //mock income logic
+            var mockIncomeLogic = new Mock<IIncomeLogic>();
+            mockIncomeLogic.Setup(x => x.ModifyUserIncome(Guid.Empty, It.IsAny<UserIncome>()))
+                            .Returns(new UserIncome() { Id = 1, Amount = 101, Frequency = 0 });
+
+            //Setup the http context (for auth)
+            var incomeController = new IncomesController(mockIncomeLogic.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new UserIncome() { Id = 1, Amount = 101, Frequency = 0 };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = incomeController.Put(new UserIncome() { Id = 1, Amount = 101, Frequency = 0 });
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
         public Mock<HttpContext> Helper_MockHttpContext()
         {
             //Mock the principal & http context to pass in a fake user
