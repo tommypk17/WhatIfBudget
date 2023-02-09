@@ -19,6 +19,15 @@ namespace WhatIfBudget.API.Controllers
             _expenseLogic = expenseLogic;
         }
 
+        [HttpGet]
+        public IActionResult Get()
+        {
+            //grab the user from the passed auth token
+            var currentUser = AuthUser.Current(User);
+            var res = _expenseLogic.GetUserExpenses(currentUser.Id);
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
         [HttpPost]
         public IActionResult Post(UserExpense apiExpense)
         {

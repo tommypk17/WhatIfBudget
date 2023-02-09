@@ -20,7 +20,7 @@ namespace WhatIfBudget.API.Test
         {
             //mock income logic
             var mockIncomeLogic = new Mock<IIncomeLogic>();
-            mockIncomeLogic.Setup(x => x.GetUserIncome(Guid.Empty)).Returns(new List<UserIncome>()
+            mockIncomeLogic.Setup(x => x.GetUserIncomes(Guid.Empty)).Returns(new List<UserIncome>()
                 {
                     new UserIncome() { Id = 1, Amount = 100, Frequency = 0 },
                     new UserIncome() { Id = 2, Amount = 100, Frequency = 0 },

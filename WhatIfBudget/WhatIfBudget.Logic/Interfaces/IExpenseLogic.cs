@@ -10,6 +10,8 @@ namespace WhatIfBudget.Logic.Interfaces
 {
     public interface IExpenseLogic
     {
+        public IList<UserExpense> GetUserExpenses(Guid userId);
+
         public UserExpense? AddUserExpense(Guid userId, UserExpense expense);
     }
 }

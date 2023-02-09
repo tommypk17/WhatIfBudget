@@ -18,7 +18,7 @@ namespace WhatIfBudget.Logic.Test
 
 
         [TestMethod]
-        public void GetUserIncome_CollectionAreEqual()
+        public void GetUserIncomes_CollectionAreEqual()
         {
             var mock = new Mock<IIncomeService>();
             mock.Setup(x => x.GetAllIncome()).Returns(
@@ -43,7 +43,7 @@ namespace WhatIfBudget.Logic.Test
                 new UserIncome() {Id = 5, Amount = 100, Frequency = 0}
             };
 
-            var actual = incomeLogic.GetUserIncome(Guid.Empty);
+            var actual = incomeLogic.GetUserIncomes(Guid.Empty);
 
             actual.Should().BeEquivalentTo(expected);
         }

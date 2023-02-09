@@ -17,7 +17,7 @@ namespace WhatIfBudget.Logic
             _incomeService = incomeService;
         }
 
-        public IList<UserIncome> GetUserIncome(Guid userId)
+        public IList<UserIncome> GetUserIncomes(Guid userId)
         {
             return _incomeService.GetAllIncome()
                                                 .Where(x => x.UserId == userId)

@@ -17,6 +17,11 @@ namespace WhatIfBudget.Logic
             _expenseService = expenseService;
         }
 
+        public IList<UserExpense> GetUserExpenses(Guid userId)
+        {
+            return _expenseService.GetAllExpenses().Where(x => x.UserId == userId).Select(x => UserExpense.FromExpense(x)).ToList();
+        }
+
         public UserExpense AddUserExpense(Guid userId, UserExpense expense)
         {
             var toCreate = expense.ToExpense(userId);

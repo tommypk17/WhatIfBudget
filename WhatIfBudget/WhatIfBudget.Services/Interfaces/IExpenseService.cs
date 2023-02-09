@@ -9,6 +9,8 @@ namespace WhatIfBudget.Services.Interfaces
 {
     public interface IExpenseService
     {
+        public IList<Expense> GetAllExpenses();
+
         public Expense? AddNewExpense(Expense newExpense);
     }
 }

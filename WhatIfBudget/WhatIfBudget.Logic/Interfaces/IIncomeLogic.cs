@@ -10,7 +10,7 @@ namespace WhatIfBudget.Logic.Interfaces
 {
     public interface IIncomeLogic
     {
-        public IList<UserIncome> GetUserIncome(Guid userId);
+        public IList<UserIncome> GetUserIncomes(Guid userId);
 
         public UserIncome? AddUserIncome(Guid userId, UserIncome income);
 

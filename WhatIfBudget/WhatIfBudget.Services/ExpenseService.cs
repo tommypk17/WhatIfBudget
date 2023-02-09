@@ -18,6 +18,11 @@ namespace WhatIfBudget.Services
             _ctx = ctx;
         }
 
+        public IList<Expense> GetAllExpenses()
+        {
+            return _ctx.Expenses.ToList();
+        }
+
         public Expense AddNewExpense(Expense expense)
         {
             _ctx.Expenses.Add(expense);
