@@ -5,9 +5,11 @@ using WhatIfBudget.Logic.Interfaces;
 using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
 using WhatIfBudget.Logic.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WhatIfBudget.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class IncomesController : ControllerBase
