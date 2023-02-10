@@ -36,5 +36,19 @@ namespace WhatIfBudget.Services
             }
             return _ctx.Expenses.FirstOrDefault(x=> x.Id == expense.Id);
         }
+
+        public Expense? UpdateExpense(Expense expense)
+        {
+            _ctx.Expenses.Update(expense);
+            try
+            {
+                _ctx.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                return null;
+            }
+            return _ctx.Expenses.FirstOrDefault(x => x.Id == expense.Id);
+        }
     }
 }

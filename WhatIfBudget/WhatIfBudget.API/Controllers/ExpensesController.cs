@@ -44,5 +44,22 @@ namespace WhatIfBudget.API.Controllers
                 return StatusCode(StatusCodes.Status200OK, res);
             }
         }
+
+        [HttpPut]
+        public IActionResult Put(UserExpense apiExpense)
+        {
+            //grab the user from the passed auth token
+            var currentUser = AuthUser.Current(User);
+
+            var res = _expenseLogic.ModifyUserExpense(currentUser.Id, apiExpense);
+            if (res == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, res);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status200OK, res);
+            }
+        }
     }
 }

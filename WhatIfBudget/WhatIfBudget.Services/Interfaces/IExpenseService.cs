@@ -12,5 +12,6 @@ namespace WhatIfBudget.Services.Interfaces
         public IList<Expense> GetAllExpenses();
 
         public Expense? AddNewExpense(Expense newExpense);
+        public Expense? UpdateExpense(Expense modifiedExpense);
     }
 }

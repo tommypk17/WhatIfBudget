@@ -7,6 +7,7 @@ using WhatIfBudget.Logic.Interfaces;
 using WhatIfBudget.Logic.Models;
 using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
+using WhatIfBudget.Services;
 
 namespace WhatIfBudget.Logic
 {
@@ -27,6 +28,18 @@ namespace WhatIfBudget.Logic
             var toCreate = expense.ToExpense(userId);
 
             var dbExpense = _expenseService.AddNewExpense(toCreate);
+            if (dbExpense == null)
+            {
+                throw new NullReferenceException();
+            }
+            return UserExpense.FromExpense(dbExpense);
+        }
+
+        public UserExpense? ModifyUserExpense(Guid userId, UserExpense expense)
+        {
+            var toUpdate = expense.ToExpense(userId);
+
+            var dbExpense = _expenseService.UpdateExpense(toUpdate);
             if (dbExpense == null)
             {
                 throw new NullReferenceException();
