@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { IncomeService } from '../../../../services/income.service';
+import { Income } from '../../../../shared/models/income';
 
 @Component({
   selector: 'app-income',
@@ -7,9 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IncomeComponent implements OnInit {
 
-  constructor() { }
+  incomes: Income[] = [];
+
+  constructor(private incomeService: IncomeService) { }
 
   ngOnInit(): void {
+    this.incomeService.getIncomes().subscribe((res: Income[]) => {
+      if (res) this.incomes = res;
+    });
+  }
+
+  incomeAdded(): void {
+    this.incomeService.getIncomes().subscribe((res: Income[]) => {
+      if (res) this.incomes = res;
+    });
   }
 
 }

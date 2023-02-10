@@ -2,10 +2,10 @@
   <div class="d-flex w-100 flex-column mx-1">
     <p-card>
       <div class="mb-1">
-        <app-income-entry-form></app-income-entry-form>
+        <app-income-entry-form (added)="incomeAdded()"></app-income-entry-form>
       </div>
       <div class="mt-1">
-        <app-income-listing></app-income-listing>
+        <app-income-listing [incomes]="incomes"></app-income-listing>
       </div>
     </p-card>
   </div>

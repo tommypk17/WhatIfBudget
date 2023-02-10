@@ -1,5 +1,5 @@
 import { KeyValue } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { IncomeService } from '../../../../services/income.service';
 import { SharedService } from '../../../../services/shared.service';
@@ -11,6 +11,8 @@ import { Income } from '../../../../shared/models/income';
   styleUrls: ['./income-entry-form.component.scss']
 })
 export class IncomeEntryFormComponent implements OnInit {
+  @Output('added') added: EventEmitter<void> = new EventEmitter();
+
   frequencies: KeyValue<number, string>[] = this.sharedService.frequencies;
   model: Income = new Income();
 
@@ -21,7 +23,7 @@ export class IncomeEntryFormComponent implements OnInit {
 
   onSubmit(event: NgForm): void {
     this.incomeService.saveIncome(event.value as Income).subscribe((res: Income) => {
-      console.log('Saved!')
+      this.added.emit();
     });
   }
 
