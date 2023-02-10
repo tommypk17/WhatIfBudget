@@ -14,7 +14,6 @@ import { TableModule } from 'primeng/table';
 import { IncomeListingComponent } from './components/income-listing/income-listing.component';
 import { IncomeDetailSectionComponent } from './components/income-detail-section/income-detail-section.component';
 import { IncomeMonthlyDetailSectionComponent } from './components/income-monthly-detail-section/income-monthly-detail-section.component';
-import { ExpenseDetailSectionComponent } from '../expense/components/expense-detail-section/expense-detail-section.component';
 
 
 @NgModule({
@@ -24,7 +23,6 @@ import { ExpenseDetailSectionComponent } from '../expense/components/expense-det
     IncomeListingComponent,
     IncomeDetailSectionComponent,
     IncomeMonthlyDetailSectionComponent,
-    ExpenseDetailSectionComponent
   ],
   imports: [
     CommonModule,
