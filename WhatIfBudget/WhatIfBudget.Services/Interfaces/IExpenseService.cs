@@ -13,5 +13,7 @@ namespace WhatIfBudget.Services.Interfaces
 
         public Expense? AddNewExpense(Expense newExpense);
         public Expense? UpdateExpense(Expense modifiedExpense);
+        public Expense? DeleteExpense(int id);
+
     }
 }

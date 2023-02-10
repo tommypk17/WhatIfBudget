@@ -14,5 +14,7 @@ namespace WhatIfBudget.Logic.Interfaces
 
         public UserExpense? AddUserExpense(Guid userId, UserExpense expense);
         public UserExpense? ModifyUserExpense(Guid userId, UserExpense expense);
+        public UserExpense? DeleteUserExpense(Guid userId, int id);
+
     }
 }

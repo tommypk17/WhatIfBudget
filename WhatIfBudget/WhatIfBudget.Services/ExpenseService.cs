@@ -50,5 +50,23 @@ namespace WhatIfBudget.Services
             }
             return _ctx.Expenses.FirstOrDefault(x => x.Id == expense.Id);
         }
+
+        public Expense? DeleteExpense(int id)
+        {
+            var Expense = _ctx.Expenses.FirstOrDefault(x => x.Id == id);
+            if (Expense != null)
+            {
+                _ctx.Expenses.Remove(Expense);
+            }
+            try
+            {
+                _ctx.SaveChanges();
+                return Expense;
+            }
+            catch (DbUpdateException)
+            {
+                return null;
+            }
+        }
     }
 }

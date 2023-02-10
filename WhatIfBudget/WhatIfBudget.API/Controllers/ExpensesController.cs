@@ -6,6 +6,7 @@ using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
 using WhatIfBudget.Logic.Models;
 using Microsoft.AspNetCore.Authorization;
+using WhatIfBudget.Logic;
 
 namespace WhatIfBudget.API.Controllers
 {
@@ -52,6 +53,23 @@ namespace WhatIfBudget.API.Controllers
             var currentUser = AuthUser.Current(User);
 
             var res = _expenseLogic.ModifyUserExpense(currentUser.Id, apiExpense);
+            if (res == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, res);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status200OK, res);
+            }
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            //grab the user from the passed auth token
+            var currentUser = AuthUser.Current(User);
+
+            var res = _expenseLogic.DeleteUserExpense(currentUser.Id, id);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);

@@ -46,5 +46,15 @@ namespace WhatIfBudget.Logic
             }
             return UserExpense.FromExpense(dbExpense);
         }
+
+        public UserExpense? DeleteUserExpense(Guid userId, int id)
+        {
+            var dbExpense = _expenseService.DeleteExpense(id);
+            if (dbExpense == null)
+            {
+                throw new NullReferenceException();
+            }
+            return UserExpense.FromExpense(dbExpense);
+        }
     }
 }
