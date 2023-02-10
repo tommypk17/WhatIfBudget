@@ -23,14 +23,14 @@ namespace WhatIfBudget.Services
             return _ctx.Expenses.ToList();
         }
 
-        public Expense AddNewExpense(Expense expense)
+        public Expense? AddNewExpense(Expense expense)
         {
             _ctx.Expenses.Add(expense);
             try
             {
                 _ctx.SaveChanges();
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 return null;
             }
