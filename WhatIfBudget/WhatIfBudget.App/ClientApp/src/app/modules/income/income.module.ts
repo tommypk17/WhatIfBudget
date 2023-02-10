@@ -12,12 +12,17 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
 import { TableModule } from 'primeng/table';
 import { IncomeListingComponent } from './components/income-listing/income-listing.component';
+import { IncomeDetailSectionComponent } from './components/income-detail-section/income-detail-section.component';
+import { IncomeMonthlyDetailSectionComponent } from './components/income-monthly-detail-section/income-monthly-detail-section.component';
+
 
 @NgModule({
   declarations: [
     IncomeComponent,
     IncomeEntryFormComponent,
-    IncomeListingComponent
+    IncomeListingComponent,
+    IncomeDetailSectionComponent,
+    IncomeMonthlyDetailSectionComponent,
   ],
   imports: [
     CommonModule,
