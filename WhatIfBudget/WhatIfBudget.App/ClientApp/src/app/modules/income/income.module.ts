@@ -10,11 +10,14 @@ import { IncomeEntryFormComponent } from './components/income-entry-form/income-
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
+import { TableModule } from 'primeng/table';
+import { IncomeListingComponent } from './components/income-listing/income-listing.component';
 
 @NgModule({
   declarations: [
     IncomeComponent,
-    IncomeEntryFormComponent
+    IncomeEntryFormComponent,
+    IncomeListingComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +27,8 @@ import { DropdownModule } from 'primeng/dropdown';
     CardModule,
     ButtonModule,
     InputNumberModule,
-    DropdownModule
+    DropdownModule,
+    TableModule
   ]
 })
 export class IncomeModule { }
