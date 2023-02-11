@@ -14,6 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\shared\enums\epriority.ts" />
+    <None Remove="ClientApp\src\app\shared\models\expense.ts" />
     <None Remove="ClientApp\src\app\shared\models\income - Copy.ts" />
     <None Remove="ClientApp\src\app\shared\models\income.ts" />
   </ItemGroup>
@@ -30,6 +32,8 @@
     <TypeScriptCompile Include="ClientApp\src\app\shared\enums\efrequency.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\shared\enums\epriority.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\models\expense.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\shared\models\income.ts" />
   </ItemGroup>
 

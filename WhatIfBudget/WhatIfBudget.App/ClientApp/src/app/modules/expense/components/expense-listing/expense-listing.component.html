@@ -1,0 +1,34 @@
+<div>
+  <h3>Need</h3>
+  <p-table [value]="model | needWantFilter : 1 : 'priority'">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Amount</th>
+        <th>Frequency</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-expense>
+      <tr>
+        <td>{{expense.amount}}</td>
+        <td>{{displayFrequencies(expense.frequency)}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<div>
+  <h3>Want</h3>
+  <p-table [value]="model | needWantFilter : 0 : 'priority'">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Amount</th>
+        <th>Frequency</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-expense>
+      <tr>
+        <td>{{expense.amount}}</td>
+        <td>{{displayFrequencies(expense.frequency)}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
