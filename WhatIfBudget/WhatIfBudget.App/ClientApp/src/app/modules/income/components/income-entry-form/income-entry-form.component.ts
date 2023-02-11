@@ -24,6 +24,7 @@ export class IncomeEntryFormComponent implements OnInit {
   onSubmit(event: NgForm): void {
     this.incomeService.saveIncome(event.value as Income).subscribe((res: Income) => {
       this.added.emit();
+      this.model = new Income();
     });
   }
 
