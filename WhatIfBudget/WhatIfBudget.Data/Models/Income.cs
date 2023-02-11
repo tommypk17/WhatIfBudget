@@ -10,6 +10,7 @@ namespace WhatIfBudget.Data.Models
     public class Income : BaseEntity
     {
         public Guid UserId { get; set; }
+        public string Name { get; set; } = String.Empty;
         public double Amount { get; set; } = 0;
         public EFrequency Frequency { get; set; } = EFrequency.None;
     }
