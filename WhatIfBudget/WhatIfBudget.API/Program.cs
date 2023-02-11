@@ -16,9 +16,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 //Services
+builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IIncomeService, IncomeService>();
 
 //Logic
+builder.Services.AddScoped<IExpenseLogic, ExpenseLogic>();
 builder.Services.AddScoped<IIncomeLogic, IncomeLogic>();
 
 builder.Services.AddControllers();
