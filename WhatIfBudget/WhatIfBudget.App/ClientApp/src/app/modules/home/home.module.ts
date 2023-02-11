@@ -12,14 +12,12 @@ import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
 
-import { ExampleFormComponent } from './components/example-form/example-form.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     LoginComponent,
-    LoginBlockComponent,
-    ExampleFormComponent
+    LoginBlockComponent
   ],
   imports: [
     CommonModule,
