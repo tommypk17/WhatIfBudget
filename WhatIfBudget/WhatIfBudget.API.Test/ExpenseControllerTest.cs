@@ -9,6 +9,7 @@ using WhatIfBudget.Data.Models;
 using WhatIfBudget.Logic;
 using WhatIfBudget.Logic.Interfaces;
 using WhatIfBudget.Logic.Models;
+using WhatIfBudget.Common.Enumerations;
 
 namespace WhatIfBudget.API.Test
 {
@@ -22,9 +23,9 @@ namespace WhatIfBudget.API.Test
             var mockExpenseLogic = new Mock<IExpenseLogic>();
             mockExpenseLogic.Setup(x => x.GetUserExpenses(Guid.Empty)).Returns(new List<UserExpense>()
                 {
-                    new UserExpense() { Id = 1, Amount = 100, Frequency = 0, Priority = 0 },
-                    new UserExpense() { Id = 2, Amount = 100, Frequency = 0, Priority = 0  },
-                    new UserExpense() { Id = 3, Amount = 100, Frequency = 0, Priority = 0 },
+                    new UserExpense() { Id = 1, Amount = 100, Frequency = EFrequency.None, Priority = EPriority.Need },
+                    new UserExpense() { Id = 2, Amount = 100, Frequency = EFrequency.Weekly, Priority = EPriority.Need },
+                    new UserExpense() { Id = 3, Amount = 100, Frequency = EFrequency.Monthly, Priority = EPriority.Want },
                 }
             );
 
@@ -39,9 +40,9 @@ namespace WhatIfBudget.API.Test
 
             var expectedValue = new List<UserExpense>()
                     {
-                        new UserExpense() { Id = 1, Amount = 100, Frequency = 0},
-                        new UserExpense() { Id = 2, Amount = 100, Frequency = 0 },
-                        new UserExpense() { Id = 3, Amount = 100, Frequency = 0 },
+                        new UserExpense() { Id = 1, Amount = 100, Frequency = EFrequency.None, Priority = EPriority.Need },
+                        new UserExpense() { Id = 2, Amount = 100, Frequency = EFrequency.Weekly, Priority = EPriority.Need },
+                        new UserExpense() { Id = 3, Amount = 100, Frequency = EFrequency.Monthly, Priority = EPriority.Want },
                     };
 
             var expected = new ObjectResult(expectedValue)
@@ -50,6 +51,96 @@ namespace WhatIfBudget.API.Test
             };
 
             var actual = expenseController.Get();
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void Post_UserExpenseCreated()
+        {
+            //mock expense logic
+            var mockExpenseLogic = new Mock<IExpenseLogic>();
+            mockExpenseLogic.Setup(x => x.AddUserExpense(Guid.Empty, It.IsAny<UserExpense>()))
+                            .Returns(new UserExpense() { Id = 1, Amount = 100, Frequency = EFrequency.None, Priority = EPriority.Need });
+
+            //Setup the http context (for auth)
+            var expenseController = new ExpensesController(mockExpenseLogic.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new UserExpense() { Id = 1, Amount = 100, Frequency = EFrequency.None, Priority = EPriority.Need };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = expenseController.Post(new UserExpense() { Id = 1, Amount = 100, Frequency = EFrequency.None, Priority = EPriority.Need });
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void Put_UserExpenseUpdated()
+        {
+            //mock expense logic
+            var mockExpenseLogic = new Mock<IExpenseLogic>();
+            mockExpenseLogic.Setup(x => x.ModifyUserExpense(Guid.Empty, It.IsAny<UserExpense>()))
+                            .Returns(new UserExpense() { Id = 1, Amount = 101, Frequency = EFrequency.None, Priority = EPriority.Need });
+
+            //Setup the http context (for auth)
+            var expenseController = new ExpensesController(mockExpenseLogic.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new UserExpense() { Id = 1, Amount = 101, Frequency = EFrequency.None, Priority = EPriority.Need };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = expenseController.Put(new UserExpense() { Id = 1, Amount = 101, Frequency = EFrequency.None, Priority = EPriority.Need });
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void Delete_UserExpenseDeleted()
+        {
+            //mock expense logic
+            var mockExpenseLogic = new Mock<IExpenseLogic>();
+            mockExpenseLogic.Setup(x => x.DeleteUserExpense(Guid.Empty, It.IsAny<int>()))
+                            .Returns(new UserExpense() { Id = 1, Amount = 100, Frequency = 0, Priority = EPriority.Need });
+
+            //Setup the http context (for auth)
+            var expenseController = new ExpensesController(mockExpenseLogic.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new UserExpense() { Id = 1, Amount = 100, Frequency = EFrequency.None, Priority = EPriority.Need };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = expenseController.Delete(1);
 
 
             actual.Should().BeEquivalentTo(expected);
