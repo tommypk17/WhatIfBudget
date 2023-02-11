@@ -6,6 +6,7 @@ namespace WhatIfBudget.Logic.Models
     public class UserExpense
     {
         public int Id { get; set; } 
+        public string Name { get; set; } = String.Empty;
         public double Amount { get; set; }
         public EFrequency Frequency { get; set; }
         public EPriority Priority { get; set; }
@@ -18,7 +19,8 @@ namespace WhatIfBudget.Logic.Models
                 Amount = Amount,
                 Frequency = Frequency,
                 Priority = Priority,
-                UserId = userId != null ? userId.Value : Guid.Empty
+                UserId = userId != null ? userId.Value : Guid.Empty,
+                Name = Name
             };
         }
 
@@ -29,7 +31,8 @@ namespace WhatIfBudget.Logic.Models
                 Id = expense.Id,
                 Amount = expense.Amount,
                 Frequency = expense.Frequency,
-                Priority = expense.Priority
+                Priority = expense.Priority,
+                Name = expense.Name
             };
         }
     }

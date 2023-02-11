@@ -13,6 +13,7 @@ import { NeedWantFilterPipe } from './pipes/need-want-filter.pipe';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 
     CardModule,
     ButtonModule,
+    InputTextModule,
     InputNumberModule,
     DropdownModule,
     TableModule
