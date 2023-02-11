@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  URL: "https://whatifbudgetapi.azurewebsites.net/api",
+  URL: "https://whatifbudgetapi.azurewebsites.net",
   AzureAd: {
     clientId: '',
     authority: '',
