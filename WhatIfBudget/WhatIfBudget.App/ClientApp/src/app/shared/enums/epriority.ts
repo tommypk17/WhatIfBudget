@@ -1,4 +1,4 @@
 export enum EPriority {
-  want,
-  need
+  Want,
+  Need
 }

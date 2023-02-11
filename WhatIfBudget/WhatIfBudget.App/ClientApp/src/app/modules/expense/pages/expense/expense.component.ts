@@ -20,7 +20,9 @@ export class ExpenseComponent implements OnInit {
   }
 
   expenseAdded(): void {
-
+    this.expenseService.getExpenses().subscribe((res: Expense[]) => {
+      if (res) this.expenses = res;
+    });
   }
 
 }
