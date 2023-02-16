@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { GoalRoutingModule } from './goal-routing.module';
 import { GoalComponent } from './pages/goal/goal.component';
-
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { SliderModule } from 'primeng/slider';
 
 @NgModule({
   declarations: [
@@ -11,7 +13,11 @@ import { GoalComponent } from './pages/goal/goal.component';
   ],
   imports: [
     CommonModule,
-    GoalRoutingModule
+    GoalRoutingModule,
+
+    CardModule,
+    ButtonModule,
+    SliderModule
   ]
 })
 export class GoalModule { }
