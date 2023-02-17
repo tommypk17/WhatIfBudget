@@ -3,8 +3,9 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
-import { InjectionToken } from '@angular/core';
+
 export interface AppConfig {
+  url: string,
   clientId: string,
   authority: string,
   redirectUri: string,
@@ -18,6 +19,7 @@ if (environment.production) {
     .then((res) => res.json())
     .then((config: AppConfig) => {
       enableProdMode();
+      environment.URL = config.url;
       environment.AzureAd.clientId = config.clientId;
       environment.AzureAd.authority = config.authority;
       environment.AzureAd.redirectUri = config.redirectUri;

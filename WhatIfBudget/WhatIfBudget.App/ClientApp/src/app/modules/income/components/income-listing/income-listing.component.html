@@ -1,7 +1,11 @@
 <div>
-  <p-table [value]="model">
+  <p-confirmPopup></p-confirmPopup>
+  <p-table [value]="model"
+           [scrollable]="true"
+           scrollHeight="25rem">
     <ng-template pTemplate="header">
       <tr>
+        <th></th>
         <th>Name</th>
         <th>Amount</th>
         <th>Frequency</th>
@@ -9,6 +13,9 @@
     </ng-template>
     <ng-template pTemplate="body" let-income>
       <tr>
+        <td>
+          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="delete($event, income)"></button>
+        </td>
         <td>{{income.name}}</td>
         <td>{{income.amount}}</td>
         <td>{{displayFrequencies(income.frequency)}}</td>

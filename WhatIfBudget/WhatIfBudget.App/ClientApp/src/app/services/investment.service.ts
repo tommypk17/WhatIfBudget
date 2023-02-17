@@ -2,22 +2,22 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, finalize, Observable, retry } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Income } from '../shared/models/income';
+import { Investment } from '../shared/models/investment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class IncomeService {
+export class InvestmentService {
 
   constructor(private http: HttpClient) { }
 
-  public getIncomes(): Observable<Income[]> {
+  public getInvestments(): Observable<Investment[]> {
     //this.sharedService.queueLoading('saveIncome');
-    return this.http.get<Income[]>(environment.URL + '/api/incomes').pipe(
+    return this.http.get<Investment[]>(environment.URL + '/api/investments').pipe(
       retry(3),
       catchError((err, caught) => {
         this.handleError(err);
-        return new Observable<Income[]>((subscriber) => {
+        return new Observable<Investment[]>((subscriber) => {
           subscriber.next(undefined);
         })
       }),
@@ -27,29 +27,13 @@ export class IncomeService {
     );
   }
 
-  public saveIncome(income: Income): Observable<Income> {
+  public saveInvestments(investment: Investment): Observable<Investment> {
     //this.sharedService.queueLoading('saveIncome');
-    return this.http.post<Income>(environment.URL + '/api/incomes', income).pipe(
+    return this.http.post<Investment>(environment.URL + '/api/investments', investment).pipe(
       retry(3),
       catchError((err, caught) => {
         this.handleError(err);
-        return new Observable<Income>((subscriber) => {
-          subscriber.next(undefined);
-        })
-      }),
-      finalize(() => {
-        //this.sharedService.dequeueLoading('saveIncome');
-      })
-    );
-  }
-
-  public deleteIncome(income: Income): Observable<Income> {
-    //this.sharedService.queueLoading('saveIncome');
-    return this.http.delete<Income>(environment.URL + '/api/incomes/' + income.id).pipe(
-      retry(3),
-      catchError((err, caught) => {
-        this.handleError(err);
-        return new Observable<Income>((subscriber) => {
+        return new Observable<Investment>((subscriber) => {
           subscriber.next(undefined);
         })
       }),

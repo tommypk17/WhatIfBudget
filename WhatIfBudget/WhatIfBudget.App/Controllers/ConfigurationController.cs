@@ -23,6 +23,7 @@ namespace WhatIfBudget.App.Controllers
         {
             AADInfo res = new AADInfo()
             {
+                URL = _config.GetSection("URL").Get<string>(),
                 ClientId = _config.GetSection("AzureAd:ClientId").Get<string>(),
                 Authority = _config.GetSection("AzureAd:Authority").Get<string>(),
                 RedirectUri = _config.GetSection("AzureAd:RedirectUri").Get<string>(),
