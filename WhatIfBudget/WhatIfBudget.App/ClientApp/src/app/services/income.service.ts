@@ -43,6 +43,22 @@ export class IncomeService {
     );
   }
 
+  public deleteIncome(income: Income): Observable<Income> {
+    //this.sharedService.queueLoading('saveIncome');
+    return this.http.delete<Income>(environment.URL + '/api/incomes/' + income.id).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<Income>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
   private handleError(err: any): void {
     console.log('Error: ' + err)
     //this.sharedService.clearLoading();
