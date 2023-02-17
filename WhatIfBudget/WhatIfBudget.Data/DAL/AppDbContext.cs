@@ -20,7 +20,7 @@ namespace WhatIfBudget.Data.DAL
         public DbSet<Income> Incomes { get; set; }
         public DbSet<Expense> Expenses { get; set; }
 
-        public DbSet<InvestmentGoal> InvestmentGoal { get; set; }
+        public DbSet<InvestmentGoal> InvestmentGoals { get; set; }
         public DbSet<Investment> Investments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

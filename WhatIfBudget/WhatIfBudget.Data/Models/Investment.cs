@@ -9,7 +9,6 @@ namespace WhatIfBudget.Data.Models
     public class Investment : BaseEntity
     {
         public Guid UserId { get; set; }
-        public int GoalId { get; set; }
         public string Name { get; set; } = String.Empty;
         public double CurrentBalance { get; set; } = 0;
         public double MonthlyPersonalContribution { get; set; } = 0;
