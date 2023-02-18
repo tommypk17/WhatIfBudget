@@ -17,7 +17,7 @@ import { IncomeMonthlyDetailSectionComponent } from './components/income-monthly
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
-
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -38,7 +38,8 @@ import { ConfirmationService } from 'primeng/api';
     InputNumberModule,
     DropdownModule,
     TableModule,
-    ConfirmPopupModule
+    ConfirmPopupModule,
+    DialogModule
   ],
   providers: [ConfirmationService]
 })

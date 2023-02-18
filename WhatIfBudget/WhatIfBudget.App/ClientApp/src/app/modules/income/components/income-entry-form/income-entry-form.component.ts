@@ -1,5 +1,5 @@
 import { KeyValue } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { IncomeService } from '../../../../services/income.service';
 import { SharedService } from '../../../../services/shared.service';
@@ -12,9 +12,10 @@ import { Income } from '../../../../shared/models/income';
 })
 export class IncomeEntryFormComponent implements OnInit {
   @Output('added') added: EventEmitter<void> = new EventEmitter();
+  @Output('updated') updated: EventEmitter<void> = new EventEmitter();
 
   frequencies: KeyValue<number, string>[] = this.sharedService.frequencies;
-  model: Income = new Income();
+  @Input('income') model: Income = new Income();
 
   constructor(private incomeService: IncomeService, private sharedService: SharedService) { }
 
@@ -22,10 +23,18 @@ export class IncomeEntryFormComponent implements OnInit {
   }
 
   onSubmit(event: NgForm): void {
-    this.incomeService.saveIncome(event.value as Income).subscribe((res: Income) => {
-      this.added.emit();
-      this.model = new Income();
-    });
+    let income: Income = event.value as Income;
+    if (this.model.id && this.model.id > 0) {
+      this.incomeService.updateIncome(this.model).subscribe((res: Income) => {
+        this.updated.emit();
+        this.model = new Income();
+      });
+    } else {
+      this.incomeService.saveIncome(income).subscribe((res: Income) => {
+        this.added.emit();
+        this.model = new Income();
+      });
+    }
   }
 
 }
