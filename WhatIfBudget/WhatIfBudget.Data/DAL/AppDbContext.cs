@@ -16,6 +16,7 @@ namespace WhatIfBudget.Data.DAL
             : base(options)
         {
         }
+        public DbSet<Budget> Budgets { get; set; }
 
         public DbSet<Income> Incomes { get; set; }
         public DbSet<Expense> Expenses { get; set; }
