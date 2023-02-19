@@ -20,23 +20,21 @@ namespace WhatIfBudget.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(int budgetId)
         {
-            //grab the user from the passed auth token
-            var currentUser = AuthUser.Current(User);
             //pass the ID from the auth token to the logic function
-            var res = _incomeLogic.GetUserIncomes(currentUser.Id);
+            var res = _incomeLogic.GetBudgetIncomes(budgetId);
             //return a status of 200 with all the current user's income
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
         [HttpPost]
-        public IActionResult Post(UserIncome apiIncome)
+        public IActionResult Post(UserIncome apiIncome, int budgetId)
         {
             //grab the user from the passed auth token
             var currentUser = AuthUser.Current(User);
 
-            var res = _incomeLogic.AddUserIncome(currentUser.Id, apiIncome);
+            var res = _incomeLogic.AddUserIncome(currentUser.Id, apiIncome, budgetId);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);
@@ -65,12 +63,12 @@ namespace WhatIfBudget.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(int incomeId, int budgetId)
         {
             //grab the user from the passed auth token
             var currentUser = AuthUser.Current(User);
 
-            var res = _incomeLogic.DeleteUserIncome(currentUser.Id, id);
+            var res = _incomeLogic.DeleteUserIncome(currentUser.Id, incomeId, budgetId);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);

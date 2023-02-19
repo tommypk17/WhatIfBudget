@@ -22,7 +22,7 @@ namespace WhatIfBudget.Logic.Test
         public void GetUserIncomes_CollectionAreEqual()
         {
             var mock = new Mock<IIncomeService>();
-            mock.Setup(x => x.GetAllIncome()).Returns(
+            mock.Setup(x => x.GetAllIncomes()).Returns(
                 (IList<Income>) new List<Income>()
                 {
                     new Income() { Id = 1, Amount = 100, Frequency = 0, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },

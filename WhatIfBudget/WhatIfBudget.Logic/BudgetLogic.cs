@@ -7,6 +7,7 @@ using WhatIfBudget.Logic.Interfaces;
 using WhatIfBudget.Logic.Models;
 using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
+using WhatIfBudget.Services;
 
 namespace WhatIfBudget.Logic
 {
@@ -14,15 +15,17 @@ namespace WhatIfBudget.Logic
     {
         private readonly IBudgetService _budgetService;
         private readonly IIncomeService _incomeService;
+        private readonly IBudgetIncomeService _budgetIncomeService;
         /*
         private readonly ISavingGoalService _savingGoalService;
         private readonly IDebtGoalService _debtGoalService;
         private readonly IMortgageGoalService _mortgageGoalService;
         private readonly IInvestmentGoalService _investmentGoalService;
         */
-        public BudgetLogic(IBudgetService budgetService, IIncomeService incomeService /* HERE */) { 
+        public BudgetLogic(IBudgetService budgetService, IIncomeService incomeService, IBudgetIncomeService budgetIncomeService /* HERE */) { 
             _budgetService = budgetService;
             _incomeService = incomeService;
+            _budgetIncomeService= budgetIncomeService;
             /*
             _savingGoalService = savingGoalService;
             _debtGoalService = debtGoalService;
@@ -33,7 +36,7 @@ namespace WhatIfBudget.Logic
 
         public IList<UserBudget> GetUserBudgets(Guid userId)
         {
-            return _budgetService.GetAllBudget()
+            return _budgetService.GetAllBudgets()
                                                 .Where(x => x.UserId == userId)
                                                 .Select(x => UserBudget.FromBudget(x))
                                                 .ToList();
@@ -81,7 +84,29 @@ namespace WhatIfBudget.Logic
             */
             // Delete relations of deleted goals (From the relation tables and the debts/investments tables)
 
-            // Delete associated incomes and expenses
+            // Delete associated incomes
+            var budgetIncomeList = _budgetIncomeService.GetAllBudgetIncomes()
+                .Where(x => x.BudgetId == id)
+                .ToList();
+            foreach (var budgetIncome in budgetIncomeList)
+            {
+                var dbBudgetIncome = _budgetIncomeService.DeleteBudgetIncome(budgetIncome.Id);
+                if (dbBudgetIncome == null)
+                {
+                    throw new NullReferenceException();
+                }
+                // Delete income element that is not associated with any other budget Id
+                if (!_budgetIncomeService.GetAllBudgetIncomes()
+                        .Where(x => x.IncomeId == dbBudgetIncome.IncomeId)
+                        .Any())
+                {
+                    var dbIncome = _incomeService.DeleteIncome(dbBudgetIncome.IncomeId);
+                    if (dbIncome == null)
+                    {
+                        throw new NullReferenceException();
+                    }
+                }
+            }
 
 
             var dbBudget = _budgetService.DeleteBudget(id);
