@@ -43,6 +43,38 @@ export class ExpenseService {
     );
   }
 
+  public updateExpense(expense: Expense): Observable<Expense> {
+    //this.sharedService.queueLoading('updateIncome');
+    return this.http.put<Expense>(environment.URL + '/api/expenses', expense).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<Expense>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('updateIncome');
+      })
+    );
+  }
+
+  public deleteExpense(expense: Expense): Observable<Expense> {
+    //this.sharedService.queueLoading('saveIncome');
+    return this.http.delete<Expense>(environment.URL + '/api/expenses/' + expense.id).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<Expense>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
   private handleError(err: any): void {
     console.log('Error: ' + err)
     //this.sharedService.clearLoading();

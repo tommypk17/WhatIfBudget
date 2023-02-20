@@ -63,7 +63,7 @@ namespace WhatIfBudget.API.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             //grab the user from the passed auth token
