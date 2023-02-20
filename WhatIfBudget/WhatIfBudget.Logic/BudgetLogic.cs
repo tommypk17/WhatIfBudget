@@ -15,17 +15,25 @@ namespace WhatIfBudget.Logic
     {
         private readonly IBudgetService _budgetService;
         private readonly IIncomeService _incomeService;
+        private readonly IExpenseService _expenseService;
         private readonly IBudgetIncomeService _budgetIncomeService;
+        private readonly IBudgetExpenseService _budgetExpenseService;
         /*
         private readonly ISavingGoalService _savingGoalService;
         private readonly IDebtGoalService _debtGoalService;
         private readonly IMortgageGoalService _mortgageGoalService;
         private readonly IInvestmentGoalService _investmentGoalService;
         */
-        public BudgetLogic(IBudgetService budgetService, IIncomeService incomeService, IBudgetIncomeService budgetIncomeService /* HERE */) { 
+        public BudgetLogic(IBudgetService budgetService,
+                           IIncomeService incomeService,
+                           IExpenseService expenseService,
+                           IBudgetIncomeService budgetIncomeService,
+                           IBudgetExpenseService budgetExpenseService/* HERE */) { 
             _budgetService = budgetService;
             _incomeService = incomeService;
+            _expenseService = expenseService;
             _budgetIncomeService= budgetIncomeService;
+            _budgetExpenseService= budgetExpenseService;
             /*
             _savingGoalService = savingGoalService;
             _debtGoalService = debtGoalService;
@@ -102,6 +110,30 @@ namespace WhatIfBudget.Logic
                 {
                     var dbIncome = _incomeService.DeleteIncome(dbBudgetIncome.IncomeId);
                     if (dbIncome == null)
+                    {
+                        throw new NullReferenceException();
+                    }
+                }
+            }
+
+            // Delete associated expenses
+            var budgetExpenseList = _budgetExpenseService.GetAllBudgetExpenses()
+                .Where(x => x.BudgetId == id)
+                .ToList();
+            foreach (var budgetExpense in budgetExpenseList)
+            {
+                var dbBudgetExpense = _budgetExpenseService.DeleteBudgetExpense(budgetExpense.Id);
+                if (dbBudgetExpense == null)
+                {
+                    throw new NullReferenceException();
+                }
+                // Delete income element that is not associated with any other budget Id
+                if (!_budgetExpenseService.GetAllBudgetExpenses()
+                        .Where(x => x.ExpenseId == dbBudgetExpense.ExpenseId)
+                        .Any())
+                {
+                    var dbExpense = _expenseService.DeleteExpense(dbBudgetExpense.ExpenseId);
+                    if (dbExpense == null)
                     {
                         throw new NullReferenceException();
                     }

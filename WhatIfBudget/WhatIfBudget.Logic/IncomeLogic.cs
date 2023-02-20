@@ -14,9 +14,11 @@ namespace WhatIfBudget.Logic
     {
         private readonly IIncomeService _incomeService;
         private readonly IBudgetIncomeService _budgetIncomeService;
-        public IncomeLogic(IIncomeService incomeService, IBudgetIncomeService budgetIncomeService) { 
+
+        public IncomeLogic(IIncomeService incomeService,
+                           IBudgetIncomeService budgetIncomeService) { 
             _incomeService = incomeService;
-            _budgetIncomeService = budgetIncomeService;
+            _budgetIncomeService= budgetIncomeService;
         }
 
         public IList<UserIncome> GetUserIncomes(Guid userId)
@@ -39,7 +41,13 @@ namespace WhatIfBudget.Logic
         public UserIncome AddUserIncome(Guid userId, UserIncome income, int budgetId)
         {
             // Associate income element to current budget
-            var budgetIncomeToCreate = new BudgetIncome { Id = 1, BudgetId = budgetId, IncomeId = income.Id };
+            var budgetIncomeToCreate = new BudgetIncome
+            {
+                Id = 1, // TODO
+                BudgetId = budgetId,
+                IncomeId = income.Id
+            };
+
             var dbBudgetIncome = _budgetIncomeService.AddNewBudgetIncome(budgetIncomeToCreate);
             if (dbBudgetIncome== null)
             {
@@ -80,7 +88,12 @@ namespace WhatIfBudget.Logic
         public UserIncome DeleteUserIncome(Guid userId, int incomeId, int budgetId)
         {
             // De-associate income element from current budget
-            var budgetIncomeToDelete = new BudgetIncome { Id = 1 /*TODO*/, BudgetId = budgetId, IncomeId = incomeId };
+            var budgetIncomeToDelete = new BudgetIncome
+            {
+                Id = 1 /*TODO*/,
+                BudgetId = budgetId,
+                IncomeId = incomeId
+            };
             var dbBudgetIncome = _budgetIncomeService.DeleteBudgetIncome(budgetIncomeToDelete.Id);
             if (dbBudgetIncome == null)
             {
