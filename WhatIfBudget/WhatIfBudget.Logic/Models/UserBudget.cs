@@ -7,10 +7,10 @@ namespace WhatIfBudget.Logic.Models
     {
         public int Id { get; set; }
         public string Name { get; set; } = String.Empty;
-        public int SavingGoalId { get; set; } = 0;
-        public int DebtGoalId { get; set; } = 0;
-        public int MortgageGoalId { get; set; } = 0;
-        public int InvestmentGoalId { get; set; } = 0;
+        public int SavingGoalId { get; set; }
+        public int DebtGoalId { get; set; }
+        public int MortgageGoalId { get; set; }
+        public int InvestmentGoalId { get; set; }
 
         public Budget ToBudget(Guid? userId = null)
         {

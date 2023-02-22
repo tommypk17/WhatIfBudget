@@ -53,15 +53,15 @@ namespace WhatIfBudget.Services
 
         public Budget? DeleteBudget(int id)
         {
-            var Budget = _ctx.Budgets.FirstOrDefault(x => x.Id == id); 
-            if (Budget != null)
+            var dbBudget = _ctx.Budgets.FirstOrDefault(x => x.Id == id); 
+            if (dbBudget != null)
             {
-                _ctx.Budgets.Remove(Budget);
+                _ctx.Budgets.Remove(dbBudget);
             }
             try
             {
                 _ctx.SaveChanges();
-                return Budget;
+                return dbBudget;
              }
             catch(DbUpdateException)
             {

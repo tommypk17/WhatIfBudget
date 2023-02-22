@@ -20,14 +20,19 @@ namespace WhatIfBudget.Logic
         public UserInvestmentGoal GetBudgetInvestmentGoal(int budgetId)
         {
             // Get the investment goal associated with this budget
-            // var id = _budgetService.GetBudget(budgetId).InvestmentGoalId;
-            var id = 1;
-            return UserInvestmentGoal.FromInvestmentGoal(_investmentGoalService.GetInvestmentGoal(id));
+            var dbBudget = _budgetService.GetBudget(budgetId);
+            return UserInvestmentGoal.FromInvestmentGoal(_investmentGoalService.GetInvestmentGoal(dbBudget.InvestmentGoalId));
+        }
+
+        public UserInvestmentGoal GetBudgetInvestmentGoal(UserBudget budget)
+        {
+            // Get the investment goal associated with this budget
+            return UserInvestmentGoal.FromInvestmentGoal(_investmentGoalService.GetInvestmentGoal(budget.InvestmentGoalId));
         }
 
         public UserInvestmentGoal AddUserInvestmentGoal(Guid userId, UserInvestmentGoal investmentGoal)
         {
-            var toCreate = investmentGoal.ToInvestmentGoal(userId);
+            var toCreate = investmentGoal.ToInvestmentGoal();
 
             var dbInvestmentGoal = _investmentGoalService.AddInvestmentGoal(toCreate);
             if (dbInvestmentGoal == null)
@@ -38,9 +43,9 @@ namespace WhatIfBudget.Logic
             return UserInvestmentGoal.FromInvestmentGoal(dbInvestmentGoal);
         }
 
-        public UserInvestmentGoal ModifyUserInvestmentGoal(Guid userId, UserInvestmentGoal investmentGoal)
+        public UserInvestmentGoal ModifyUserInvestmentGoal(UserInvestmentGoal investmentGoal)
         {
-            var toUpdate = investmentGoal.ToInvestmentGoal(userId);
+            var toUpdate = investmentGoal.ToInvestmentGoal();
 
             var dbInvestmentGoal = _investmentGoalService.UpdateInvestmentGoal(toUpdate);
             if (dbInvestmentGoal == null)

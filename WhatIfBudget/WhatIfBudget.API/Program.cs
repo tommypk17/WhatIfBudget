@@ -21,11 +21,13 @@ builder.Services.AddScoped<IIncomeService, IncomeService>();
 builder.Services.AddScoped<IBudgetService, BudgetService>();
 builder.Services.AddScoped<IBudgetIncomeService, BudgetIncomeService>();
 builder.Services.AddScoped<IBudgetExpenseService, BudgetExpenseService>();
+builder.Services.AddScoped<IInvestmentGoalService, InvestmentGoalService>();
 
 //Logic
 builder.Services.AddScoped<IExpenseLogic, ExpenseLogic>();
 builder.Services.AddScoped<IIncomeLogic, IncomeLogic>();
 builder.Services.AddScoped<IBudgetLogic, BudgetLogic>();
+builder.Services.AddScoped<IInvestmentGoalLogic, InvestmentGoalLogic>();
 
 builder.Services.AddControllers();
 

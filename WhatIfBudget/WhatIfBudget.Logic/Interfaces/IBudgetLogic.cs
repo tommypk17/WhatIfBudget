@@ -14,10 +14,10 @@ namespace WhatIfBudget.Logic.Interfaces
 
         public UserBudget? GetBudget(int budgetId);
 
-        public UserBudget? AddUserBudget(Guid userId, UserBudget budget);
+        public UserBudget? CreateUserBudget(Guid userId, UserBudget budget);
 
         public UserBudget? ModifyUserBudget(Guid userId, UserBudget budget);
 
-        public UserBudget? DeleteUserBudget(int id);
+        public UserBudget? DeleteUserBudget(UserBudget budget);
     }
 }

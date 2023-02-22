@@ -46,7 +46,7 @@ namespace WhatIfBudget.API.Controllers
             //grab the user from the passed auth token
             var currentUser = AuthUser.Current(User);
 
-            var res = _budgetLogic.AddUserBudget(currentUser.Id, apiBudget);
+            var res = _budgetLogic.CreateUserBudget(currentUser.Id, apiBudget);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);
@@ -74,13 +74,13 @@ namespace WhatIfBudget.API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete]
+        public IActionResult Delete(UserBudget apiBudget)
         {
             //grab the user from the passed auth token
             var currentUser = AuthUser.Current(User);
 
-            var res = _budgetLogic.DeleteUserBudget(id);
+            var res = _budgetLogic.DeleteUserBudget(apiBudget);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);

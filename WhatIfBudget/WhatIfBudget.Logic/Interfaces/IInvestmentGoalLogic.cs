@@ -10,10 +10,8 @@ namespace WhatIfBudget.Logic.Interfaces
 {
     public interface IInvestmentGoalLogic
     {
-        public UserInvestmentGoal? GetBudgetInvestmentGoal(int budgetId);
+        public UserInvestmentGoal? GetBudgetInvestmentGoal(UserBudget budget);
 
-        public UserInvestmentGoal? AddUserInvestmentGoal(Guid userId, UserInvestmentGoal income);
-
-        public UserInvestmentGoal? ModifyUserInvestmentGoal(Guid userId, UserInvestmentGoal income);
+        public UserInvestmentGoal? ModifyUserInvestmentGoal(UserInvestmentGoal investmentGoal);
     }
 }
