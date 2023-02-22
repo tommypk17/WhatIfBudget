@@ -13,24 +13,33 @@ namespace WhatIfBudget.Logic
     public class InvestmentGoalLogic : IInvestmentGoalLogic
     {
         private readonly IInvestmentGoalService _investmentGoalService;
-        public InvestmentGoalLogic(IInvestmentGoalService investmentGoalService) { 
+        private readonly IBudgetService _budgetService;
+        public InvestmentGoalLogic(IInvestmentGoalService investmentGoalService, IBudgetService budgetService) { 
             _investmentGoalService = investmentGoalService;
+            _budgetService = budgetService;
         }
 
-        public UserInvestmentGoal GetBudgetInvestmentGoal(int budgetId)
+        public UserInvestmentGoal? GetBudgetInvestmentGoal(int budgetId)
         {
             // Get the investment goal associated with this budget
             var dbBudget = _budgetService.GetBudget(budgetId);
-            return UserInvestmentGoal.FromInvestmentGoal(_investmentGoalService.GetInvestmentGoal(dbBudget.InvestmentGoalId));
+            if (dbBudget is null) return null;
+            
+            var investmentGoal = _investmentGoalService.GetInvestmentGoal(dbBudget.InvestmentGoalId);
+            if(investmentGoal is null) return null;
+
+            return UserInvestmentGoal.FromInvestmentGoal(investmentGoal);
         }
 
-        public UserInvestmentGoal GetBudgetInvestmentGoal(UserBudget budget)
+        public UserInvestmentGoal? GetBudgetInvestmentGoal(UserBudget budget)
         {
             // Get the investment goal associated with this budget
-            return UserInvestmentGoal.FromInvestmentGoal(_investmentGoalService.GetInvestmentGoal(budget.InvestmentGoalId));
+            var investmentGoal = _investmentGoalService.GetInvestmentGoal(budget.InvestmentGoalId);
+            if (investmentGoal is null) return null;
+            return UserInvestmentGoal.FromInvestmentGoal(investmentGoal);
         }
 
-        public UserInvestmentGoal AddUserInvestmentGoal(Guid userId, UserInvestmentGoal investmentGoal)
+        public UserInvestmentGoal? AddUserInvestmentGoal(Guid userId, UserInvestmentGoal investmentGoal)
         {
             var toCreate = investmentGoal.ToInvestmentGoal();
 
@@ -43,7 +52,7 @@ namespace WhatIfBudget.Logic
             return UserInvestmentGoal.FromInvestmentGoal(dbInvestmentGoal);
         }
 
-        public UserInvestmentGoal ModifyUserInvestmentGoal(UserInvestmentGoal investmentGoal)
+        public UserInvestmentGoal? ModifyUserInvestmentGoal(UserInvestmentGoal investmentGoal)
         {
             var toUpdate = investmentGoal.ToInvestmentGoal();
 

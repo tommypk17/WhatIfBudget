@@ -68,5 +68,10 @@ namespace WhatIfBudget.Services
                 return null;
             }
         }
+
+        public Budget? GetBudget(int budgetId)
+        {
+            return _ctx.Budgets.FirstOrDefault(x => x.Id == budgetId);
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace WhatIfBudget.Services.Interfaces
 {
     public interface IBudgetService
     {
+        public Budget? GetBudget(int budgetId);
         public IList<Budget> GetAllBudgets();
 
         public Budget? AddNewBudget(Budget newBudget);
