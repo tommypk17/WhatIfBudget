@@ -49,6 +49,13 @@ namespace WhatIfBudget.Logic
                                                 .Select(x => UserBudget.FromBudget(x))
                                                 .ToList();
         }
+        public UserBudget GetBudget(int budgetId)
+        {
+            return _budgetService.GetAllBudgets()
+                                                .Where(x => x.Id == budgetId)
+                                                .Select(x => UserBudget.FromBudget(x))
+                                                .FirstOrDefault();
+        }
         public UserBudget AddUserBudget(Guid userId, UserBudget budget)
         {
             // Create goals for this budget

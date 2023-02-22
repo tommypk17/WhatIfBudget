@@ -14,10 +14,10 @@ namespace WhatIfBudget.Logic.Interfaces
 
         public IList<UserIncome> GetBudgetIncomes(int budgetId);
 
-        public UserIncome? AddUserIncome(Guid userId, UserIncome income, int budgetId);
+        public UserIncome? AddUserIncome(Guid userId, UserIncome income);
 
         public UserIncome? ModifyUserIncome(Guid userId, UserIncome income);
 
-        public UserIncome? DeleteUserIncome(Guid userId, int incomeId, int budgetId);
+        public UserIncome? DeleteBudgetIncome(int incomeId, int budgetId);
     }
 }

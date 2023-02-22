@@ -30,6 +30,16 @@ namespace WhatIfBudget.API.Controllers
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
+        [HttpGet("{budgetId}")]
+        public IActionResult Get([FromRoute] int budgetId)
+        {
+            //pass the budget ID from the route to the logic function
+            var res = _budgetLogic.GetBudget(budgetId);
+            //return a status of 200 with all the current user's budget
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
+
         [HttpPost]
         public IActionResult Post(UserBudget apiBudget)
         {

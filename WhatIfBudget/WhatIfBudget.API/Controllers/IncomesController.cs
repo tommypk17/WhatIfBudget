@@ -20,21 +20,31 @@ namespace WhatIfBudget.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get(int budgetId)
+        public IActionResult Get()
         {
-            //pass the ID from the auth token to the logic function
+            //grab the user from the passed auth token
+            var currentUser = AuthUser.Current(User);
+            var res = _incomeLogic.GetUserIncomes(currentUser.Id);
+            //return a status of 200 with all the current user's income
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
+        [HttpGet("{budgetId}")]
+        public IActionResult Get([FromRoute] int budgetId)
+        {
+            //pass the ID from the route to the logic function
             var res = _incomeLogic.GetBudgetIncomes(budgetId);
             //return a status of 200 with all the current user's income
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
         [HttpPost]
-        public IActionResult Post(UserIncome apiIncome, int budgetId)
+        public IActionResult Post(UserIncome apiIncome)
         {
             //grab the user from the passed auth token
             var currentUser = AuthUser.Current(User);
 
-            var res = _incomeLogic.AddUserIncome(currentUser.Id, apiIncome, budgetId);
+            var res = _incomeLogic.AddUserIncome(currentUser.Id, apiIncome);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);
@@ -62,13 +72,10 @@ namespace WhatIfBudget.API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int incomeId, int budgetId)
+        [HttpDelete("{incomeId}/{budgetId}")]
+        public IActionResult Delete([FromRoute] int incomeId, [FromRoute] int budgetId)
         {
-            //grab the user from the passed auth token
-            var currentUser = AuthUser.Current(User);
-
-            var res = _incomeLogic.DeleteUserIncome(currentUser.Id, incomeId, budgetId);
+            var res = _incomeLogic.DeleteBudgetIncome(incomeId, budgetId);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);

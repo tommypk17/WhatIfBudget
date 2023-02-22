@@ -24,7 +24,7 @@ namespace WhatIfBudget.Logic
         public IList<UserIncome> GetUserIncomes(Guid userId)
         {
             return _incomeService.GetAllIncomes().Where(x => x.UserId == userId)
-                                                .Select(x => UserIncome.FromIncome(x))
+                                                .Select(x => UserIncome.FromIncome(x, 0)) // TODO: Return with budgetId 0?
                                                 .ToList();
         }
         public IList<UserIncome> GetBudgetIncomes(int budgetId)
@@ -35,16 +35,15 @@ namespace WhatIfBudget.Logic
                 .ToList();
 
             return _incomeService.GetAllIncomes().Where(x => budgetIncomeIdList.Contains(x.Id))
-                                                .Select(x => UserIncome.FromIncome(x))
+                                                .Select(x => UserIncome.FromIncome(x, budgetId))
                                                 .ToList();
         }
-        public UserIncome AddUserIncome(Guid userId, UserIncome income, int budgetId)
+        public UserIncome AddUserIncome(Guid userId, UserIncome income)
         {
             // Associate income element to current budget
             var budgetIncomeToCreate = new BudgetIncome
             {
-                Id = 1, // TODO
-                BudgetId = budgetId,
+                BudgetId = income.BudgetId,
                 IncomeId = income.Id
             };
 
@@ -65,11 +64,11 @@ namespace WhatIfBudget.Logic
                 {
                     throw new NullReferenceException();
                 }
-                return UserIncome.FromIncome(dbNewIncome);
+                return UserIncome.FromIncome(dbNewIncome, income.BudgetId);
             }
             else
             {
-                return UserIncome.FromIncome(dbIncome);
+                return UserIncome.FromIncome(dbIncome, income.BudgetId);
             }
         }
 
@@ -82,19 +81,17 @@ namespace WhatIfBudget.Logic
             {
                 throw new NullReferenceException();
             }
-            return UserIncome.FromIncome(dbIncome);
+            return UserIncome.FromIncome(dbIncome, income.BudgetId);
         }
 
-        public UserIncome DeleteUserIncome(Guid userId, int incomeId, int budgetId)
+        public UserIncome DeleteBudgetIncome(int incomeId, int budgetId)
         {
             // De-associate income element from current budget
-            var budgetIncomeToDelete = new BudgetIncome
-            {
-                Id = 1 /*TODO*/,
-                BudgetId = budgetId,
-                IncomeId = incomeId
-            };
-            var dbBudgetIncome = _budgetIncomeService.DeleteBudgetIncome(budgetIncomeToDelete.Id);
+            var idToDelete = _budgetIncomeService.GetAllBudgetIncomes()
+                    .Where(x => x.IncomeId == incomeId && x.BudgetId == budgetId)
+                    .Select(x => x.Id)
+                    .FirstOrDefault();
+            var dbBudgetIncome = _budgetIncomeService.DeleteBudgetIncome(idToDelete);
             if (dbBudgetIncome == null)
             {
                 throw new NullReferenceException();
@@ -109,14 +106,14 @@ namespace WhatIfBudget.Logic
                 {
                     throw new NullReferenceException();
                 }
-                return UserIncome.FromIncome(dbDeleteIncome);
+                return UserIncome.FromIncome(dbDeleteIncome, budgetId);
             }
             else
             {
                 // Keep income element in database for use by other budgets
                 return UserIncome.FromIncome(_incomeService.GetAllIncomes()
                     .Where(x => x.Id == incomeId)
-                    .FirstOrDefault());
+                    .FirstOrDefault(), budgetId);
             }
         }
     }

@@ -12,6 +12,8 @@ namespace WhatIfBudget.Logic.Interfaces
     {
         public IList<UserBudget> GetUserBudgets(Guid userId);
 
+        public UserBudget? GetBudget(int budgetId);
+
         public UserBudget? AddUserBudget(Guid userId, UserBudget budget);
 
         public UserBudget? ModifyUserBudget(Guid userId, UserBudget budget);
