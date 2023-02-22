@@ -1,4 +1,3 @@
-import { KeyValue } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { InvestmentService } from '../../../../services/investment.service'
@@ -13,7 +12,6 @@ import { Investment } from '../../../../shared/models/investment';
 export class InvestmentEntryFormComponent implements OnInit {
   @Output('added') added: EventEmitter<void> = new EventEmitter();
 
-  frequencies: KeyValue<number, string>[] = this.sharedService.frequencies;
   model: Investment = new Investment();
 
   constructor(private investmentService: InvestmentService, private sharedService: SharedService) { }

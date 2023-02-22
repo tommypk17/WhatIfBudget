@@ -17,6 +17,11 @@ import { InvestmentComponent } from './pages/investment/investment.component';
 import { SavingComponent } from './pages/saving/saving.component';
 import { DebtComponent } from './pages/debt/debt.component';
 import { MortgageComponent } from './pages/mortgage/mortgage.component';
+import { InvestmentListingComponent } from './components/investment-listing/investment-listing.component';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { TableModule } from 'primeng/table';
+import { DialogModule } from 'primeng/dialog';
+import { ConfirmationService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -27,6 +32,7 @@ import { MortgageComponent } from './pages/mortgage/mortgage.component';
     SavingComponent,
     DebtComponent,
     MortgageComponent,
+    InvestmentListingComponent,
   ],
   imports: [
     CommonModule,
@@ -39,10 +45,14 @@ import { MortgageComponent } from './pages/mortgage/mortgage.component';
     DropdownModule,
     InputTextModule,
     InputNumberModule,
-    TabMenuModule
+    TabMenuModule,
+    TableModule,
+    DialogModule,
+    ConfirmPopupModule
   ],
   exports: [
     GoalNavigationComponent
-    ]
+  ],
+  providers: [ConfirmationService]
 })
 export class GoalModule { }

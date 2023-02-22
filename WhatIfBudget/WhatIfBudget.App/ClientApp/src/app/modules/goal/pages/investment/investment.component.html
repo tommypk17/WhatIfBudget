@@ -1,6 +1,14 @@
 <app-goal-navigation></app-goal-navigation>
-<p-card header="Investments">
-  <div class="mb-1">
-    <app-investment-entry-form (added)="investmentAdded()"></app-investment-entry-form>
+<div class="d-flex justify-content-between">
+  <div class="d-flex w-100 flex-column m-2">
+    <p-card header="Investments">
+      <div class="mb-1">
+        <app-investment-entry-form (added)="investmentAdded()"></app-investment-entry-form>
+      </div>
+      <div class="mt-1">
+        <app-investment-listing [investments]="investments"></app-investment-listing>
+      </div>
+    </p-card>
   </div>
-</p-card>
+</div>
+
