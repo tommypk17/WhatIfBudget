@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { KeyValue } from '@angular/common';
 import { IncomeService } from '../../../../services/income.service';
 import { Income } from '../../../../shared/models/income';
@@ -12,6 +12,9 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 })
 export class IncomeListingComponent implements OnInit {
   @Input('incomes') model: Income[] = [];
+
+  editModal: boolean = false;
+  editIncome: Income | undefined;
 
   frequencies: KeyValue<number, string>[] = this.sharedService.frequencies;
 
@@ -34,7 +37,7 @@ export class IncomeListingComponent implements OnInit {
         this.incomeService.deleteIncome(income).subscribe((res: Income) => {
           if (res) {
             this.messageService.add({ severity: 'success', summary: 'Income Deleted' });
-            this.model.splice(this.model.indexOf(income), 1);
+            this.refreshTable();
           }
           else this.messageService.add({ severity: 'error', summary: 'Income Delete Failed'});
         });
@@ -42,4 +45,21 @@ export class IncomeListingComponent implements OnInit {
     });
   }
 
+  edit(event: Event, income: Income) {
+    this.editIncome = Object.assign(new Income(), income);
+    this.editModal = true
+  }
+
+  editComplete(): void {
+    this.editIncome = undefined;
+    this.editModal = false;
+
+    this.refreshTable();
+  }
+
+  refreshTable(): void {
+    this.incomeService.getIncomes().subscribe((res: Income[]) => {
+      if (res) this.model = res;
+    });
+  }
 }

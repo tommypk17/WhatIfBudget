@@ -10,7 +10,7 @@ import { filter } from 'rxjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'ClientApp';
+  title = 'WhatIfBudget';
 
   constructor(private msalBroadcastService: MsalBroadcastService, private router: Router) {}
 

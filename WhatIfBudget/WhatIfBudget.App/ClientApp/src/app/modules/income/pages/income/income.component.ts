@@ -24,5 +24,4 @@ export class IncomeComponent implements OnInit {
       if (res) this.incomes = res;
     });
   }
-
 }

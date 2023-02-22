@@ -18,7 +18,7 @@ namespace WhatIfBudget.Services
             _ctx = ctx;
         }
 
-        public IList<Income> GetAllIncome()
+        public IList<Income> GetAllIncomes()
         {
             return _ctx.Incomes.ToList();
         }

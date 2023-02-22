@@ -12,10 +12,12 @@ namespace WhatIfBudget.Logic.Interfaces
     {
         public IList<UserIncome> GetUserIncomes(Guid userId);
 
+        public IList<UserIncome> GetBudgetIncomes(int budgetId);
+
         public UserIncome? AddUserIncome(Guid userId, UserIncome income);
 
         public UserIncome? ModifyUserIncome(Guid userId, UserIncome income);
 
-        public UserIncome? DeleteUserIncome(Guid userId, int id);
+        public UserIncome? DeleteBudgetIncome(int incomeId, int budgetId);
     }
 }

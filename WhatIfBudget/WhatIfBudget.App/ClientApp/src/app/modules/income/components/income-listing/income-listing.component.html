@@ -14,7 +14,10 @@
     <ng-template pTemplate="body" let-income>
       <tr>
         <td>
-          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="delete($event, income)"></button>
+          <div class="d-flex">
+            <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="delete($event, income)"></button>
+            <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-secondary p-button-text" (click)="edit($event, income)"></button>
+          </div>
         </td>
         <td>{{income.name}}</td>
         <td>{{income.amount}}</td>
@@ -23,3 +26,7 @@
     </ng-template>
   </p-table>
 </div>
+<p-dialog header="Edit Income" [(visible)]="editModal" [modal]="true" [style]="{width: '50vw'}"
+          [draggable]="false" [resizable]="false">
+  <app-income-entry-form *ngIf="editIncome" [income]="editIncome" (updated)="editComplete()"></app-income-entry-form>
+</p-dialog>

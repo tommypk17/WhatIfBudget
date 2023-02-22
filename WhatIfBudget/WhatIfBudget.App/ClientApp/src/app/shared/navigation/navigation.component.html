@@ -1,8 +1,7 @@
-<div class="d-flex">
-  <button pButton class="m-1" label="Home" icon="pi pi-home" routerLink="/"></button>
-  <button pButton class="m-1" label="Incomes" icon="pi pi-money-bill" routerLink="/incomes"></button>
-  <button pButton class="m-1" label="Expenses" icon="pi pi-chart-pie" routerLink="/expenses"></button>
-  <button pButton class="m-1" label="Goals" icon="pi pi-chart-line" routerLink="/goals"></button>
-  <p-menu #menu [popup]="true" [model]="items"></p-menu>
-  <button type="button" pButton class="m-1" icon="pi pi-list" label="Show" (click)="menu.toggle($event)"></button>
+<div>
+  <p-menubar [model]="navs">
+    <ng-template pTemplate="start">
+      <img src="./assets/whatifbudget.webp" height="40" class="mr-2">
+    </ng-template>
+  </p-menubar>
 </div>
