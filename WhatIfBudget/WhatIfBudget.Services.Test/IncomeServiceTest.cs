@@ -38,7 +38,7 @@ namespace WhatIfBudget.Services.Test
             Helper_SeedDB();
             var expected = (List<Income>)Helper_SeedIncomes();
 
-            var actual = (List<Income>)_incomeService.GetAllIncome();
+            var actual = (List<Income>)_incomeService.GetAllIncomes();
 
             actual.Should().BeEquivalentTo(expected);
         }

@@ -10,6 +10,7 @@ namespace WhatIfBudget.Logic.Models
         public double Amount { get; set; }
         public EFrequency Frequency { get; set; }
         public EPriority Priority { get; set; }
+        public int BudgetId { get; set; }
 
         public Expense ToExpense(Guid? userId = null)
         {
@@ -24,7 +25,7 @@ namespace WhatIfBudget.Logic.Models
             };
         }
 
-        public static UserExpense FromExpense(Expense expense)
+        public static UserExpense FromExpense(Expense expense, int budgetId)
         {
             return new UserExpense()
             {
@@ -32,7 +33,8 @@ namespace WhatIfBudget.Logic.Models
                 Amount = expense.Amount,
                 Frequency = expense.Frequency,
                 Priority = expense.Priority,
-                Name = expense.Name
+                Name = expense.Name,
+                BudgetId= budgetId
             };
         }
     }

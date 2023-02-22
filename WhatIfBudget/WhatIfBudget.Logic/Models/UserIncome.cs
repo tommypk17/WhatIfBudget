@@ -9,6 +9,7 @@ namespace WhatIfBudget.Logic.Models
         public string Name { get; set; } = String.Empty;
         public double Amount { get; set; }
         public EFrequency Frequency { get; set; }
+        public int BudgetId { get; set; }
 
         public Income ToIncome(Guid? userId = null)
         {
@@ -22,14 +23,15 @@ namespace WhatIfBudget.Logic.Models
             };
         }
 
-        public static UserIncome FromIncome(Income income)
+        public static UserIncome FromIncome(Income income, int budgetId)
         {
             return new UserIncome()
             {
                 Id = income.Id,
                 Amount = income.Amount,
                 Frequency = income.Frequency,
-                Name = income.Name
+                Name = income.Name,
+                BudgetId = budgetId
             };
         }
     }

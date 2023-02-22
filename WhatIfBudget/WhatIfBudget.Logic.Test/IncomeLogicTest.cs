@@ -19,10 +19,10 @@ namespace WhatIfBudget.Logic.Test
 
 
         [TestMethod]
-        public void GetUserIncomes_CollectionAreEqual()
+        public void GetBudgetIncomes_CollectionAreEqual()
         {
-            var mock = new Mock<IIncomeService>();
-            mock.Setup(x => x.GetAllIncome()).Returns(
+            var mockIS = new Mock<IIncomeService>();
+            mockIS.Setup(x => x.GetAllIncomes()).Returns(
                 (IList<Income>) new List<Income>()
                 {
                     new Income() { Id = 1, Amount = 100, Frequency = 0, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
@@ -33,7 +33,20 @@ namespace WhatIfBudget.Logic.Test
                     new Income() { Id = 6, Amount = 100, Frequency = 0, UserId = Guid.NewGuid(), CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue }
                 }
                 );
-            var incomeLogic = new IncomeLogic(mock.Object);
+            var mockBIS = new Mock<IBudgetIncomeService>();
+            mockBIS.Setup(x => x.GetAllBudgetIncomes()).Returns(
+                (IList<BudgetIncome>)new List<BudgetIncome>()
+                {
+                    new BudgetIncome() { Id = 1, BudgetId = 1, IncomeId =  1},
+                    new BudgetIncome() { Id = 2, BudgetId = 1, IncomeId =  2},
+                    new BudgetIncome() { Id = 3, BudgetId = 1, IncomeId =  3},
+                    new BudgetIncome() { Id = 4, BudgetId = 2, IncomeId =  4},
+                    new BudgetIncome() { Id = 5, BudgetId = 2, IncomeId =  5},
+                    new BudgetIncome() { Id = 6, BudgetId = 2, IncomeId =  6},
+                    new BudgetIncome() { Id = 7, BudgetId = 1, IncomeId =  6}
+                }
+                );
+            var incomeLogic = new IncomeLogic(mockIS.Object, mockBIS.Object);
 
             var expected = new List<UserIncome>()
             {
@@ -44,7 +57,7 @@ namespace WhatIfBudget.Logic.Test
                 new UserIncome() {Id = 5, Amount = 100, Frequency = 0}
             };
 
-            var actual = incomeLogic.GetUserIncomes(Guid.Empty);
+            var actual = incomeLogic.GetBudgetIncomes(1);
 
             actual.Should().BeEquivalentTo(expected);
         }
