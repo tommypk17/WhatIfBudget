@@ -73,5 +73,10 @@ namespace WhatIfBudget.Services
         {
             return _ctx.Budgets.FirstOrDefault(x => x.Id == budgetId);
         }
+
+        public bool Exists(int budgetId)
+        {
+            return _ctx.Budgets.Any(x => x.Id == budgetId);
+        }
     }
 }

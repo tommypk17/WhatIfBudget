@@ -46,7 +46,10 @@ namespace WhatIfBudget.Logic.Test
                     new BudgetIncome() { Id = 7, BudgetId = 2, IncomeId =  6}
                 }
                 );
-            var incomeLogic = new IncomeLogic(mockIS.Object, mockBIS.Object);
+
+            var mock3 = new Mock<IBudgetService>();
+
+            var incomeLogic = new IncomeLogic(mockIS.Object, mockBIS.Object, mock3.Object);
 
             var expected = new List<UserIncome>()
             {
@@ -67,6 +70,7 @@ namespace WhatIfBudget.Logic.Test
         {
             var mock = new Mock<IIncomeService>();
             var mock2 = new Mock<IBudgetIncomeService>();
+            var mock3 = new Mock<IBudgetService>();
 
             mock.Setup(x => x.GetAllIncomes()).Returns(
                 new List<Income>()
@@ -106,12 +110,17 @@ namespace WhatIfBudget.Logic.Test
                 }
             );
 
-            var incomeLogic = new IncomeLogic(mock.Object, mock2.Object);
+            mock3.Setup(x => x.Exists(It.IsAny<int>())).Returns(
+                true
+            );
+
+            var incomeLogic = new IncomeLogic(mock.Object, mock2.Object, mock3.Object);
 
             var expected = new UserIncome()
             {
                 Id = 1,
                 Amount = 100,
+                BudgetId = 1,
                 Frequency = EFrequency.None,
             };
 
@@ -119,6 +128,7 @@ namespace WhatIfBudget.Logic.Test
             {
                 Id = 1,
                 Amount = 100,
+                BudgetId = 1,
                 Frequency = EFrequency.None,
             });
 
@@ -130,6 +140,7 @@ namespace WhatIfBudget.Logic.Test
         {
             var mock = new Mock<IIncomeService>();
             var mock2 = new Mock<IBudgetIncomeService>();
+            var mock3 = new Mock<IBudgetService>();
 
             mock.Setup(x => x.UpdateIncome(It.IsAny<Income>())).Returns(
                     new Income()
@@ -142,7 +153,7 @@ namespace WhatIfBudget.Logic.Test
                         UpdatedOn = DateTime.MinValue
                     }
                 );
-            var incomeLogic = new IncomeLogic(mock.Object, mock2.Object);
+            var incomeLogic = new IncomeLogic(mock.Object, mock2.Object, mock3.Object);
 
             var expected = new UserIncome()
             {
@@ -166,6 +177,7 @@ namespace WhatIfBudget.Logic.Test
         {
             var mock = new Mock<IIncomeService>();
             var mock2 = new Mock<IBudgetIncomeService>();
+            var mock3 = new Mock<IBudgetService>();
 
             mock.Setup(x => x.DeleteIncome(It.IsAny<int>())).Returns(
                     new Income()
@@ -218,7 +230,7 @@ namespace WhatIfBudget.Logic.Test
                 }
             );
 
-            var incomeLogic = new IncomeLogic(mock.Object, mock2.Object);
+            var incomeLogic = new IncomeLogic(mock.Object, mock2.Object, mock3.Object);
 
             var expected = new UserIncome()
             {

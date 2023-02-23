@@ -14,11 +14,14 @@ namespace WhatIfBudget.Logic
     {
         private readonly IIncomeService _incomeService;
         private readonly IBudgetIncomeService _budgetIncomeService;
+        private readonly IBudgetService _budgetService;
 
         public IncomeLogic(IIncomeService incomeService,
-                           IBudgetIncomeService budgetIncomeService) { 
+                           IBudgetIncomeService budgetIncomeService,
+                            IBudgetService budgetService) { 
             _incomeService = incomeService;
             _budgetIncomeService= budgetIncomeService;
+            _budgetService = budgetService;
         }
 
         public IList<UserIncome> GetUserIncomes(Guid userId)
@@ -38,8 +41,9 @@ namespace WhatIfBudget.Logic
                                                 .Select(x => UserIncome.FromIncome(x, budgetId))
                                                 .ToList();
         }
-        public UserIncome AddUserIncome(Guid userId, UserIncome income)
+        public UserIncome? AddUserIncome(Guid userId, UserIncome income)
         {
+            if (!_budgetService.Exists(income.BudgetId)) return null;
             // Create income element if it does not yet exist
             var dbIncome = _incomeService.GetAllIncomes()
                     .Where(x => x.Id == income.Id)
@@ -67,7 +71,7 @@ namespace WhatIfBudget.Logic
             return UserIncome.FromIncome(dbIncome, income.BudgetId);
         }
 
-        public UserIncome ModifyUserIncome(Guid userId, UserIncome income)
+        public UserIncome? ModifyUserIncome(Guid userId, UserIncome income)
         {
             var toUpdate = income.ToIncome(userId);
 
@@ -79,7 +83,7 @@ namespace WhatIfBudget.Logic
             return UserIncome.FromIncome(dbIncome, income.BudgetId);
         }
 
-        public UserIncome DeleteBudgetIncome(int incomeId, int budgetId)
+        public UserIncome? DeleteBudgetIncome(int incomeId, int budgetId)
         {
             // De-associate income element from current budget
             var idToDelete = _budgetIncomeService.GetAllBudgetIncomes()

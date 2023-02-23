@@ -15,11 +15,14 @@ namespace WhatIfBudget.Logic
     {
         private readonly IExpenseService _expenseService;
         private readonly IBudgetExpenseService _budgetExpenseService;
+        private readonly IBudgetService _budgetService;
 
         public ExpenseLogic(IExpenseService expenseService,
-                            IBudgetExpenseService budgetExpenseService) { 
+                            IBudgetExpenseService budgetExpenseService,
+                            IBudgetService budgetService) { 
             _expenseService = expenseService;
             _budgetExpenseService= budgetExpenseService;
+            _budgetService = budgetService;
         }
 
         public IList<UserExpense> GetUserExpenses(Guid userId)
@@ -41,8 +44,10 @@ namespace WhatIfBudget.Logic
                                                    .ToList();
         }
 
-        public UserExpense AddUserExpense(Guid userId, UserExpense expense)
+        public UserExpense? AddUserExpense(Guid userId, UserExpense expense)
         {
+            if (!_budgetService.Exists(expense.BudgetId)) return null;
+            if (expense.BudgetId == 0) return null;
             // Create expense element if it does not yet exist
             var dbExpense = _expenseService.GetAllExpenses()
                 .Where(x => x.Id == expense.Id)
