@@ -49,7 +49,7 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = incomeController.Get();
+            var actual = incomeController.Get(1);
 
 
             actual.Should().BeEquivalentTo(expected);
@@ -60,7 +60,7 @@ namespace WhatIfBudget.API.Test
         {
             //mock income logic
             var mockIncomeLogic = new Mock<IIncomeLogic>();
-            mockIncomeLogic.Setup(x => x.AddUserIncome(Guid.Empty, It.IsAny<UserIncome>()))
+            mockIncomeLogic.Setup(x => x.AddUserIncome(Guid.Empty, It.IsAny<UserIncome>(), 1))
                             .Returns(new UserIncome() { Id = 1, Amount = 100, Frequency = 0 });
 
             //Setup the http context (for auth)
@@ -79,7 +79,7 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = incomeController.Post(new UserIncome() { Id = 1, Amount = 100, Frequency = 0 });
+            var actual = incomeController.Post(new UserIncome() { Id = 1, Amount = 100, Frequency = 0 }, 1);
 
 
             actual.Should().BeEquivalentTo(expected);

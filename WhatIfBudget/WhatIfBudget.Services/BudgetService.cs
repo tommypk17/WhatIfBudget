@@ -10,22 +10,22 @@ using WhatIfBudget.Services.Interfaces;
 
 namespace WhatIfBudget.Services
 {
-    public class IncomeService : IIncomeService
+    public class BudgetService : IBudgetService
     {
         private readonly AppDbContext _ctx;
-        public IncomeService(AppDbContext ctx)
+        public BudgetService(AppDbContext ctx)
         {
             _ctx = ctx;
         }
 
-        public IList<Income> GetAllIncomes()
+        public IList<Budget> GetAllBudgets()
         {
-            return _ctx.Incomes.ToList();
+            return _ctx.Budgets.ToList();
         }
 
-        public Income? AddNewIncome(Income income)
+        public Budget? AddNewBudget(Budget budget)
         {
-            _ctx.Incomes.Add(income);
+            _ctx.Budgets.Add(budget);
             try
             {
                 _ctx.SaveChanges();
@@ -34,12 +34,12 @@ namespace WhatIfBudget.Services
             {
                 return null;
             }
-            return _ctx.Incomes.FirstOrDefault(x=> x.Id == income.Id);
+            return _ctx.Budgets.FirstOrDefault(x=> x.Id == budget.Id);
         }
 
-        public Income? UpdateIncome(Income income)
+        public Budget? UpdateBudget(Budget budget)
         {
-            _ctx.Incomes.Update(income);
+            _ctx.Budgets.Update(budget);
             try
             {
                 _ctx.SaveChanges();
@@ -48,25 +48,30 @@ namespace WhatIfBudget.Services
             {
                 return null;
             }
-            return _ctx.Incomes.FirstOrDefault(x=> x.Id == income.Id);
+            return _ctx.Budgets.FirstOrDefault(x=> x.Id == budget.Id);
         }
 
-        public Income? DeleteIncome(int id)
+        public Budget? DeleteBudget(int id)
         {
-            var Income = _ctx.Incomes.FirstOrDefault(x => x.Id == id); 
-            if (Income != null)
+            var dbBudget = _ctx.Budgets.FirstOrDefault(x => x.Id == id); 
+            if (dbBudget != null)
             {
-                _ctx.Incomes.Remove(Income);
+                _ctx.Budgets.Remove(dbBudget);
             }
             try
             {
                 _ctx.SaveChanges();
-                return Income;
+                return dbBudget;
              }
             catch(DbUpdateException)
             {
                 return null;
             }
+        }
+
+        public Budget? GetBudget(int budgetId)
+        {
+            return _ctx.Budgets.FirstOrDefault(x => x.Id == budgetId);
         }
     }
 }

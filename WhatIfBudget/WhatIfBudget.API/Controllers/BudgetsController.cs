@@ -6,18 +6,17 @@ using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
 using WhatIfBudget.Logic.Models;
 using Microsoft.AspNetCore.Authorization;
-using WhatIfBudget.Logic;
 
 namespace WhatIfBudget.API.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ExpensesController : ControllerBase
+    public class BudgetsController : ControllerBase
     {
-        private readonly IExpenseLogic _expenseLogic;
-        public ExpensesController(IExpenseLogic expenseLogic) {
-            _expenseLogic = expenseLogic;
+        private readonly IBudgetLogic _budgetLogic;
+        public BudgetsController(IBudgetLogic budgetLogic) { 
+            _budgetLogic = budgetLogic;
         }
 
         [HttpGet]
@@ -25,26 +24,29 @@ namespace WhatIfBudget.API.Controllers
         {
             //grab the user from the passed auth token
             var currentUser = AuthUser.Current(User);
-            var res = _expenseLogic.GetUserExpenses(currentUser.Id);
+            //pass the ID from the auth token to the logic function
+            var res = _budgetLogic.GetUserBudgets(currentUser.Id);
+            //return a status of 200 with all the current user's budget
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
         [HttpGet("{budgetId}")]
         public IActionResult Get([FromRoute] int budgetId)
         {
-            //pass the ID from the route to the logic function
-            var res = _expenseLogic.GetBudgetExpenses(budgetId);
+            //pass the budget ID from the route to the logic function
+            var res = _budgetLogic.GetBudget(budgetId);
+            //return a status of 200 with all the current user's budget
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
 
         [HttpPost]
-        public IActionResult Post(UserExpense apiExpense)
+        public IActionResult Post(UserBudget apiBudget)
         {
             //grab the user from the passed auth token
             var currentUser = AuthUser.Current(User);
 
-            var res = _expenseLogic.AddUserExpense(currentUser.Id, apiExpense);
+            var res = _budgetLogic.CreateUserBudget(currentUser.Id, apiBudget);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);
@@ -56,12 +58,12 @@ namespace WhatIfBudget.API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put(UserExpense apiExpense)
+        public IActionResult Put(UserBudget apiBudget)
         {
             //grab the user from the passed auth token
             var currentUser = AuthUser.Current(User);
 
-            var res = _expenseLogic.ModifyUserExpense(currentUser.Id, apiExpense);
+            var res = _budgetLogic.ModifyUserBudget(currentUser.Id, apiBudget);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);
@@ -72,10 +74,13 @@ namespace WhatIfBudget.API.Controllers
             }
         }
 
-        [HttpDelete("{expenseId}/{budgetId}")]
-        public IActionResult Delete([FromRoute] int expenseId, [FromRoute] int budgetId)
+        [HttpDelete]
+        public IActionResult Delete(UserBudget apiBudget)
         {
-            var res = _expenseLogic.DeleteBudgetExpense(expenseId, budgetId);
+            //grab the user from the passed auth token
+            var currentUser = AuthUser.Current(User);
+
+            var res = _budgetLogic.DeleteUserBudget(apiBudget);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);

@@ -16,9 +16,14 @@ namespace WhatIfBudget.Data.DAL
             : base(options)
         {
         }
+        public DbSet<Budget> Budgets { get; set; }
+        public DbSet<BudgetIncome> BudgetIncomes { get; set; }
+        public DbSet<BudgetExpense> BudgetExpenses { get; set; }
 
         public DbSet<Income> Incomes { get; set; }
         public DbSet<Expense> Expenses { get; set; }
+
+        public DbSet<InvestmentGoal> InvestmentGoals { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
