@@ -16,6 +16,6 @@ namespace WhatIfBudget.Data.Models
         public EFrequency Frequency { get; set; } = EFrequency.None;
         public EPriority Priority { get; set; } = EPriority.Want;
 
-        public virtual ICollection<BudgetExpense> BudgetExpenses { get; set; } = new Collection<BudgetExpense>();
+        public virtual ICollection<BudgetExpense>? BudgetExpenses { get; set; }
     }
 }

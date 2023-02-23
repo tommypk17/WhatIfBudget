@@ -15,6 +15,6 @@ namespace WhatIfBudget.Data.Models
         public double AnnualRaiseFactor_Percent { get; set; } = 0;
         public double AdditionalBudgetAllocation { get; set; } = 0;
 
-        public virtual ICollection<Budget> Budgets { get; set; } = new Collection<Budget>();
+        public virtual ICollection<Budget>? Budgets { get; set; }
     }
 }

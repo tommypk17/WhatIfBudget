@@ -8,6 +8,6 @@ namespace WhatIfBudget.Data.Models
 {
     public class DebtGoal : BaseEntity
     {
-        public virtual Budget Budget { get; set; } = new Budget();
+        public virtual Budget? Budget { get; set; }
     }
 }
