@@ -121,7 +121,7 @@ namespace WhatIfBudget.API.Test
         {
             //mock expense logic
             var mockExpenseLogic = new Mock<IExpenseLogic>();
-            mockExpenseLogic.Setup(x => x.DeleteUserExpense(Guid.Empty, It.IsAny<int>()))
+            mockExpenseLogic.Setup(x => x.DeleteBudgetExpense(1, It.IsAny<int>()))
                             .Returns(new UserExpense() { Id = 1, Amount = 100, Frequency = 0, Priority = EPriority.Need });
 
             //Setup the http context (for auth)
@@ -140,7 +140,7 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = expenseController.Delete(1);
+            var actual = expenseController.Delete(1,1);
 
 
             actual.Should().BeEquivalentTo(expected);

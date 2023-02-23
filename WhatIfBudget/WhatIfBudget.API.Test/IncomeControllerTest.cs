@@ -20,7 +20,7 @@ namespace WhatIfBudget.API.Test
         {
             //mock income logic
             var mockIncomeLogic = new Mock<IIncomeLogic>();
-            mockIncomeLogic.Setup(x => x.GetUserIncomes(Guid.Empty)).Returns(new List<UserIncome>()
+            mockIncomeLogic.Setup(x => x.GetBudgetIncomes(It.IsAny<int>())).Returns(new List<UserIncome>()
                 {
                     new UserIncome() { Id = 1, Amount = 100, Frequency = 0 },
                     new UserIncome() { Id = 2, Amount = 100, Frequency = 0 },
@@ -60,7 +60,7 @@ namespace WhatIfBudget.API.Test
         {
             //mock income logic
             var mockIncomeLogic = new Mock<IIncomeLogic>();
-            mockIncomeLogic.Setup(x => x.AddUserIncome(Guid.Empty, It.IsAny<UserIncome>(), 1))
+            mockIncomeLogic.Setup(x => x.AddUserIncome(Guid.Empty, It.IsAny<UserIncome>()))
                             .Returns(new UserIncome() { Id = 1, Amount = 100, Frequency = 0 });
 
             //Setup the http context (for auth)
@@ -79,7 +79,7 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = incomeController.Post(new UserIncome() { Id = 1, Amount = 100, Frequency = 0 }, 1);
+            var actual = incomeController.Post(new UserIncome() { Id = 1, Amount = 100, Frequency = 0 });
 
 
             actual.Should().BeEquivalentTo(expected);
@@ -120,7 +120,7 @@ namespace WhatIfBudget.API.Test
         {
             //mock income logic
             var mockIncomeLogic = new Mock<IIncomeLogic>();
-            mockIncomeLogic.Setup(x => x.DeleteUserIncome(Guid.Empty, It.IsAny<int>()))
+            mockIncomeLogic.Setup(x => x.DeleteBudgetIncome(1, It.IsAny<int>()))
                             .Returns(new UserIncome() { Id = 1, Amount = 100, Frequency = 0 });
 
             //Setup the http context (for auth)
@@ -139,7 +139,7 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = incomeController.Delete(1);
+            var actual = incomeController.Delete(1, 1);
 
 
             actual.Should().BeEquivalentTo(expected);

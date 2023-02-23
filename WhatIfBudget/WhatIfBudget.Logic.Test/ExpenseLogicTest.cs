@@ -22,6 +22,7 @@ namespace WhatIfBudget.Logic.Test
         public void GetUserExpenses_CollectionAreEqual()
         {
             var mock = new Mock<IExpenseService>();
+            var mock2 = new Mock<IBudgetExpenseService>();
             mock.Setup(x => x.GetAllExpenses()).Returns(
                 (IList<Expense>) new List<Expense>()
                 {
@@ -33,7 +34,7 @@ namespace WhatIfBudget.Logic.Test
                     new Expense() { Id = 6, Amount = 100, Frequency = EFrequency.None, Priority = EPriority.Need, UserId = Guid.NewGuid(), CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue }
                 }
                 );
-            var expenseLogic = new ExpenseLogic(mock.Object);
+            var expenseLogic = new ExpenseLogic(mock.Object, mock2.Object);
 
             var expected = new List<UserExpense>()
             {
@@ -53,6 +54,22 @@ namespace WhatIfBudget.Logic.Test
         public void AddUserExpense_CollectionAreEqual()
         {
             var mock = new Mock<IExpenseService>();
+            var mock2 = new Mock<IBudgetExpenseService>();
+
+            mock.Setup(x => x.GetAllExpenses()).Returns(
+                    new List<Expense>(){ 
+                        new Expense()
+                        {
+                            Id = 1,
+                            Amount = 100,
+                            Frequency = EFrequency.None,
+                            Priority = EPriority.Need,
+                            UserId = Guid.Empty,
+                            CreatedOn = DateTime.MinValue,
+                            UpdatedOn = DateTime.MinValue
+                        } 
+                }
+            );
 
             mock.Setup(x => x.AddNewExpense(It.IsAny<Expense>())).Returns(
                     new Expense()
@@ -66,7 +83,17 @@ namespace WhatIfBudget.Logic.Test
                         UpdatedOn = DateTime.MinValue
                     }
                 );
-            var expenseLogic = new ExpenseLogic(mock.Object);
+            mock2.Setup(x => x.AddNewBudgetExpense(It.IsAny<BudgetExpense>())).Returns(
+                    new BudgetExpense()
+                    {
+                        Id = 1,
+                        BudgetId= 1,
+                        ExpenseId = 1,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                );
+            var expenseLogic = new ExpenseLogic(mock.Object, mock2.Object);
 
             var expected = new UserExpense()
             {
@@ -91,6 +118,8 @@ namespace WhatIfBudget.Logic.Test
         public void ModifyUserExpense_CollectionAreEqual()
         {
             var mock = new Mock<IExpenseService>();
+            var mock2 = new Mock<IBudgetExpenseService>();
+
 
             mock.Setup(x => x.UpdateExpense(It.IsAny<Expense>())).Returns(
                     new Expense()
@@ -104,7 +133,7 @@ namespace WhatIfBudget.Logic.Test
                         UpdatedOn = DateTime.MinValue
                     }
                 );
-            var expenseLogic = new ExpenseLogic(mock.Object);
+            var expenseLogic = new ExpenseLogic(mock.Object, mock2.Object);
 
             var expected = new UserExpense()
             {
@@ -129,6 +158,7 @@ namespace WhatIfBudget.Logic.Test
         public void DeleteUserExpense_CollectionAreEqual()
         {
             var mock = new Mock<IExpenseService>();
+            var mock2 = new Mock<IBudgetExpenseService>();
 
             mock.Setup(x => x.DeleteExpense(It.IsAny<int>())).Returns(
                     new Expense()
@@ -142,17 +172,60 @@ namespace WhatIfBudget.Logic.Test
                         UpdatedOn = DateTime.MinValue
                     }
                 );
-            var expenseLogic = new ExpenseLogic(mock.Object);
+
+            mock.Setup(x => x.GetAllExpenses()).Returns(
+                new List<Expense>()
+                {
+                    new Expense()
+                    {
+                        Id = 1,
+                        Amount = 101,
+                        Frequency = EFrequency.None,
+                        Priority = EPriority.Need,
+                        UserId = Guid.Empty,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                }
+            );
+
+            mock2.Setup(x => x.DeleteBudgetExpense(It.IsAny<int>())).Returns(
+                new BudgetExpense()
+                {
+                    Id = 1,
+                    BudgetId = 1,
+                    ExpenseId = 1,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                }
+            );
+
+            mock2.Setup(x => x.GetAllBudgetExpenses()).Returns(
+                new List<BudgetExpense>()
+                {
+                    new BudgetExpense()
+                    {
+                        Id = 1,
+                        BudgetId = 1,
+                        ExpenseId = 1,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                }
+            ) ;
+
+            var expenseLogic = new ExpenseLogic(mock.Object, mock2.Object);
 
             var expected = new UserExpense()
             {
                 Id = 1,
                 Amount = 101,
+                BudgetId = 1,
                 Frequency = EFrequency.None,
                 Priority = EPriority.Need
             };
 
-            var actual = expenseLogic.DeleteUserExpense(Guid.Empty, 1);
+            var actual = expenseLogic.DeleteBudgetExpense(1, 1);
 
             actual.Should().BeEquivalentTo(expected);
         }
