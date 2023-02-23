@@ -43,6 +43,19 @@ namespace WhatIfBudget.Logic
 
         public UserExpense AddUserExpense(Guid userId, UserExpense expense)
         {
+            // Create expense element if it does not yet exist
+            var dbExpense = _expenseService.GetAllExpenses()
+                .Where(x => x.Id == expense.Id)
+                .FirstOrDefault();
+            if (dbExpense == null)
+            {
+                dbExpense = _expenseService.AddNewExpense(expense.ToExpense(userId));
+                if (dbExpense == null)
+                {
+                    throw new NullReferenceException();
+                }
+            }
+
             // Associate expense element to current budget
             var budgetExpenseToCreate = new BudgetExpense
             {
@@ -55,24 +68,8 @@ namespace WhatIfBudget.Logic
             {
                 throw new NullReferenceException();
             }
+            return UserExpense.FromExpense(dbExpense, expense.BudgetId);
 
-            // Create expense element if it does not yet exist
-            var dbExpense = _expenseService.GetAllExpenses()
-                .Where(x => x.Id == expense.Id)
-                .FirstOrDefault();
-            if (dbExpense == null)
-            {
-                var dbNewExpense = _expenseService.AddNewExpense(expense.ToExpense(userId));
-                if (dbNewExpense == null)
-                {
-                    throw new NullReferenceException();
-                }
-                return UserExpense.FromExpense(dbNewExpense, expense.BudgetId);
-            }
-            else
-            {
-                return UserExpense.FromExpense(dbExpense, expense.BudgetId);
-            }
         }
 
         public UserExpense? ModifyUserExpense(Guid userId, UserExpense expense)

@@ -40,6 +40,18 @@ namespace WhatIfBudget.Logic
         }
         public UserIncome AddUserIncome(Guid userId, UserIncome income)
         {
+            // Create income element if it does not yet exist
+            var dbIncome = _incomeService.GetAllIncomes()
+                    .Where(x => x.Id == income.Id)
+                    .FirstOrDefault();
+            if (dbIncome == null)
+            {
+                dbIncome = _incomeService.AddNewIncome(income.ToIncome(userId));
+                if (dbIncome == null)
+                {
+                    throw new NullReferenceException();
+                }
+            }
             // Associate income element to current budget
             var budgetIncomeToCreate = new BudgetIncome
             {
@@ -52,24 +64,7 @@ namespace WhatIfBudget.Logic
             {
                 throw new NullReferenceException();
             }
-
-            // Create income element if it does not yet exist
-            var dbIncome = _incomeService.GetAllIncomes()
-                    .Where(x => x.Id == income.Id)
-                    .FirstOrDefault();
-            if (dbIncome == null)
-            {
-                var dbNewIncome = _incomeService.AddNewIncome(income.ToIncome(userId));
-                if (dbNewIncome == null)
-                {
-                    throw new NullReferenceException();
-                }
-                return UserIncome.FromIncome(dbNewIncome, income.BudgetId);
-            }
-            else
-            {
-                return UserIncome.FromIncome(dbIncome, income.BudgetId);
-            }
+            return UserIncome.FromIncome(dbIncome, income.BudgetId);
         }
 
         public UserIncome ModifyUserIncome(Guid userId, UserIncome income)
