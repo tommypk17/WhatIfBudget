@@ -25,4 +25,10 @@ export class GoalComponent implements OnInit {
     });
   }
 
+  investmentGoalAdded(): void {
+    this.investmentService.getInvestments().subscribe((res: Investment[]) => {
+      if (res) this.investments = res;
+    });
+  }
+
 }

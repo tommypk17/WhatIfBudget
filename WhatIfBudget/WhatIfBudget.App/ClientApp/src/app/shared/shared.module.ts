@@ -11,7 +11,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
 
 @NgModule({
   declarations: [
-    NavigationComponent
+    NavigationComponent,
   ],
   imports: [
     CommonModule,

@@ -19,10 +19,10 @@ export class NavigationComponent implements OnInit {
       { label: "Expenses", icon: "pi pi-chart-pie", routerLink: "/expenses" },
       { label: "Goals", icon: "pi pi-chart-line", routerLink: "/goals" },
       {
-        label: "Show", icon: "pi pi-list", items:
+        label: "Budgets", icon: "pi pi-list", items:
           [{ label: 'Start New Budget', icon: 'pi pi-fw pi-refresh' },
           { label: 'Save Current Budget', icon: 'pi pi-fw pi-save' },
-          { label: 'Load Saved Budget', icon: 'pi pi-fw pi-download' },
+          { label: 'Load Saved Budget', icon: 'pi pi-fw pi-download', routerLink: '/budget-list' },
           { label: 'Log Out', icon: 'pi pi-fw pi-sign-out' }]
       }
     ];

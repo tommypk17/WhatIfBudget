@@ -1,0 +1,32 @@
+<form (ngSubmit)="onSubmit(form)" #form="ngForm">
+  <div class="d-flex">
+    <div class="d-flex w-100 mr-1">
+      <span class="p-float-label w-100 mt-1">
+        <input pInputText id="name"
+               [required]="true"
+               [(ngModel)]="model.name" name="name"
+               #name="ngModel" class="w-100" />
+        <label for="name">Name</label>
+      </span>
+      <span class="p-float-label w-100 mt-1">
+        <p-inputNumber id="amount"
+                       [required]="true"
+                       [(ngModel)]="model.amount" name="amount"
+                       #amount="ngModel" class="w-100" styleClass="w-100">
+        </p-inputNumber>
+        <label for="amount">Amount</label>
+      </span>
+      <span class="p-float-label w-100 mt-1">
+        <p-inputNumber id="years"
+                       [required]="true"
+                       [(ngModel)]="model.years" name="years"
+                       #amount="ngModel" class="w-100" styleClass="w-100">
+        </p-inputNumber>
+        <label for="years">Years</label>
+      </span>
+    </div>
+  </div>
+  <div class="d-flex flex-end mt-2">
+    <button pButton type="submit" label="Save" [disabled]="!form.form.valid"></button>
+  </div>
+</form>

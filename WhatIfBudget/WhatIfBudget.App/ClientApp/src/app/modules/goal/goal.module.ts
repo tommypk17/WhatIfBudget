@@ -17,7 +17,9 @@ import { InvestmentComponent } from './pages/investment/investment.component';
 import { SavingComponent } from './pages/saving/saving.component';
 import { DebtComponent } from './pages/debt/debt.component';
 import { MortgageComponent } from './pages/mortgage/mortgage.component';
+import { InvestmentGoalEntryFormComponent } from './components/investment-goal-entry-form/investment-goal-entry-form.component';
 import { InvestmentListingComponent } from './components/investment-listing/investment-listing.component';
+import { InvestmentGoalListingComponent } from './components/investment-goal-listing/investment-goal-listing.component';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
@@ -32,7 +34,9 @@ import { ConfirmationService } from 'primeng/api';
     SavingComponent,
     DebtComponent,
     MortgageComponent,
+    InvestmentGoalEntryFormComponent,
     InvestmentListingComponent,
+    InvestmentGoalListingComponent,
   ],
   imports: [
     CommonModule,

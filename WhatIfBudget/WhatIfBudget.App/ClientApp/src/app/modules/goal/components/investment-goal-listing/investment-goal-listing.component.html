@@ -1,0 +1,26 @@
+<div>
+  <p-confirmPopup></p-confirmPopup>
+  <p-table [value]="model">
+    <ng-template pTemplate="header">
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Amount</th>
+        <th>Years</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-investment>
+      <tr>
+        <td>
+          <div class="d-flex">
+            <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="delete($event, investment)"></button>
+            <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-secondary p-button-text" (click)="edit($event, investment)"></button>
+          </div>
+        </td>
+        <td>{{investment.name}}</td>
+        <td>{{investment.amount}}</td>
+        <td>{{investment.years}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
