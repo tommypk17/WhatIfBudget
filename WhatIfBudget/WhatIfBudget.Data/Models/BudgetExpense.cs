@@ -10,5 +10,8 @@ namespace WhatIfBudget.Data.Models
     {
         public int BudgetId { get; set; }
         public int ExpenseId { get; set; }
+
+        public virtual Expense Expense { get; set; } = new Expense();
+        public virtual Budget Budget { get; set; } = new Budget();
     }
 }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace WhatIfBudget.Data.Models
 {
-    public class BudgetIncome : BaseEntity
+    public class SavingGoal : BaseEntity
     {
-        public int BudgetId { get; set; }
-        public int IncomeId { get; set; }
-        public virtual Income Income { get; set; } = new Income();
+        public double TotalBalance { get; set; } = 0;
+        public double AnnualReturnRate_Percent { get; set; } = 0;
+
         public virtual Budget Budget { get; set; } = new Budget();
     }
 }

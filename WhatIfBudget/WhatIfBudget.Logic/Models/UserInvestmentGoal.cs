@@ -22,7 +22,7 @@ namespace WhatIfBudget.Logic.Models
                 AnnualReturnRate_Percent = AnnualReturnRate_Percent,
                 YearsToMaturation = YearsToMaturation,
                 AnnualRaiseFactor_Percent = AnnualRaiseFactor_Percent,
-                additionalBudgetAllocation = additionalBudgetAllocation
+                AdditionalBudgetAllocation = additionalBudgetAllocation
             };
         }
 
@@ -35,7 +35,7 @@ namespace WhatIfBudget.Logic.Models
                 AnnualReturnRate_Percent = investmentGoal.AnnualReturnRate_Percent,
                 YearsToMaturation = investmentGoal.YearsToMaturation,
                 AnnualRaiseFactor_Percent = investmentGoal.AnnualRaiseFactor_Percent,
-                additionalBudgetAllocation = investmentGoal.additionalBudgetAllocation
+                additionalBudgetAllocation = investmentGoal.AdditionalBudgetAllocation
             };
         }
     }

@@ -14,5 +14,10 @@ namespace WhatIfBudget.Data.Models
         public int DebtGoalId { get; set; }
         public int MortgageGoalId { get; set; }
         public int InvestmentGoalId { get; set; }
+
+        public virtual InvestmentGoal InvestmentGoal { get; set; } = new InvestmentGoal();
+        public virtual SavingGoal SavingGoal { get; set; } = new SavingGoal();
+        public virtual MortgageGoal MortgageGoal { get; set; } = new MortgageGoal();
+        public virtual DebtGoal DebtGoal { get; set; } = new DebtGoal();
     }
 }
