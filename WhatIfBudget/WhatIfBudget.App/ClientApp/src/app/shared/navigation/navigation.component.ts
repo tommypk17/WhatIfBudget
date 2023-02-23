@@ -1,14 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
+import { BudgetListingComponent } from '../budget-listing/budget-listing.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  styleUrls: ['./navigation.component.scss'],
+  providers: [DialogService]
 })
 export class NavigationComponent implements OnInit {
 
-  constructor() { }
+  constructor(private dialogService: DialogService) { }
 
   navs: MenuItem[] = [];
 
@@ -22,9 +25,16 @@ export class NavigationComponent implements OnInit {
         label: "Budgets", icon: "pi pi-list", items:
           [{ label: 'Start New Budget', icon: 'pi pi-fw pi-refresh' },
           { label: 'Save Current Budget', icon: 'pi pi-fw pi-save' },
-          { label: 'Load Saved Budget', icon: 'pi pi-fw pi-download', routerLink: '/budget-list' },
+          { label: 'Load Saved Budget', icon: 'pi pi-fw pi-download', command: () => { this.budgetlist() } },
           { label: 'Log Out', icon: 'pi pi-fw pi-sign-out' }]
       }
     ];
+  }
+
+  budgetlist() {
+    const ref = this.dialogService.open(BudgetListingComponent, {
+      header: 'Saved Budgets',
+      width: '70%'
+    });
   }
 }

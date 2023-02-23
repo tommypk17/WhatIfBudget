@@ -7,11 +7,14 @@ import { ButtonModule } from 'primeng/button';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuModule } from 'primeng/menu';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { BudgetListingComponent } from './budget-listing/budget-listing.component';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 
 @NgModule({
   declarations: [
     NavigationComponent,
+    BudgetListingComponent,
   ],
   imports: [
     CommonModule,
@@ -21,6 +24,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
     SplitButtonModule,
     MenuModule,
     TabMenuModule,
+    OverlayPanelModule
   ],
   exports: [
     NavigationComponent
