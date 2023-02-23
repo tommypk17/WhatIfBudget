@@ -89,7 +89,6 @@ namespace WhatIfBudget.Logic
             // De-associate expense element from current budget
             var budgetExpenseToDelete = new BudgetExpense 
             {
-                Id = 1 /*TODO*/,
                 BudgetId = budgetId,
                 ExpenseId = expenseId
             };
