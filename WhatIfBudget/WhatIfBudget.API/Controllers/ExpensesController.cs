@@ -29,7 +29,7 @@ namespace WhatIfBudget.API.Controllers
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
-        [HttpGet("{budgetId}")]
+        [HttpGet("budgets/{budgetId}")]
         public IActionResult Get([FromRoute] int budgetId)
         {
             //pass the ID from the route to the logic function

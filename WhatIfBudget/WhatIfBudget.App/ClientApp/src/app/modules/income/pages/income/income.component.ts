@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IncomeService } from '../../../../services/income.service';
+import { SharedService } from '../../../../services/shared.service';
 import { Income } from '../../../../shared/models/income';
 
 @Component({
@@ -11,16 +12,16 @@ export class IncomeComponent implements OnInit {
 
   incomes: Income[] = [];
 
-  constructor(private incomeService: IncomeService) { }
+  constructor(private incomeService: IncomeService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
-    this.incomeService.getIncomes().subscribe((res: Income[]) => {
+    this.incomeService.getIncomesByBudgetId(this.sharedService.budget.id).subscribe((res: Income[]) => {
       if (res) this.incomes = res;
     });
   }
 
   incomeAdded(): void {
-    this.incomeService.getIncomes().subscribe((res: Income[]) => {
+    this.incomeService.getIncomesByBudgetId(this.sharedService.budget.id).subscribe((res: Income[]) => {
       if (res) this.incomes = res;
     });
   }

@@ -27,7 +27,7 @@ export class BudgetListingComponent implements OnInit {
 
   loadBudget(): void {
     if (this.selected) {
-      this.sharedService.budget = this.selected.id;
+      this.sharedService.budget = this.selected;
       this.ref.close(this.selected);
     }
   }

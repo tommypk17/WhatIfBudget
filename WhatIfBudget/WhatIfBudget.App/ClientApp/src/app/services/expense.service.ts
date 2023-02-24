@@ -27,6 +27,22 @@ export class ExpenseService {
     );
   }
 
+  public getExpensesByBudgetId(budgetId: number): Observable<Expense[]> {
+    //this.sharedService.queueLoading('saveIncome');
+    return this.http.get<Expense[]>(environment.URL + `/api/expenses/budgets/${budgetId}`).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<Expense[]>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
   public saveExpense(expense: Expense): Observable<Expense> {
     //this.sharedService.queueLoading('saveIncome');
     return this.http.post<Expense>(environment.URL + '/api/expenses', expense).pipe(

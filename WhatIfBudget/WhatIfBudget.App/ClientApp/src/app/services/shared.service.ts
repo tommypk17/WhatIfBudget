@@ -2,6 +2,7 @@ import { KeyValue } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { EFrequency } from '../shared/enums/efrequency';
 import { EPriority } from '../shared/enums/epriority';
+import { Budget } from '../shared/models/budget';
 
 @Injectable({
   providedIn: 'root'
@@ -26,13 +27,19 @@ export class SharedService {
     return frequencies;
   }
 
-  set budget(budgetId: number) {
-    localStorage.setItem("budgetId", budgetId.toString());
+  set budget(budget: Budget) {
+    localStorage.setItem("budget", JSON.stringify(budget));
   }
 
-  get budget(): number {
-    let temp: string | null = localStorage.getItem("budgetId");
-    if (temp != null) return parseInt(temp);
-    return -1;
+  get budget(): Budget {
+    let temp: string | null = localStorage.getItem("budget");
+    if (temp != null) {
+      try {
+        return JSON.parse(temp) as Budget;
+      } catch {
+
+      }
+    }
+    return new Budget();
   }
 }
