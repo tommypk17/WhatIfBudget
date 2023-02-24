@@ -52,10 +52,12 @@ namespace WhatIfBudget.Logic
         }
         public UserBudget GetBudget(int budgetId)
         {
-            return _budgetService.GetAllBudgets()
+            var dbBudget = _budgetService.GetAllBudgets()
                                                 .Where(x => x.Id == budgetId)
                                                 .Select(x => UserBudget.FromBudget(x))
                                                 .FirstOrDefault();
+            if (dbBudget == null) { throw new NullReferenceException(); }
+            else { return dbBudget; }
         }
         public UserBudget CreateUserBudget(Guid userId, UserBudget budget)
         {
@@ -67,20 +69,14 @@ namespace WhatIfBudget.Logic
             */
             var newInvestmentGoal = new InvestmentGoal();
             var dbInvestmentGoal = _investmentGoalService.AddInvestmentGoal(newInvestmentGoal);
-            if (dbInvestmentGoal == null)
-            {
-                throw new NullReferenceException();
-            }
+            if (dbInvestmentGoal == null) { throw new NullReferenceException(); }
 
             // Populate user budget attributes
             budget.InvestmentGoalId = dbInvestmentGoal.Id;
             var toCreate = budget.ToBudget(userId);
 
             var dbBudget = _budgetService.AddNewBudget(toCreate);
-            if (dbBudget == null)
-            {
-                throw new NullReferenceException();
-            }
+            if (dbBudget == null) { throw new NullReferenceException(); }
             return UserBudget.FromBudget(dbBudget);
         }
 
@@ -89,10 +85,7 @@ namespace WhatIfBudget.Logic
             var toUpdate = budget.ToBudget(userId);
 
             var dbBudget = _budgetService.UpdateBudget(toUpdate);
-            if (dbBudget == null)
-            {
-                throw new NullReferenceException();
-            }
+            if (dbBudget == null) { throw new NullReferenceException(); }
             return UserBudget.FromBudget(dbBudget);
         }
 
@@ -115,20 +108,14 @@ namespace WhatIfBudget.Logic
             foreach (var budgetIncome in budgetIncomeList)
             {
                 var dbBudgetIncome = _budgetIncomeService.DeleteBudgetIncome(budgetIncome.Id);
-                if (dbBudgetIncome == null)
-                {
-                    throw new NullReferenceException();
-                }
+                if (dbBudgetIncome == null) { throw new NullReferenceException(); }
                 // Delete income element that is not associated with any other budget Id
                 if (!_budgetIncomeService.GetAllBudgetIncomes()
                         .Where(x => x.IncomeId == dbBudgetIncome.IncomeId)
                         .Any())
                 {
                     var dbIncome = _incomeService.DeleteIncome(dbBudgetIncome.IncomeId);
-                    if (dbIncome == null)
-                    {
-                        throw new NullReferenceException();
-                    }
+                    if (dbIncome == null) { throw new NullReferenceException(); }
                 }
             }
 
@@ -139,29 +126,21 @@ namespace WhatIfBudget.Logic
             foreach (var budgetExpense in budgetExpenseList)
             {
                 var dbBudgetExpense = _budgetExpenseService.DeleteBudgetExpense(budgetExpense.Id);
-                if (dbBudgetExpense == null)
-                {
-                    throw new NullReferenceException();
-                }
+                if (dbBudgetExpense == null) { throw new NullReferenceException(); }
+
                 // Delete income element that is not associated with any other budget Id
                 if (!_budgetExpenseService.GetAllBudgetExpenses()
                         .Where(x => x.ExpenseId == dbBudgetExpense.ExpenseId)
                         .Any())
                 {
                     var dbExpense = _expenseService.DeleteExpense(dbBudgetExpense.ExpenseId);
-                    if (dbExpense == null)
-                    {
-                        throw new NullReferenceException();
-                    }
+                    if (dbExpense == null) { throw new NullReferenceException(); }
                 }
             }
 
 
             var dbBudget = _budgetService.DeleteBudget(budget.Id);
-            if (dbBudget == null)
-            {
-                throw new NullReferenceException();
-            }
+            if (dbBudget == null) { throw new NullReferenceException(); }
             return UserBudget.FromBudget(dbBudget);
         }
     }

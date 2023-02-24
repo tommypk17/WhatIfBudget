@@ -25,12 +25,12 @@ namespace WhatIfBudget.Logic.Test
             mockIS.Setup(x => x.GetAllIncomes()).Returns(
                 (IList<Income>) new List<Income>()
                 {
-                    new Income() { Id = 1, Amount = 100, Frequency = 0, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
-                    new Income() { Id = 2, Amount = 100, Frequency = 0, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
-                    new Income() { Id = 3, Amount = 100, Frequency = 0, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
-                    new Income() { Id = 4, Amount = 100, Frequency = 0, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
-                    new Income() { Id = 5, Amount = 100, Frequency = 0, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
-                    new Income() { Id = 6, Amount = 100, Frequency = 0, UserId = Guid.NewGuid(), CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue }
+                    new Income() { Id = 1, Amount = 100, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 2, Amount = 100, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 3, Amount = 100, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 4, Amount = 100, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 5, Amount = 100, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 6, Amount = 100, Frequency = EFrequency.None, UserId = Guid.NewGuid(), CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue }
                 }
                 );
             var mockBIS = new Mock<IBudgetIncomeService>();

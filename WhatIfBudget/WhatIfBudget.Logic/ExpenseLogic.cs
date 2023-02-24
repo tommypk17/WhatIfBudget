@@ -112,9 +112,14 @@ namespace WhatIfBudget.Logic
             else
             {
                 // Keep expense element in database for use by other budgets
-                return UserExpense.FromExpense(_expenseService.GetAllExpenses()
+                var dbDeleteExpense = _expenseService.GetAllExpenses()
                     .Where(x => x.Id == expenseId)
-                    .FirstOrDefault(), budgetId);
+                    .FirstOrDefault();
+                if (dbDeleteExpense == null)
+                {
+                    throw new NullReferenceException();
+                }
+                else { return UserExpense.FromExpense(dbDeleteExpense, budgetId); }
             }
         }
     }

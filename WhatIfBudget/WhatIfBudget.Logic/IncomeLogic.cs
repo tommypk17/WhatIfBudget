@@ -106,9 +106,14 @@ namespace WhatIfBudget.Logic
             else
             {
                 // Keep income element in database for use by other budgets
-                return UserIncome.FromIncome(_incomeService.GetAllIncomes()
+                var dbDeleteIncome = _incomeService.GetAllIncomes()
                     .Where(x => x.Id == incomeId)
-                    .FirstOrDefault(), budgetId);
+                    .FirstOrDefault();
+                if (dbDeleteIncome == null)
+                {
+                    throw new NullReferenceException();
+                }
+                else { return UserIncome.FromIncome(dbDeleteIncome, budgetId); }
             }
         }
     }
