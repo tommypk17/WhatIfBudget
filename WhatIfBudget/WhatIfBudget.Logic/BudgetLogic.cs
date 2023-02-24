@@ -50,14 +50,14 @@ namespace WhatIfBudget.Logic
                                                 .Select(x => UserBudget.FromBudget(x))
                                                 .ToList();
         }
-        public UserBudget GetBudget(int budgetId)
+        public UserBudget? GetBudget(int budgetId)
         {
             return _budgetService.GetAllBudgets()
                                                 .Where(x => x.Id == budgetId)
                                                 .Select(x => UserBudget.FromBudget(x))
                                                 .FirstOrDefault();
         }
-        public UserBudget CreateUserBudget(Guid userId, UserBudget budget)
+        public UserBudget? CreateUserBudget(Guid userId, UserBudget budget)
         {
             // Create goals for this budget
             /*
@@ -84,7 +84,7 @@ namespace WhatIfBudget.Logic
             return UserBudget.FromBudget(dbBudget);
         }
 
-        public UserBudget ModifyUserBudget(Guid userId, UserBudget budget)
+        public UserBudget? ModifyUserBudget(Guid userId, UserBudget budget)
         {
             var toUpdate = budget.ToBudget(userId);
 
@@ -96,7 +96,7 @@ namespace WhatIfBudget.Logic
             return UserBudget.FromBudget(dbBudget);
         }
 
-        public UserBudget DeleteUserBudget(UserBudget budget)
+        public UserBudget? DeleteUserBudget(UserBudget budget)
         {
             // Delete associated debts & investments
 
