@@ -19,28 +19,28 @@ namespace WhatIfBudget.Logic
         private readonly IBudgetIncomeService _budgetIncomeService;
         private readonly IBudgetExpenseService _budgetExpenseService;
         private readonly IInvestmentGoalService _investmentGoalService;
-        /*
         private readonly ISavingGoalService _savingGoalService;
         private readonly IDebtGoalService _debtGoalService;
         private readonly IMortgageGoalService _mortgageGoalService;
-        */
+        
         public BudgetLogic(IBudgetService budgetService,
                            IIncomeService incomeService,
                            IExpenseService expenseService,
                            IBudgetIncomeService budgetIncomeService,
                            IBudgetExpenseService budgetExpenseService,
-                           IInvestmentGoalService investmentGoalService/* HERE */) { 
+                           IInvestmentGoalService investmentGoalService,
+                           IMortgageGoalService mortgageGoalService,
+                           IDebtGoalService debtGoalService,
+                           ISavingGoalService savingGoalService) { 
             _budgetService = budgetService;
             _incomeService = incomeService;
             _expenseService = expenseService;
             _budgetIncomeService= budgetIncomeService;
             _budgetExpenseService= budgetExpenseService;
             _investmentGoalService = investmentGoalService;
-            /*
             _savingGoalService = savingGoalService;
             _debtGoalService = debtGoalService;
             _mortgageGoalService = mortgageGoalService;
-            */
         }
 
         public IList<UserBudget> GetUserBudgets(Guid userId)
@@ -50,7 +50,7 @@ namespace WhatIfBudget.Logic
                                                 .Select(x => UserBudget.FromBudget(x))
                                                 .ToList();
         }
-        public UserBudget GetBudget(int budgetId)
+        public UserBudget? GetBudget(int budgetId)
         {
             var dbBudget = _budgetService.GetAllBudgets()
                                                 .Where(x => x.Id == budgetId)
@@ -59,20 +59,38 @@ namespace WhatIfBudget.Logic
             if (dbBudget == null) { throw new NullReferenceException(); }
             else { return dbBudget; }
         }
-        public UserBudget CreateUserBudget(Guid userId, UserBudget budget)
+        public UserBudget? CreateUserBudget(Guid userId, UserBudget budget)
         {
             // Create goals for this budget
-            /*
-            dbSavingGoal = _savingGoalService.AddNewSavingGoal(UserSavingGoal.FromId(budget.SavingGoalId).ToSavingGoal());
-            dbDebtGoal = _debtGoalService.AddNewDebtGoal(UserDebtGoal.FromId(budget.DebtGoalId).ToDebtGoal());
-            dbMortgageGoal = _mortgageGoalService.AddNewMortageGoal(UserMortageGoal.FromId(budget.MortageGoalId).ToMortageGoal());
-            */
-            var newInvestmentGoal = new InvestmentGoal();
-            var dbInvestmentGoal = _investmentGoalService.AddInvestmentGoal(newInvestmentGoal);
-            if (dbInvestmentGoal == null) { throw new NullReferenceException(); }
+            var dbSavingGoal = _savingGoalService.AddSavingGoal(new SavingGoal());
+            if (dbSavingGoal == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            var dbDebtGoal = _debtGoalService.AddDebtGoal(new DebtGoal());
+            if (dbDebtGoal == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            var dbMortgageGoal = _mortgageGoalService.AddMortgageGoal(new MortgageGoal());
+            if (dbMortgageGoal == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            var dbInvestmentGoal = _investmentGoalService.AddInvestmentGoal(new InvestmentGoal());
+            if (dbInvestmentGoal == null)
+            {
+                throw new NullReferenceException();
+            }
 
             // Populate user budget attributes
             budget.InvestmentGoalId = dbInvestmentGoal.Id;
+            budget.DebtGoalId = dbDebtGoal.Id;
+            budget.MortgageGoalId = dbMortgageGoal.Id;
+            budget.SavingGoalId = dbSavingGoal.Id;
             var toCreate = budget.ToBudget(userId);
 
             var dbBudget = _budgetService.AddNewBudget(toCreate);
@@ -80,7 +98,7 @@ namespace WhatIfBudget.Logic
             return UserBudget.FromBudget(dbBudget);
         }
 
-        public UserBudget ModifyUserBudget(Guid userId, UserBudget budget)
+        public UserBudget? ModifyUserBudget(Guid userId, UserBudget budget)
         {
             var toUpdate = budget.ToBudget(userId);
 
@@ -89,7 +107,7 @@ namespace WhatIfBudget.Logic
             return UserBudget.FromBudget(dbBudget);
         }
 
-        public UserBudget DeleteUserBudget(UserBudget budget)
+        public UserBudget? DeleteUserBudget(UserBudget budget)
         {
             // Delete associated debts & investments
 

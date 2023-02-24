@@ -25,4 +25,14 @@ export class SharedService {
     });
     return frequencies;
   }
+
+  set budget(budgetId: number) {
+    localStorage.setItem("budgetId", budgetId.toString());
+  }
+
+  get budget(): number {
+    let temp: string | null = localStorage.getItem("budgetId");
+    if (temp != null) return parseInt(temp);
+    return -1;
+  }
 }

@@ -17,5 +17,6 @@ namespace WhatIfBudget.Services.Interfaces
         public Budget? UpdateBudget(Budget modifiedBudget);
 
         public Budget? DeleteBudget(int id);
+        public bool Exists(int budgetId);
     }
 }

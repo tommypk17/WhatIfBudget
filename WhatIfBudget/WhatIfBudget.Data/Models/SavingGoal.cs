@@ -11,6 +11,6 @@ namespace WhatIfBudget.Data.Models
         public double TotalBalance { get; set; } = 0;
         public double AnnualReturnRate_Percent { get; set; } = 0;
 
-        public virtual Budget Budget { get; set; } = new Budget();
+        public virtual Budget? Budget { get; set; }
     }
 }
