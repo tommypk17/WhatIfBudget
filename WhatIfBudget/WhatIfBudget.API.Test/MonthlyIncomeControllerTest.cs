@@ -20,7 +20,7 @@ namespace WhatIfBudget.API.Test
         {
             //mock income logic
             var mockMonthlyIncomeLogic = new Mock<IMonthlyIncomeLogic>();
-            mockMonthlyIncomeLogic.Setup(x => x.GetBudgetMonthlyIncome(It.IsAny<int>())).Returns(5000);
+            mockMonthlyIncomeLogic.Setup(x => x.GetBudgetMonthlyIncome(It.IsAny<int>())).Returns(5000.0);
 
             //Setup the http context (for auth)
             var monthlyIncomeController = new MonthlyIncomeController(mockMonthlyIncomeLogic.Object)
@@ -31,7 +31,7 @@ namespace WhatIfBudget.API.Test
                 }
             };
 
-            var expectedValue = 5000;
+            var expectedValue = 5000.0;
 
             var expected = new ObjectResult(expectedValue)
             {

@@ -55,7 +55,7 @@ namespace WhatIfBudget.Logic.Test
 
             var actual = monthlyIncomeLogic.GetBudgetMonthlyIncome(1);
 
-            actual.Should().Equals(expected);
+            actual.Should().Be(expected);
         }
     }
 }
