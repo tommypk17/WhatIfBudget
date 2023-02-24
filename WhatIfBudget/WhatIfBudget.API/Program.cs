@@ -23,6 +23,9 @@ builder.Services.AddScoped<IBudgetService, BudgetService>();
 builder.Services.AddScoped<IBudgetIncomeService, BudgetIncomeService>();
 builder.Services.AddScoped<IBudgetExpenseService, BudgetExpenseService>();
 builder.Services.AddScoped<IInvestmentGoalService, InvestmentGoalService>();
+builder.Services.AddScoped<IMortgageGoalService, MortgageGoalService>();
+builder.Services.AddScoped<IDebtGoalService, DebtGoalService>();
+builder.Services.AddScoped<ISavingGoalService, SavingGoalService>();
 
 //Logic
 builder.Services.AddScoped<IExpenseLogic, ExpenseLogic>();
