@@ -18,12 +18,12 @@ namespace WhatIfBudget.Services
             _ctx = ctx;
         }
 
-        public InvestmentGoal GetInvestmentGoal(int id)
+        public InvestmentGoal? GetInvestmentGoal(int id)
         {
             return _ctx.InvestmentGoals.FirstOrDefault(x => x.Id == id);
         }
 
-        public InvestmentGoal AddInvestmentGoal(InvestmentGoal investmentGoal)
+        public InvestmentGoal? AddInvestmentGoal(InvestmentGoal investmentGoal)
         {
             _ctx.InvestmentGoals.Add(investmentGoal);
             try
@@ -37,7 +37,7 @@ namespace WhatIfBudget.Services
             return _ctx.InvestmentGoals.FirstOrDefault(x=> x.Id == investmentGoal.Id);
         }
 
-        public InvestmentGoal UpdateInvestmentGoal(InvestmentGoal investmentGoal)
+        public InvestmentGoal? UpdateInvestmentGoal(InvestmentGoal investmentGoal)
         {
             _ctx.InvestmentGoals.Update(investmentGoal);
             try
