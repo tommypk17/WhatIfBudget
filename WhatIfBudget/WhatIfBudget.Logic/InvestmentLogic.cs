@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WhatIfBudget.Data.Models;
 using WhatIfBudget.Logic.Interfaces;
 using WhatIfBudget.Logic.Models;
+using WhatIfBudget.Services;
 using WhatIfBudget.Services.Interfaces;
 
 namespace WhatIfBudget.Logic
@@ -16,6 +17,14 @@ namespace WhatIfBudget.Logic
         public InvestmentLogic(IInvestmentService investmentService) {
             _investmentService = investmentService;
         }
+        public IList<UserInvestment> GetUserInvestments(Guid userId)
+        {
+            return _investmentService.GetAllInvestments()
+                                    .Where(x => x.UserId == userId)
+                                    .Select(x => UserInvestment.FromInvestment(x))
+                                    .ToList();
+        }
+
         public UserInvestment? AddUserInvestment(Guid userId, UserInvestment userInvestment)
         {
             var dbInvestment = _investmentService.AddNewInvestment(userInvestment.ToInvestment(userId));

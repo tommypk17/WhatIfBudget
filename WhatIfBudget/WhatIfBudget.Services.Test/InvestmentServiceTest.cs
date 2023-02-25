@@ -16,8 +16,8 @@ namespace WhatIfBudget.Services.Test
         [TestCleanup()]
         public void TestCleanUp()
         {
-            var allExpenses = _ctx.Expenses.ToList();
-            _ctx.Expenses.RemoveRange(allExpenses);
+            var allInvestments = _ctx.Investments.ToList();
+            _ctx.Investments.RemoveRange(allInvestments);
             _ctx.SaveChanges();
         }
 
@@ -32,7 +32,17 @@ namespace WhatIfBudget.Services.Test
             _investmentService = new InvestmentService(_ctx);
         }
 
-       
+        [TestMethod]
+        public void GetAllInvestments_CollectionAreEqual()
+        {
+            Helper_SeedDB();
+            var expected = (List<Investment>)Helper_SeedInvestments();
+
+            var actual = (List<Investment>)_investmentService.GetAllInvestments();
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
         [TestMethod]
         public void AddNewInvestment_CollectionAreEqual()
         {
@@ -69,19 +79,30 @@ namespace WhatIfBudget.Services.Test
         }
         public void Helper_SeedDB()
         {
-            _ctx.Expenses.AddRange(Helper_SeedExpenses());
+            _ctx.Investments.AddRange(Helper_SeedInvestments());
             _ctx.SaveChanges();
         }
 
-        public IList<Expense> Helper_SeedExpenses()
+        public IList<Investment> Helper_SeedInvestments()
         {
-            var expenses = new List<Expense>();
+            var investments = new List<Investment>();
             for (var i = 1; i <= 10; i++)
             {
-                expenses.Add(new Expense() { Id = i, Amount = i * 102, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue });
+                investments.Add(
+                            new Investment()
+                            {
+                                Id = i,
+                                Name = "test" + i,
+                                CurrentBalance = 0,
+                                MonthlyEmployerContribution = 0,
+                                MonthlyPersonalContribution = 0,
+                                UserId = Guid.Empty,
+                                CreatedOn = DateTime.MinValue,
+                                UpdatedOn = DateTime.MinValue
+                            });
             }
 
-            return expenses;
+            return investments;
         }
     }
 }

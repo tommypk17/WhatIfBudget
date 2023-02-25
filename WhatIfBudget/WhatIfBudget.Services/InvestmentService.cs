@@ -18,6 +18,11 @@ namespace WhatIfBudget.Services
             _ctx = ctx;
         }
 
+        public IList<Investment> GetAllInvestments()
+        {
+            return _ctx.Investments.ToList();
+        }
+
         public Investment? AddNewInvestment(Investment investment)
         {
             _ctx.Investments.Add(investment);

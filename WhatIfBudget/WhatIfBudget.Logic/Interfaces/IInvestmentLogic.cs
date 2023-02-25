@@ -9,6 +9,7 @@ namespace WhatIfBudget.Logic.Interfaces
 {
     public interface IInvestmentLogic
     {
+        public IList<UserInvestment> GetUserInvestments(Guid userId);
         public UserInvestment? AddUserInvestment(Guid userId, UserInvestment userInvestment);
     }
 }
