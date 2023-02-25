@@ -1,5 +1,5 @@
 import { KeyValue } from '@angular/common';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { EFrequency } from '../shared/enums/efrequency';
 import { EPriority } from '../shared/enums/epriority';
 import { Budget } from '../shared/models/budget';
@@ -8,6 +8,7 @@ import { Budget } from '../shared/models/budget';
   providedIn: 'root'
 })
 export class SharedService {
+  budgetLoadedEmit: EventEmitter<void> = new EventEmitter<void>();
 
   constructor() { }
 
@@ -29,6 +30,7 @@ export class SharedService {
 
   set budget(budget: Budget) {
     localStorage.setItem("budget", JSON.stringify(budget));
+    this.budgetLoadedEmit.emit();
   }
 
   get budget(): Budget {
@@ -41,5 +43,10 @@ export class SharedService {
       }
     }
     return new Budget();
+  }
+
+  get budgetLoaded(): boolean {
+    if (this.budget && this.budget.id) return true;
+    else return false;
   }
 }

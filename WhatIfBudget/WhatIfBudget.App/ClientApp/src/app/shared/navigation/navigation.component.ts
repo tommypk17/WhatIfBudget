@@ -3,6 +3,7 @@ import { MenuItem } from 'primeng/api';
 import { BudgetListingComponent } from '../budget-listing/budget-listing.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { BudgetEntryFormComponent } from '../budget-entry-form/budget-entry-form.component';
+import { SharedService } from '../../services/shared.service';
 
 @Component({
   selector: 'app-navigation',
@@ -12,12 +13,25 @@ import { BudgetEntryFormComponent } from '../budget-entry-form/budget-entry-form
 })
 export class NavigationComponent implements OnInit {
 
-  constructor(private dialogService: DialogService) { }
+  constructor(private dialogService: DialogService, private sharedService: SharedService) { }
 
   navs: MenuItem[] = [];
 
   ngOnInit() {
     this.navs = [
+      { label: 'Load Budget', icon: 'pi pi-fw pi-download', command: () => { this.budgetlist() } },
+      { label: 'Start New Budget', icon: 'pi pi-fw pi-refresh', command: () => { this.budgetCreate() } }
+    ];
+    if (this.sharedService.budgetLoaded) {
+      this.navs = this.loadFullNavigation();
+    }
+    this.sharedService.budgetLoadedEmit.subscribe(() => {
+      if (this.sharedService.budgetLoaded) this.navs = this.loadFullNavigation();
+    });
+  }
+
+  private loadFullNavigation(): MenuItem[] {
+    return [
       { label: "Home", icon: "pi pi-home", routerLink: "/" },
       { label: "Incomes", icon: "pi pi-money-bill", routerLink: "/incomes" },
       { label: "Expenses", icon: "pi pi-chart-pie", routerLink: "/expenses" },
@@ -25,9 +39,7 @@ export class NavigationComponent implements OnInit {
       {
         label: "Budgets", icon: "pi pi-list", items:
           [{ label: 'Start New Budget', icon: 'pi pi-fw pi-refresh', command: () => { this.budgetCreate() } },
-          { label: 'Save Current Budget', icon: 'pi pi-fw pi-save' },
-          { label: 'Load Saved Budget', icon: 'pi pi-fw pi-download', command: () => { this.budgetlist() } },
-          { label: 'Log Out', icon: 'pi pi-fw pi-sign-out' }]
+          { label: 'Load Saved Budget', icon: 'pi pi-fw pi-download', command: () => { this.budgetlist() } }]
       }
     ];
   }
