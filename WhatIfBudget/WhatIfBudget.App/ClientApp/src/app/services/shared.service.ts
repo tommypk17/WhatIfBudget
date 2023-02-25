@@ -1,5 +1,6 @@
 import { KeyValue } from '@angular/common';
 import { EventEmitter, Injectable } from '@angular/core';
+import { MsalService } from '@azure/msal-angular';
 import { EFrequency } from '../shared/enums/efrequency';
 import { EPriority } from '../shared/enums/epriority';
 import { Budget } from '../shared/models/budget';
@@ -10,7 +11,7 @@ import { Budget } from '../shared/models/budget';
 export class SharedService {
   budgetLoadedEmit: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor() { }
+  constructor(private msalService: MsalService) { }
 
   get frequencies(): KeyValue<number, string>[] {
     let frequencies: KeyValue<number, string>[] = [];
@@ -48,5 +49,15 @@ export class SharedService {
   get budgetLoaded(): boolean {
     if (this.budget && this.budget.id) return true;
     else return false;
+  }
+
+  get loggedIn(): boolean {
+    return !!!this.msalService.instance.getAllAccounts()[0];
+  }
+
+  logout(): void {
+    localStorage.removeItem('budget');
+    this.msalService.logout();
+    
   }
 }

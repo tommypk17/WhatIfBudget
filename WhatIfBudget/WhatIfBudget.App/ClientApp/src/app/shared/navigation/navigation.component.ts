@@ -55,4 +55,8 @@ export class NavigationComponent implements OnInit {
       header: 'New Budget',
     });
   }
+
+  logout(): void {
+    this.sharedService.logout();
+  }
 }

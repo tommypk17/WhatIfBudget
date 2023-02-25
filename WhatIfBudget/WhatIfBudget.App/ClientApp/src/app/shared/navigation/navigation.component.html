@@ -3,5 +3,13 @@
     <ng-template pTemplate="start">
       <img src="./assets/whatifbudget.webp" height="40" class="mr-2">
     </ng-template>
+    <ng-template pTemplate="end">
+      <button pButton icon="pi pi-user" class="p-button-rounded p-button-text" (click)="profile.toggle($event)"></button>
+    </ng-template>
   </p-menubar>
+  <p-overlayPanel #profile>
+    <ng-template pTemplate>
+      <button pButton class="p-button-text p-button-danger" label="Logout" icon="pi pi-fw pi-sign-out" (click)="logout()"></button>
+    </ng-template>
+  </p-overlayPanel>
 </div>
