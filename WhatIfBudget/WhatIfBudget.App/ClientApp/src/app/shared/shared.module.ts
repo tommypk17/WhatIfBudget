@@ -11,11 +11,13 @@ import { BudgetListingComponent } from './budget-listing/budget-listing.componen
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ListboxModule } from 'primeng/listbox';
 import { FormsModule } from '@angular/forms';
+import { BudgetCreationFormComponent } from './budget-creation-form/budget-creation-form.component';
 
 @NgModule({
   declarations: [
     NavigationComponent,
     BudgetListingComponent,
+    BudgetCreationFormComponent,
   ],
   imports: [
     CommonModule,

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { BudgetListingComponent } from '../budget-listing/budget-listing.component';
 import { DialogService } from 'primeng/dynamicdialog';
+import { BudgetCreationFormComponent } from '../budget-creation-form/budget-creation-form.component';
 
 @Component({
   selector: 'app-navigation',
@@ -23,7 +24,7 @@ export class NavigationComponent implements OnInit {
       { label: "Goals", icon: "pi pi-chart-line", routerLink: "/goals" },
       {
         label: "Budgets", icon: "pi pi-list", items:
-          [{ label: 'Start New Budget', icon: 'pi pi-fw pi-refresh' },
+          [{ label: 'Start New Budget', icon: 'pi pi-fw pi-refresh', command: () => { this.budgetCreate() } },
           { label: 'Save Current Budget', icon: 'pi pi-fw pi-save' },
           { label: 'Load Saved Budget', icon: 'pi pi-fw pi-download', command: () => { this.budgetlist() } },
           { label: 'Log Out', icon: 'pi pi-fw pi-sign-out' }]
@@ -34,6 +35,13 @@ export class NavigationComponent implements OnInit {
   budgetlist() {
     const ref = this.dialogService.open(BudgetListingComponent, {
       header: 'Saved Budgets',
+      width: '70%'
+    });
+  }
+
+  budgetCreate() {
+    const ref = this.dialogService.open(BudgetCreationFormComponent, {
+      header: 'New Budget',
       width: '70%'
     });
   }
