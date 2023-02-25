@@ -7,6 +7,7 @@ using WhatIfBudget.Logic.Interfaces;
 using WhatIfBudget.Logic.Models;
 using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
+using System.Dynamic;
 
 namespace WhatIfBudget.Logic
 {
@@ -17,6 +18,32 @@ namespace WhatIfBudget.Logic
         public InvestmentGoalLogic(IInvestmentGoalService investmentGoalService, IBudgetService budgetService) { 
             _investmentGoalService = investmentGoalService;
             _budgetService = budgetService;
+        }
+
+        private double GetTotalMonthlyContributions(UserInvestmentGoal investmentGoal)
+        {
+
+        }
+
+        private IList<double> GetBalanceOverTime(UserInvestmentGoal investmentGoal)
+        {
+            int iMax = investmentGoal.YearsToTarget + 11;
+            IList<double> monthlyContribution = new List<double>(iMax);
+            for (int i = 0; i < iMax; i++)
+            {
+
+            }
+
+
+            IList<double> balance = new List<double>(iMax);
+            balance[0] = investmentGoal.TotalBalance;
+
+            for (int i = 1; i < iMax; i++)
+            {
+
+            }
+
+            return balance;
         }
 
         public UserInvestmentGoal? GetBudgetInvestmentGoal(int budgetId)

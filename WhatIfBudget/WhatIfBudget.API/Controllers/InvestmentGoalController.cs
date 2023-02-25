@@ -51,6 +51,17 @@ namespace WhatIfBudget.API.Controllers
             }
         }
 
+        [HttpGet("{investmentGoalId}/BalanceAtMaturation")]
+        public IActionResult GetBalanceAtMaturation(int investmentGoalId)
+        {
+
+        }
+
+        [HttpGet("{investmentGoalId}/BalanceOverTime")]
+        public IActionResult GetBalanceOverTime(int investmentGoalId)
+        {
+
+        }
 
         [HttpPut]
         public IActionResult Put(UserInvestmentGoal apiInvestmentGoal)

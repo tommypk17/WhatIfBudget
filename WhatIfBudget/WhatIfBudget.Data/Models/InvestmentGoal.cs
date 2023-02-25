@@ -11,7 +11,7 @@ namespace WhatIfBudget.Data.Models
     {
         public double TotalBalance { get; set; } = 0;
         public double AnnualReturnRate_Percent { get; set; } = 0;
-        public UInt16 YearsToMaturation { get; set; } = 0;
+        public UInt16 YearsToTarget { get; set; } = 0;
         public double AnnualRaiseFactor_Percent { get; set; } = 0;
         public double AdditionalBudgetAllocation { get; set; } = 0;
 

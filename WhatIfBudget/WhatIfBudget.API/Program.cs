@@ -35,6 +35,12 @@ builder.Services.AddScoped<IBudgetLogic, BudgetLogic>();
 builder.Services.AddScoped<IInvestmentLogic, InvestmentLogic>();
 builder.Services.AddScoped<IInvestmentGoalLogic, InvestmentGoalLogic>();
 
+builder.Services.AddScoped<IMonthlyIncomeLogic, MonthlyIncomeLogic>();
+builder.Services.AddScoped<IMonthlyExpenseLogic, MonthlyExpenseLogic>();
+builder.Services.AddScoped<IMonthlyNeedLogic, MonthlyNeedLogic>();
+builder.Services.AddScoped<IMonthlyWantLogic, MonthlyWantLogic>();
+
+
 builder.Services.AddControllers();
 
 //Setup MS AD B2C Auth
