@@ -4,6 +4,7 @@ import { BudgetListingComponent } from '../budget-listing/budget-listing.compone
 import { DialogService } from 'primeng/dynamicdialog';
 import { BudgetEntryFormComponent } from '../budget-entry-form/budget-entry-form.component';
 import { SharedService } from '../../services/shared.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navigation',
@@ -13,21 +14,32 @@ import { SharedService } from '../../services/shared.service';
 })
 export class NavigationComponent implements OnInit {
 
-  constructor(private dialogService: DialogService, private sharedService: SharedService) { }
+  constructor(private dialogService: DialogService, private sharedService: SharedService, private authService: AuthService) { }
 
   navs: MenuItem[] = [];
 
   ngOnInit() {
-    this.navs = [
-      { label: 'Load Budget', icon: 'pi pi-fw pi-download', command: () => { this.budgetlist() } },
-      { label: 'Start New Budget', icon: 'pi pi-fw pi-refresh', command: () => { this.budgetCreate() } }
-    ];
-    if (this.sharedService.budgetLoaded) {
+    if (this.sharedService.loggedIn) {
+      this.navs = this.loadBasicNavigation();
+    }
+    if (this.sharedService.budgetLoaded && this.sharedService.loggedIn) {
       this.navs = this.loadFullNavigation();
     }
     this.sharedService.budgetLoadedEmit.subscribe(() => {
+      if (this.sharedService.loggedIn) this.navs = this.loadBasicNavigation();
       if (this.sharedService.budgetLoaded) this.navs = this.loadFullNavigation();
     });
+    this.sharedService.loggedInEmit.subscribe(() => {
+      if (this.sharedService.loggedIn) this.navs = this.loadBasicNavigation();
+      if (this.sharedService.budgetLoaded) this.navs = this.loadFullNavigation();
+    });
+  }
+
+  private loadBasicNavigation(): MenuItem[] {
+    return [
+      { label: 'Load Budget', icon: 'pi pi-fw pi-download', command: () => { this.budgetlist() } },
+      { label: 'Start New Budget', icon: 'pi pi-fw pi-refresh', command: () => { this.budgetCreate() } }
+    ];
   }
 
   private loadFullNavigation(): MenuItem[] {
@@ -58,5 +70,13 @@ export class NavigationComponent implements OnInit {
 
   logout(): void {
     this.sharedService.logout();
+  }
+
+  login(): void {
+    this.authService.login();
+  }
+
+  get loggedIn(): boolean {
+    return this.sharedService.loggedIn;
   }
 }

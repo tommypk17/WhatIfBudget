@@ -9,7 +9,8 @@
   </p-menubar>
   <p-overlayPanel #profile>
     <ng-template pTemplate>
-      <button pButton class="p-button-text p-button-danger" label="Logout" icon="pi pi-fw pi-sign-out" (click)="logout()"></button>
+      <button *ngIf="loggedIn" pButton class="p-button-text p-button-danger" label="Logout" icon="pi pi-fw pi-sign-out" (click)="logout()"></button>
+      <button *ngIf="!loggedIn" pButton class="p-button-text" label="Login" icon="pi pi-fw pi-sign-in" (click)="login()"></button>
     </ng-template>
   </p-overlayPanel>
 </div>

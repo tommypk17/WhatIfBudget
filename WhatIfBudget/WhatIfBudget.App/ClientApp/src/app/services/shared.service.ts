@@ -9,6 +9,7 @@ import { Budget } from '../shared/models/budget';
   providedIn: 'root'
 })
 export class SharedService {
+  loggedInEmit: EventEmitter<void> = new EventEmitter<void>();
   budgetLoadedEmit: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(private msalService: MsalService) { }
@@ -52,12 +53,11 @@ export class SharedService {
   }
 
   get loggedIn(): boolean {
-    return !!!this.msalService.instance.getAllAccounts()[0];
+    return !!this.msalService.instance.getAllAccounts()[0];
   }
 
   logout(): void {
     localStorage.removeItem('budget');
     this.msalService.logout();
-    
   }
 }
