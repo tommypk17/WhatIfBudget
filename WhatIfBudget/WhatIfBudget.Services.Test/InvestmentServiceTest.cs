@@ -77,6 +77,56 @@ namespace WhatIfBudget.Services.Test
 
             actual.Should().BeEquivalentTo(expected);
         }
+
+        [TestMethod]
+        public void UpdateInvestment_ObjectsAreEqual()
+        {
+            _ctx.Investments.Add(new Investment()
+            {
+                Id = 11,
+                Name = "Test",
+                CurrentBalance = 1,
+                MonthlyEmployerContribution = 0,
+                MonthlyPersonalContribution = 0,
+                UserId = Guid.Empty,
+                CreatedOn = DateTime.MinValue,
+                UpdatedOn = DateTime.MinValue
+            });
+            _ctx.SaveChanges();
+            _ctx.ChangeTracker.Clear();
+
+            var expected = new Investment()
+            {
+                Id = 11,
+                Name = "Test1",
+                CurrentBalance = 1,
+                MonthlyEmployerContribution = 0,
+                MonthlyPersonalContribution = 0,
+                UserId = Guid.Empty,
+                CreatedOn = DateTime.MinValue,
+                UpdatedOn = DateTime.MinValue
+            };
+
+            var actual = _investmentService.UpdateInvestment(new Investment()
+            {
+                Id = 11,
+                Name = "Test1",
+                CurrentBalance = 1,
+                MonthlyEmployerContribution = 0,
+                MonthlyPersonalContribution = 0,
+                UserId = Guid.Empty,
+                CreatedOn = DateTime.MinValue,
+                UpdatedOn = DateTime.MinValue
+            });
+            Assert.IsNotNull(actual);
+
+            Assert.AreEqual(actual.Id, expected.Id);
+            Assert.AreEqual(actual.Name, expected.Name);
+            Assert.AreEqual(actual.UserId, expected.UserId);
+            Assert.AreEqual(actual.CurrentBalance, expected.CurrentBalance);
+            Assert.AreEqual(actual.MonthlyPersonalContribution, expected.MonthlyPersonalContribution);
+            Assert.AreEqual(actual.MonthlyEmployerContribution, expected.MonthlyEmployerContribution);
+        }
         public void Helper_SeedDB()
         {
             _ctx.Investments.AddRange(Helper_SeedInvestments());

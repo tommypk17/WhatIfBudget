@@ -11,6 +11,7 @@ namespace WhatIfBudget.Services.Interfaces
     {
         public IList<Investment> GetAllInvestments();
         public Investment? AddNewInvestment(Investment newInvestment);
+        public Investment? UpdateInvestment(Investment modifiedInvestment);
 
     }
 }

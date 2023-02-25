@@ -36,5 +36,19 @@ namespace WhatIfBudget.Services
             }
             return _ctx.Investments.FirstOrDefault(x => x.Id == investment.Id);
         }
+
+        public Investment? UpdateInvestment(Investment investment)
+        {
+            _ctx.Investments.Update(investment);
+            try
+            {
+                _ctx.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                return null;
+            }
+            return _ctx.Investments.FirstOrDefault(x => x.Id == investment.Id);
+        }
     }
 }

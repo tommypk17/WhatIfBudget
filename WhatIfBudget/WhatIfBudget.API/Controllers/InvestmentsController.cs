@@ -40,5 +40,22 @@ namespace WhatIfBudget.API.Controllers
             //return a status of 200 with all the current user's budget
             return StatusCode(StatusCodes.Status200OK, res);
         }
+
+        [HttpPut]
+        public IActionResult Put(UserInvestment apiInvestment)
+        {
+            //grab the user from the passed auth token
+            var currentUser = AuthUser.Current(User);
+
+            var res = _investmentLogic.ModifyUserInvestment(currentUser.Id, apiInvestment);
+            if (res == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, res);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status200OK, res);
+            }
+        }
     }
 }

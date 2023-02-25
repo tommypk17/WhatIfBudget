@@ -11,5 +11,7 @@ namespace WhatIfBudget.Logic.Interfaces
     {
         public IList<UserInvestment> GetUserInvestments(Guid userId);
         public UserInvestment? AddUserInvestment(Guid userId, UserInvestment userInvestment);
+        public UserInvestment? ModifyUserInvestment(Guid userId, UserInvestment investment);
+
     }
 }

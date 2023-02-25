@@ -35,5 +35,14 @@ namespace WhatIfBudget.Logic
 
             return UserInvestment.FromInvestment(dbInvestment);
         }
+
+        public UserInvestment? ModifyUserInvestment(Guid userId, UserInvestment investment)
+        {
+            var toUpdate = investment.ToInvestment(userId);
+
+            var dbInvestment = _investmentService.UpdateInvestment(toUpdate);
+            if (dbInvestment == null) { throw new NullReferenceException(); }
+            return UserInvestment.FromInvestment(dbInvestment);
+        }
     }
 }

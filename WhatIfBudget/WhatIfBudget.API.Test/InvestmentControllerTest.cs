@@ -148,6 +148,57 @@ namespace WhatIfBudget.API.Test
             actual.Should().BeEquivalentTo(expected);
         }
 
+        [TestMethod]
+        public void Put_UserInvestmentUpdated()
+        {
+            //mock income logic
+            var mock = new Mock<IInvestmentLogic>();
+            mock.Setup(x => x.ModifyUserInvestment(Guid.Empty, It.IsAny<UserInvestment>()))
+                            .Returns(new UserInvestment() {
+                                Id = 1,
+                                Name = "test",
+                                GoalId = 0,
+                                CurrentBalance = 0,
+                                MonthlyPersonalContribution = 0,
+                                MonthlyEmployerContribution = 0
+                            });
+
+            //Setup the http context (for auth)
+            var investmentController = new InvestmentsController(mock.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new UserInvestment() {
+                Id = 1,
+                Name = "test",
+                GoalId = 0,
+                CurrentBalance = 0,
+                MonthlyPersonalContribution = 0,
+                MonthlyEmployerContribution = 0
+            };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = investmentController.Put(new UserInvestment() {
+                Id = 1,
+                Name = "test",
+                GoalId = 0,
+                CurrentBalance = 0,
+                MonthlyPersonalContribution = 0,
+                MonthlyEmployerContribution = 0
+            });
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
         public Mock<HttpContext> Helper_MockHttpContext()
         {
             //Mock the principal & http context to pass in a fake user
