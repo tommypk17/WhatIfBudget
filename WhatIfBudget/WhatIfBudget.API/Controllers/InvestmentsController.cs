@@ -57,5 +57,19 @@ namespace WhatIfBudget.API.Controllers
                 return StatusCode(StatusCodes.Status200OK, res);
             }
         }
+
+        [HttpDelete("{investmentId}")]
+        public IActionResult Delete([FromRoute] int investmentId)
+        {
+            var res = _investmentLogic.DeleteInvestment(investmentId);
+            if (res == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, res);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status200OK, res);
+            }
+        }
     }
 }

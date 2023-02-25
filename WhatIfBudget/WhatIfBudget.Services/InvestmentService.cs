@@ -50,5 +50,23 @@ namespace WhatIfBudget.Services
             }
             return _ctx.Investments.FirstOrDefault(x => x.Id == investment.Id);
         }
+
+        public Investment? DeleteInvestment(int id)
+        {
+            var investment = _ctx.Investments.FirstOrDefault(x => x.Id == id);
+            if (investment != null)
+            {
+                _ctx.Investments.Remove(investment);
+            }
+            try
+            {
+                _ctx.SaveChanges();
+                return investment;
+            }
+            catch (DbUpdateException)
+            {
+                return null;
+            }
+        }
     }
 }

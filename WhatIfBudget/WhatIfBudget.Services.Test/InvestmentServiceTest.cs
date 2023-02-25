@@ -127,6 +127,21 @@ namespace WhatIfBudget.Services.Test
             Assert.AreEqual(actual.MonthlyPersonalContribution, expected.MonthlyPersonalContribution);
             Assert.AreEqual(actual.MonthlyEmployerContribution, expected.MonthlyEmployerContribution);
         }
+
+        [TestMethod]
+        public void DeleteInvestment_CollectionsAreEqual()
+        {
+            Helper_SeedDB();
+            var expected = (List<Investment>)Helper_SeedInvestments();
+            var toRemove = expected.First();
+            expected.Remove(toRemove);
+
+            _investmentService.DeleteInvestment(toRemove.Id);
+
+            var actual = _ctx.Investments.ToList();
+
+            actual.Should().BeEquivalentTo(expected);
+        }
         public void Helper_SeedDB()
         {
             _ctx.Investments.AddRange(Helper_SeedInvestments());

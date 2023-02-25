@@ -183,5 +183,57 @@ namespace WhatIfBudget.Logic.Test
             actual.Should().BeEquivalentTo(expected);
         }
 
+        [TestMethod]
+        public void DeleteUserInvestment_CollectionsAreEqual()
+        {
+            var mock = new Mock<IInvestmentService>();
+
+            mock.Setup(x => x.DeleteInvestment(It.IsAny<int>())).Returns(
+                    new Investment()
+                    {
+                        Id = 1,
+                        Name = "Test",
+                        CurrentBalance = 1,
+                        MonthlyEmployerContribution = 0,
+                        MonthlyPersonalContribution = 0,
+                        UserId = Guid.Empty,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                );
+
+            mock.Setup(x => x.GetAllInvestments()).Returns(
+                    new List<Investment>(){
+                        new Investment()
+                        {
+                            Id = 1,
+                            Name = "Test",
+                            CurrentBalance = 1,
+                            MonthlyEmployerContribution = 0,
+                            MonthlyPersonalContribution = 0,
+                            UserId = Guid.Empty,
+                            CreatedOn = DateTime.MinValue,
+                            UpdatedOn = DateTime.MinValue
+                        }
+                    }
+                );
+
+            var investmentLogic = new InvestmentLogic(mock.Object);
+
+            var expected = new UserInvestment()
+            {
+                Id = 1,
+                Name = "Test",
+                GoalId = 0,
+                CurrentBalance = 1,
+                MonthlyPersonalContribution = 0,
+                MonthlyEmployerContribution = 0
+            };
+
+            var actual = investmentLogic.DeleteInvestment(1);
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
     }
 }

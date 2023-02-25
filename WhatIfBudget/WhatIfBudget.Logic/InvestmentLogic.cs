@@ -44,5 +44,20 @@ namespace WhatIfBudget.Logic
             if (dbInvestment == null) { throw new NullReferenceException(); }
             return UserInvestment.FromInvestment(dbInvestment);
         }
+
+        public UserInvestment? DeleteInvestment(int investmentId)
+        {
+            var idToDelete = _investmentService.GetAllInvestments()
+                    .Where(x => x.Id == investmentId)
+                    .Select(x => x.Id)
+                    .FirstOrDefault();
+            var dbInvestment = _investmentService.DeleteInvestment(idToDelete);
+            if (dbInvestment == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            return UserInvestment.FromInvestment(dbInvestment);
+        }
     }
 }
