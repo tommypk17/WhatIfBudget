@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { BudgetListingComponent } from '../budget-listing/budget-listing.component';
 import { DialogService } from 'primeng/dynamicdialog';
-import { BudgetCreationFormComponent } from '../budget-creation-form/budget-creation-form.component';
+import { BudgetEntryFormComponent } from '../budget-entry-form/budget-entry-form.component';
 
 @Component({
   selector: 'app-navigation',
@@ -35,14 +35,12 @@ export class NavigationComponent implements OnInit {
   budgetlist() {
     const ref = this.dialogService.open(BudgetListingComponent, {
       header: 'Saved Budgets',
-      width: '70%'
     });
   }
 
   budgetCreate() {
-    const ref = this.dialogService.open(BudgetCreationFormComponent, {
+    const ref = this.dialogService.open(BudgetEntryFormComponent, {
       header: 'New Budget',
-      width: '70%'
     });
   }
 }

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { BudgetService } from '../../services/budget.service';
 import { SharedService } from '../../services/shared.service';
+import { BudgetEntryFormComponent } from '../budget-entry-form/budget-entry-form.component';
 import { Budget } from '../models/budget';
 
 @Component({
@@ -13,7 +14,7 @@ export class BudgetListingComponent implements OnInit {
   private _budgets: Budget[] = [];
   selected: Budget | undefined;
 
-  constructor(private sharedService: SharedService, private budgetService: BudgetService, private ref: DynamicDialogRef) { }
+  constructor(private sharedService: SharedService, private budgetService: BudgetService, private ref: DynamicDialogRef, private dialogService: DialogService) { }
 
   ngOnInit(): void {
     this.budgetService.getBudgets().subscribe((res: Budget[]) => {
@@ -30,5 +31,17 @@ export class BudgetListingComponent implements OnInit {
       this.sharedService.budget = this.selected;
       this.ref.close(this.selected);
     }
+  }
+
+  editBudget(): void {
+    const ref = this.dialogService.open(BudgetEntryFormComponent, {
+      header: 'Edit Budget',
+      data: {budget: this.selected}
+    });
+    ref.onClose.subscribe(() => {
+      this.budgetService.getBudgets().subscribe((res: Budget[]) => {
+        this._budgets = res;
+      });
+    });
   }
 }

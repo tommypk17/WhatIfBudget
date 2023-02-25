@@ -15,15 +15,19 @@ export class ExpenseComponent implements OnInit {
   constructor(private expenseService: ExpenseService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
-    this.expenseService.getExpensesByBudgetId(this.sharedService.budget.id).subscribe((res: Expense[]) => {
-      if (res) this.expenses = res;
-    });
+    if (this.sharedService.budget.id) {
+      this.expenseService.getExpensesByBudgetId(this.sharedService.budget.id).subscribe((res: Expense[]) => {
+        if (res) this.expenses = res;
+      });
+    }
   }
 
   expenseAdded(): void {
-    this.expenseService.getExpensesByBudgetId(this.sharedService.budget.id).subscribe((res: Expense[]) => {
-      if (res) this.expenses = res;
-    });
+    if (this.sharedService.budget.id) {
+      this.expenseService.getExpensesByBudgetId(this.sharedService.budget.id).subscribe((res: Expense[]) => {
+        if (res) this.expenses = res;
+      });
+    }
   }
 
 }

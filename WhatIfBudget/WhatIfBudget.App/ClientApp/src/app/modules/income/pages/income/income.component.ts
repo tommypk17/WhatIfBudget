@@ -15,14 +15,18 @@ export class IncomeComponent implements OnInit {
   constructor(private incomeService: IncomeService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
-    this.incomeService.getIncomesByBudgetId(this.sharedService.budget.id).subscribe((res: Income[]) => {
-      if (res) this.incomes = res;
-    });
+    if (this.sharedService.budget.id) {
+      this.incomeService.getIncomesByBudgetId(this.sharedService.budget.id).subscribe((res: Income[]) => {
+        if (res) this.incomes = res;
+      });
+    }
   }
 
   incomeAdded(): void {
-    this.incomeService.getIncomesByBudgetId(this.sharedService.budget.id).subscribe((res: Income[]) => {
-      if (res) this.incomes = res;
-    });
+    if (this.sharedService.budget.id) {
+      this.incomeService.getIncomesByBudgetId(this.sharedService.budget.id).subscribe((res: Income[]) => {
+        if (res) this.incomes = res;
+      });
+    }
   }
 }

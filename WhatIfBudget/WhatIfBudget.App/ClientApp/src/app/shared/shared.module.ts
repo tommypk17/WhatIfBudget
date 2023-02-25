@@ -11,13 +11,14 @@ import { BudgetListingComponent } from './budget-listing/budget-listing.componen
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ListboxModule } from 'primeng/listbox';
 import { FormsModule } from '@angular/forms';
-import { BudgetCreationFormComponent } from './budget-creation-form/budget-creation-form.component';
+import { BudgetEntryFormComponent } from './budget-entry-form/budget-entry-form.component';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [
     NavigationComponent,
     BudgetListingComponent,
-    BudgetCreationFormComponent,
+    BudgetEntryFormComponent,
   ],
   imports: [
     CommonModule,
@@ -29,7 +30,8 @@ import { BudgetCreationFormComponent } from './budget-creation-form/budget-creat
     MenuModule,
     TabMenuModule,
     OverlayPanelModule,
-    ListboxModule
+    ListboxModule,
+    InputTextModule
   ],
   exports: [
     NavigationComponent
