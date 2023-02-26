@@ -79,7 +79,7 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = monthlyExpenseController.Get(1);
+            var actual = monthlyExpenseController.GetMonthlyExpense(1);
 
 
             actual.Should().BeEquivalentTo(expected);
@@ -108,7 +108,7 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = monthlyNeedController.Get(1);
+            var actual = monthlyNeedController.GetMonthlyNeeds(1);
 
 
             actual.Should().BeEquivalentTo(expected);
@@ -137,7 +137,7 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = monthlyWantController.Get(1);
+            var actual = monthlyWantController.GetMonthlyWants(1);
 
 
             actual.Should().BeEquivalentTo(expected);

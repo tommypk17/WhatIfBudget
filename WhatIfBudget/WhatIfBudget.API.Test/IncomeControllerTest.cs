@@ -78,7 +78,8 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = monthlyIncomeController.Get(1);
+            var actual = monthlyIncomeController.GetMonthlyIncome(1);
+
 
 
             actual.Should().BeEquivalentTo(expected);

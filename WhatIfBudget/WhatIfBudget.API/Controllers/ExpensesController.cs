@@ -38,7 +38,7 @@ namespace WhatIfBudget.API.Controllers
         }
 
         [HttpGet("budgets/{budgetId}/monthlyExpense")]
-        public IActionResult GetmonthlyExpense([FromRoute] int budgetId)
+        public IActionResult GetMonthlyExpense([FromRoute] int budgetId)
         {
             //pass the ID from the route to the logic function
             var res = _expenseLogic.GetBudgetMonthlyExpense(budgetId);
@@ -47,19 +47,19 @@ namespace WhatIfBudget.API.Controllers
         }
 
         [HttpGet("budgets/{budgetId}/monthlyNeeds")]
-        public IActionResult GetmonthlyNeeds([FromRoute] int budgetId)
+        public IActionResult GetMonthlyNeeds([FromRoute] int budgetId)
         {
             //pass the ID from the route to the logic function
-            var res = _expenseLogic.GetBudgetMonthlyExpense(budgetId);
+            var res = _expenseLogic.GetBudgetMonthlyNeed(budgetId);
             //return a status of 200 with all the current user's income
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
         [HttpGet("budgets/{budgetId}/monthlyWants")]
-        public IActionResult GetmonthlyWants([FromRoute] int budgetId)
+        public IActionResult GetMonthlyWants([FromRoute] int budgetId)
         {
             //pass the ID from the route to the logic function
-            var res = _expenseLogic.GetBudgetMonthlyExpense(budgetId);
+            var res = _expenseLogic.GetBudgetMonthlyWant(budgetId);
             //return a status of 200 with all the current user's income
             return StatusCode(StatusCodes.Status200OK, res);
         }
