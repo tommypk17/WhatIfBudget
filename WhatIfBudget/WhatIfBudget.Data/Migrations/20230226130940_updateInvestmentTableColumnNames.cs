@@ -5,14 +5,39 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WhatIfBudget.Data.Migrations
 {
-    public partial class addInvestmentGoalInvestment : Migration
+    public partial class updateInvestmentTableColumnNames : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "AnnualRaiseFactor_Percent",
+                table: "InvestmentGoals");
+
             migrationBuilder.RenameColumn(
                 name: "YearsToMaturation",
                 table: "InvestmentGoals",
                 newName: "YearsToTarget");
+
+            migrationBuilder.AddColumn<double>(
+                name: "AdditionalBudgetAllocation",
+                table: "SavingGoals",
+                type: "float",
+                nullable: false,
+                defaultValue: 0.0);
+
+            migrationBuilder.AddColumn<double>(
+                name: "AdditionalBudgetAllocation",
+                table: "MortgageGoals",
+                type: "float",
+                nullable: false,
+                defaultValue: 0.0);
+
+            migrationBuilder.AddColumn<double>(
+                name: "AdditionalBudgetAllocation",
+                table: "DebtGoals",
+                type: "float",
+                nullable: false,
+                defaultValue: 0.0);
 
             migrationBuilder.CreateTable(
                 name: "InvestmentGoalInvestments",
@@ -58,10 +83,29 @@ namespace WhatIfBudget.Data.Migrations
             migrationBuilder.DropTable(
                 name: "InvestmentGoalInvestments");
 
+            migrationBuilder.DropColumn(
+                name: "AdditionalBudgetAllocation",
+                table: "SavingGoals");
+
+            migrationBuilder.DropColumn(
+                name: "AdditionalBudgetAllocation",
+                table: "MortgageGoals");
+
+            migrationBuilder.DropColumn(
+                name: "AdditionalBudgetAllocation",
+                table: "DebtGoals");
+
             migrationBuilder.RenameColumn(
                 name: "YearsToTarget",
                 table: "InvestmentGoals",
                 newName: "YearsToMaturation");
+
+            migrationBuilder.AddColumn<double>(
+                name: "AnnualRaiseFactor_Percent",
+                table: "InvestmentGoals",
+                type: "float",
+                nullable: false,
+                defaultValue: 0.0);
         }
     }
 }
