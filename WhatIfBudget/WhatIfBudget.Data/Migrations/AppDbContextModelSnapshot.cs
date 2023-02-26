@@ -137,6 +137,9 @@ namespace WhatIfBudget.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<double>("AdditionalBudgetAllocation")
+                        .HasColumnType("float");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -261,9 +264,6 @@ namespace WhatIfBudget.Data.Migrations
                     b.Property<double>("AdditionalBudgetAllocation")
                         .HasColumnType("float");
 
-                    b.Property<double>("AnnualRaiseFactor_Percent")
-                        .HasColumnType("float");
-
                     b.Property<double>("AnnualReturnRate_Percent")
                         .HasColumnType("float");
 
@@ -276,12 +276,41 @@ namespace WhatIfBudget.Data.Migrations
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("YearsToMaturation")
+                    b.Property<int>("YearsToTarget")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("InvestmentGoals");
+                });
+
+            modelBuilder.Entity("WhatIfBudget.Data.Models.InvestmentGoalInvestment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("InvestmentGoalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InvestmentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvestmentGoalId");
+
+                    b.HasIndex("InvestmentId");
+
+                    b.ToTable("InvestmentGoalInvestments");
                 });
 
             modelBuilder.Entity("WhatIfBudget.Data.Models.MortgageGoal", b =>
@@ -291,6 +320,9 @@ namespace WhatIfBudget.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<double>("AdditionalBudgetAllocation")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -319,6 +351,9 @@ namespace WhatIfBudget.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<double>("AdditionalBudgetAllocation")
+                        .HasColumnType("float");
 
                     b.Property<double>("AnnualReturnRate_Percent")
                         .HasColumnType("float");
@@ -408,6 +443,25 @@ namespace WhatIfBudget.Data.Migrations
                     b.Navigation("Budget");
 
                     b.Navigation("Income");
+                });
+
+            modelBuilder.Entity("WhatIfBudget.Data.Models.InvestmentGoalInvestment", b =>
+                {
+                    b.HasOne("WhatIfBudget.Data.Models.InvestmentGoal", "InvestmentGoal")
+                        .WithMany()
+                        .HasForeignKey("InvestmentGoalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WhatIfBudget.Data.Models.Investment", "Investment")
+                        .WithMany()
+                        .HasForeignKey("InvestmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Investment");
+
+                    b.Navigation("InvestmentGoal");
                 });
 
             modelBuilder.Entity("WhatIfBudget.Data.Models.DebtGoal", b =>

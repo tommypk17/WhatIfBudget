@@ -39,7 +39,7 @@ namespace WhatIfBudget.API.Controllers
         public IActionResult GetBalanceAtTarget(int investmentGoalId)
         {
             //pass the ID from the route to the logic function
-            var res = _investmentGoalLogic.GetInvestmentGoal(investmentGoalId);
+            var res = _investmentGoalLogic.GetBalanceAtTarget(investmentGoalId);
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
@@ -47,7 +47,7 @@ namespace WhatIfBudget.API.Controllers
         public IActionResult GetBalanceOverTime(int investmentGoalId)
         {
             //pass the ID from the route to the logic function
-            var res = _investmentGoalLogic.GetInvestmentGoal(investmentGoalId);
+            var res = _investmentGoalLogic.GetBalanceOverTime(investmentGoalId);
             return StatusCode(StatusCodes.Status200OK, res);
         }
 

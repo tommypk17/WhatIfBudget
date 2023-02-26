@@ -17,16 +17,17 @@ namespace WhatIfBudget.Data.DAL
         {
         }
         public DbSet<Budget> Budgets { get; set; }
-        public DbSet<BudgetIncome> BudgetIncomes { get; set; }
-        public DbSet<BudgetExpense> BudgetExpenses { get; set; }
-
         public DbSet<Income> Incomes { get; set; }
         public DbSet<Expense> Expenses { get; set; }
-        public DbSet<Investment> Investments { get; set; }
-        public DbSet<InvestmentGoal> InvestmentGoals { get; set; }
-        public DbSet<MortgageGoal> MortgageGoals { get; set; }
-        public DbSet<DebtGoal> DebtGoals { get; set; }
         public DbSet<SavingGoal> SavingGoals { get; set; }
+        public DbSet<DebtGoal> DebtGoals { get; set; }
+        public DbSet<MortgageGoal> MortgageGoals { get; set; }
+        public DbSet<InvestmentGoal> InvestmentGoals { get; set; }
+        public DbSet<Investment> Investments { get; set; }
+
+        public DbSet<BudgetIncome> BudgetIncomes { get; set; }
+        public DbSet<BudgetExpense> BudgetExpenses { get; set; }
+        public DbSet<InvestmentGoalInvestment> InvestmentGoalInvestments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
