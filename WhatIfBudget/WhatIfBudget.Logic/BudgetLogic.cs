@@ -19,6 +19,8 @@ namespace WhatIfBudget.Logic
         private readonly IBudgetIncomeService _budgetIncomeService;
         private readonly IBudgetExpenseService _budgetExpenseService;
         private readonly IInvestmentGoalService _investmentGoalService;
+        private readonly IInvestmentService _investmentService;
+        private readonly IInvestmentGoalInvestmentService _igiService;
         private readonly ISavingGoalService _savingGoalService;
         private readonly IDebtGoalService _debtGoalService;
         private readonly IMortgageGoalService _mortgageGoalService;
@@ -29,6 +31,8 @@ namespace WhatIfBudget.Logic
                            IBudgetIncomeService budgetIncomeService,
                            IBudgetExpenseService budgetExpenseService,
                            IInvestmentGoalService investmentGoalService,
+                           IInvestmentService investmentService,
+                           IInvestmentGoalInvestmentService investmentGoalInvestmentService,
                            IMortgageGoalService mortgageGoalService,
                            IDebtGoalService debtGoalService,
                            ISavingGoalService savingGoalService) { 
@@ -38,6 +42,8 @@ namespace WhatIfBudget.Logic
             _budgetIncomeService= budgetIncomeService;
             _budgetExpenseService= budgetExpenseService;
             _investmentGoalService = investmentGoalService;
+            _investmentService = investmentService;
+            _igiService = investmentGoalInvestmentService;
             _savingGoalService = savingGoalService;
             _debtGoalService = debtGoalService;
             _mortgageGoalService = mortgageGoalService;
@@ -109,7 +115,26 @@ namespace WhatIfBudget.Logic
 
         public UserBudget? DeleteUserBudget(UserBudget budget)
         {
-            // Delete associated debts & investments
+            // Delete associated debts
+            // TODO
+
+            // Delete associated investments
+            var igiList = _igiService.GetAllInvestmentGoalInvestments()
+                .Where(x => x.InvestmentGoalId == budget.InvestmentGoalId)
+                .ToList();
+            foreach (var igi in igiList)
+            {
+                var dbIGI = _igiService.DeleteInvestmentGoalInvestment(igi.Id);
+                if (dbIGI == null) { throw new NullReferenceException(); }
+                // Delete investment element if it has no remaining associations
+                if (!_igiService.GetAllInvestmentGoalInvestments()
+                    .Where(x => x.InvestmentId == dbIGI.InvestmentId)
+                    .Any())
+                {
+                    var dbInvestment = _investmentService.DeleteInvestment(igi.InvestmentId);
+                    if (dbInvestment == null) { throw new NullReferenceException(); }
+                }
+            }
 
             // Delete associated goals
             var dbInvestmentGoal = _investmentGoalService.DeleteInvestmentGoal(budget.InvestmentGoalId);
@@ -127,7 +152,7 @@ namespace WhatIfBudget.Logic
             {
                 var dbBudgetIncome = _budgetIncomeService.DeleteBudgetIncome(budgetIncome.Id);
                 if (dbBudgetIncome == null) { throw new NullReferenceException(); }
-                // Delete income element that is not associated with any other budget Id
+                // Delete income element if it has no remaining associations
                 if (!_budgetIncomeService.GetAllBudgetIncomes()
                         .Where(x => x.IncomeId == dbBudgetIncome.IncomeId)
                         .Any())

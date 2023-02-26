@@ -204,7 +204,7 @@ namespace WhatIfBudget.API.Test
         {
             //mock income logic
             var mock = new Mock<IInvestmentLogic>();
-            mock.Setup(x => x.DeleteInvestment(It.IsAny<int>()))
+            mock.Setup(x => x.DeleteInvestment(It.IsAny<int>(), It.IsAny<int>()))
                             .Returns(new UserInvestment() {
                                 Id = 1,
                                 Name = "test",
@@ -238,7 +238,7 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = investmentController.Delete(1);
+            var actual = investmentController.Delete(1, 1);
 
 
             actual.Should().BeEquivalentTo(expected);

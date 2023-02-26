@@ -21,6 +21,8 @@ namespace WhatIfBudget.Logic.Test
         public void GetAllInvestments_CollectionAreEqual()
         {
             var mockIS = new Mock<IInvestmentService>();
+            var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
+
             mockIS.Setup(x => x.GetAllInvestments()).Returns(
                 (IList<Investment>)new List<Investment>()
                 {
@@ -60,7 +62,7 @@ namespace WhatIfBudget.Logic.Test
                 });
             
 
-            var investmentLogic = new InvestmentLogic(mockIS.Object);
+            var investmentLogic = new InvestmentLogic(mockIS.Object, mockIGIS.Object);
 
             var expected = new List<UserInvestment>()
             {
@@ -100,6 +102,7 @@ namespace WhatIfBudget.Logic.Test
         public void AddUserInvestment_CollectionAreEqual()
         {
             var mock = new Mock<IInvestmentService>();
+            var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
 
             mock.Setup(x => x.AddNewInvestment(It.IsAny<Investment>())).Returns(
                 new Investment()
@@ -115,7 +118,7 @@ namespace WhatIfBudget.Logic.Test
                 }
             );
 
-            var investmentLogic = new InvestmentLogic(mock.Object);
+            var investmentLogic = new InvestmentLogic(mock.Object, mockIGIS.Object);
 
             var expected = new UserInvestment()
             {
@@ -144,6 +147,7 @@ namespace WhatIfBudget.Logic.Test
         public void ModifyUserInvestment_ObjectsAreEqual()
         {
             var mock = new Mock<IInvestmentService>();
+            var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
 
             mock.Setup(x => x.UpdateInvestment(It.IsAny<Investment>())).Returns(
                     new Investment()
@@ -158,7 +162,7 @@ namespace WhatIfBudget.Logic.Test
                         UpdatedOn = DateTime.MinValue
                     }
                 );
-            var investmentLogic = new InvestmentLogic(mock.Object);
+            var investmentLogic = new InvestmentLogic(mock.Object, mockIGIS.Object);
 
             var expected = new UserInvestment()
             {
@@ -187,6 +191,7 @@ namespace WhatIfBudget.Logic.Test
         public void DeleteUserInvestment_CollectionsAreEqual()
         {
             var mock = new Mock<IInvestmentService>();
+            var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
 
             mock.Setup(x => x.DeleteInvestment(It.IsAny<int>())).Returns(
                     new Investment()
@@ -218,7 +223,27 @@ namespace WhatIfBudget.Logic.Test
                     }
                 );
 
-            var investmentLogic = new InvestmentLogic(mock.Object);
+            mockIGIS.Setup(x => x.GetAllInvestmentGoalInvestments()).Returns(
+                new List<InvestmentGoalInvestment>()
+                {
+                    new InvestmentGoalInvestment()
+                    {
+                        Id = 1,
+                        InvestmentId = 1,
+                        InvestmentGoalId = 1
+                    }
+                });
+
+            mockIGIS.Setup(x => x.DeleteInvestmentGoalInvestment(It.IsAny<int>())).Returns(
+                    new InvestmentGoalInvestment()
+                    {
+                        Id = 1,
+                        InvestmentId = 1,
+                        InvestmentGoalId = 1
+                    });
+
+
+            var investmentLogic = new InvestmentLogic(mock.Object, mockIGIS.Object);
 
             var expected = new UserInvestment()
             {
@@ -230,7 +255,7 @@ namespace WhatIfBudget.Logic.Test
                 MonthlyEmployerContribution = 0
             };
 
-            var actual = investmentLogic.DeleteInvestment(1);
+            var actual = investmentLogic.DeleteInvestment(1, 1);
 
             actual.Should().BeEquivalentTo(expected);
         }

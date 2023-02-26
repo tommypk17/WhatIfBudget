@@ -14,8 +14,12 @@ namespace WhatIfBudget.Logic
     public class InvestmentLogic : IInvestmentLogic
     {
         private readonly IInvestmentService _investmentService;
-        public InvestmentLogic(IInvestmentService investmentService) {
+        private readonly IInvestmentGoalInvestmentService _igiService;
+
+        public InvestmentLogic(IInvestmentService investmentService, IInvestmentGoalInvestmentService investmentGoalInvestmentService)
+        {
             _investmentService = investmentService;
+            _igiService = investmentGoalInvestmentService;
         }
         public IList<UserInvestment> GetUserInvestments(Guid userId)
         {
@@ -45,19 +49,37 @@ namespace WhatIfBudget.Logic
             return UserInvestment.FromInvestment(dbInvestment);
         }
 
-        public UserInvestment? DeleteInvestment(int investmentId)
+        public UserInvestment? DeleteInvestment(int investmentId, int investmentGoalId)
         {
-            var idToDelete = _investmentService.GetAllInvestments()
-                    .Where(x => x.Id == investmentId)
-                    .Select(x => x.Id)
-                    .FirstOrDefault();
-            var dbInvestment = _investmentService.DeleteInvestment(idToDelete);
-            if (dbInvestment == null)
-            {
-                throw new NullReferenceException();
-            }
+            // De-associate investment from current goal
+            var idToDelete = _igiService.GetAllInvestmentGoalInvestments()
+                .Where(x => x.InvestmentId == investmentId && x.InvestmentGoalId == investmentGoalId)
+                .Select(x => x.Id)
+                .FirstOrDefault();
+            var dbIGI = _igiService.DeleteInvestmentGoalInvestment(idToDelete);
+            if (dbIGI == null) { throw new NullReferenceException() ; }
 
-            return UserInvestment.FromInvestment(dbInvestment);
+            // Delete investment if it has no remaining associations
+            if (!_igiService.GetAllInvestmentGoalInvestments()
+                    .Where(x => x.InvestmentId == investmentId)
+                    .Any())
+            {
+                var dbDeleteInvestment = _investmentService.DeleteInvestment(dbIGI.InvestmentId);
+                if (dbDeleteInvestment == null) { throw new NullReferenceException(); }
+                return UserInvestment.FromInvestment(dbDeleteInvestment);
+            }
+            else
+            {
+                // Keep investment for use by other budgets
+                var dbDeleteInvestment = _investmentService.GetAllInvestments()
+                    .Where(x => x.Id == investmentId)
+                    .FirstOrDefault();
+                if (dbDeleteInvestment == null) { throw new NullReferenceException(); }
+                else
+                {
+                    return UserInvestment.FromInvestment(dbDeleteInvestment);
+                }
+            }
         }
     }
 }
