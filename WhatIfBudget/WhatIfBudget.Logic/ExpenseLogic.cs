@@ -8,6 +8,7 @@ using WhatIfBudget.Logic.Models;
 using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
 using WhatIfBudget.Services;
+using WhatIfBudget.Common.Enumerations;
 
 namespace WhatIfBudget.Logic
 {
@@ -42,6 +43,87 @@ namespace WhatIfBudget.Logic
             return _expenseService.GetAllExpenses().Where(x => budgetExpenseIdList.Contains(x.Id))
                                                    .Select(x => UserExpense.FromExpense(x, budgetId))
                                                    .ToList();
+        }
+
+        public double GetBudgetMonthlyExpense(int budgetId)
+        {
+            var expenseIdList = _budgetExpenseService.GetAllBudgetExpenses()
+                .Where(x => x.BudgetId == budgetId)
+                .Select(x => x.ExpenseId)
+                .ToList();
+            var expenseList = _expenseService.GetAllExpenses()
+                .Where(x => expenseIdList.Contains(x.Id))
+                .Select(x => UserExpense.FromExpense(x, budgetId))
+                .ToList();
+
+            double monthlyExpense = 0;
+            var noneFreqList = expenseList.Where(x => x.Frequency == EFrequency.None).Select(x => x.Amount).ToList();
+            var weekFreqList = expenseList.Where(x => x.Frequency == EFrequency.Weekly).Select(x => x.Amount).ToList();
+            var monthFreqList = expenseList.Where(x => x.Frequency == EFrequency.Monthly).Select(x => x.Amount).ToList();
+            var quartFreqList = expenseList.Where(x => x.Frequency == EFrequency.Quarterly).Select(x => x.Amount).ToList();
+            var yearFreqList = expenseList.Where(x => x.Frequency == EFrequency.Yearly).Select(x => x.Amount).ToList();
+
+            monthlyExpense += noneFreqList.Sum();
+            monthlyExpense += weekFreqList.Sum() * 4;
+            monthlyExpense += monthFreqList.Sum();
+            monthlyExpense += quartFreqList.Sum() / 3;
+            monthlyExpense += yearFreqList.Sum() / 12;
+
+            return monthlyExpense;
+        }
+
+        public double GetBudgetMonthlyNeed(int budgetId)
+        {
+            var expenseIdList = _budgetExpenseService.GetAllBudgetExpenses()
+                .Where(x => x.BudgetId == budgetId)
+                .Select(x => x.ExpenseId)
+                .ToList();
+            var needList = _expenseService.GetAllExpenses()
+                .Where(x => expenseIdList.Contains(x.Id) && x.Priority == EPriority.Need)
+                .Select(x => UserExpense.FromExpense(x, budgetId))
+                .ToList();
+
+            double monthlyNeed = 0;
+            var noneFreqList = needList.Where(x => x.Frequency == EFrequency.None).Select(x => x.Amount).ToList();
+            var weekFreqList = needList.Where(x => x.Frequency == EFrequency.Weekly).Select(x => x.Amount).ToList();
+            var monthFreqList = needList.Where(x => x.Frequency == EFrequency.Monthly).Select(x => x.Amount).ToList();
+            var quartFreqList = needList.Where(x => x.Frequency == EFrequency.Quarterly).Select(x => x.Amount).ToList();
+            var yearFreqList = needList.Where(x => x.Frequency == EFrequency.Yearly).Select(x => x.Amount).ToList();
+
+            monthlyNeed += noneFreqList.Sum();
+            monthlyNeed += weekFreqList.Sum() * 4;
+            monthlyNeed += monthFreqList.Sum();
+            monthlyNeed += quartFreqList.Sum() / 3;
+            monthlyNeed += yearFreqList.Sum() / 12;
+
+            return monthlyNeed;
+        }
+
+        public double GetBudgetMonthlyWant(int budgetId)
+        {
+            var expenseIdList = _budgetExpenseService.GetAllBudgetExpenses()
+                .Where(x => x.BudgetId == budgetId)
+                .Select(x => x.ExpenseId)
+                .ToList();
+            var wantList = _expenseService.GetAllExpenses()
+                .Where(x => expenseIdList.Contains(x.Id) && x.Priority == EPriority.Want)
+                .Select(x => UserExpense.FromExpense(x, budgetId))
+                .ToList();
+
+            double monthlyWant = 0;
+            var noneFreqList = wantList.Where(x => x.Frequency == EFrequency.None).Select(x => x.Amount).ToList();
+            var weekFreqList = wantList.Where(x => x.Frequency == EFrequency.Weekly).Select(x => x.Amount).ToList();
+            var monthFreqList = wantList.Where(x => x.Frequency == EFrequency.Monthly).Select(x => x.Amount).ToList();
+            var quartFreqList = wantList.Where(x => x.Frequency == EFrequency.Quarterly).Select(x => x.Amount).ToList();
+            var yearFreqList = wantList.Where(x => x.Frequency == EFrequency.Yearly).Select(x => x.Amount).ToList();
+
+            monthlyWant += noneFreqList.Sum();
+            monthlyWant += weekFreqList.Sum() * 4;
+            monthlyWant += monthFreqList.Sum();
+            monthlyWant += quartFreqList.Sum() / 3;
+            monthlyWant += yearFreqList.Sum() / 12;
+
+            return monthlyWant;
         }
 
         public UserExpense? AddUserExpense(Guid userId, UserExpense expense)

@@ -6,6 +6,7 @@ using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
 using WhatIfBudget.Logic.Models;
 using Microsoft.AspNetCore.Authorization;
+using WhatIfBudget.Logic;
 
 namespace WhatIfBudget.API.Controllers
 {
@@ -34,6 +35,15 @@ namespace WhatIfBudget.API.Controllers
         {
             //pass the ID from the route to the logic function
             var res = _incomeLogic.GetBudgetIncomes(budgetId);
+            //return a status of 200 with all the current user's income
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
+        [HttpGet("budgets/{budgetId}/monthlyIncome")]
+        public IActionResult GetMonthlyIncome([FromRoute] int budgetId)
+        {
+            //pass the ID from the route to the logic function
+            var res = _incomeLogic.GetBudgetMonthlyIncome(budgetId);
             //return a status of 200 with all the current user's income
             return StatusCode(StatusCodes.Status200OK, res);
         }

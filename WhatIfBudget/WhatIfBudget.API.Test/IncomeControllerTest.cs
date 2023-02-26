@@ -56,6 +56,35 @@ namespace WhatIfBudget.API.Test
         }
 
         [TestMethod]
+        public void Get_BudgetMonthlyIncome()
+        {
+            //mock income logic
+            var mockIL = new Mock<IIncomeLogic>();
+            mockIL.Setup(x => x.GetBudgetMonthlyIncome(It.IsAny<int>())).Returns(5000.0);
+
+            //Setup the http context (for auth)
+            var monthlyIncomeController = new IncomesController(mockIL.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = 5000.0;
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = monthlyIncomeController.Get(1);
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
         public void Post_UserIncomeCreated()
         {
             //mock income logic

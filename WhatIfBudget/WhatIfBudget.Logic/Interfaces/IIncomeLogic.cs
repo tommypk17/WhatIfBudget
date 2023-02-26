@@ -14,6 +14,8 @@ namespace WhatIfBudget.Logic.Interfaces
 
         public IList<UserIncome> GetBudgetIncomes(int budgetId);
 
+        public double GetBudgetMonthlyIncome(int budgetId);
+
         public UserIncome? AddUserIncome(Guid userId, UserIncome income);
 
         public UserIncome? ModifyUserIncome(Guid userId, UserIncome income);

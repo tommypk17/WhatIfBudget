@@ -57,6 +57,93 @@ namespace WhatIfBudget.API.Test
         }
 
         [TestMethod]
+        public void Get_BudgetMonthlyExpense()
+        {
+            //mock expense logic
+            var mockEL = new Mock<IExpenseLogic>();
+            mockEL.Setup(x => x.GetBudgetMonthlyExpense(It.IsAny<int>())).Returns(5000);
+
+            //Setup the http context (for auth)
+            var monthlyExpenseController = new ExpensesController(mockEL.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = 5000;
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = monthlyExpenseController.Get(1);
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void Get_BudgetNeedExpense()
+        {
+            //mock expense logic
+            var mockEL = new Mock<IExpenseLogic>();
+            mockEL.Setup(x => x.GetBudgetMonthlyNeed(It.IsAny<int>())).Returns(5000);
+
+            //Setup the http context (for auth)
+            var monthlyNeedController = new ExpensesController(mockEL.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = 5000;
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = monthlyNeedController.Get(1);
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void Get_BudgetWantExpense()
+        {
+            //mock expense logic
+            var mockEL = new Mock<IExpenseLogic>();
+            mockEL.Setup(x => x.GetBudgetMonthlyWant(It.IsAny<int>())).Returns(5000);
+
+            //Setup the http context (for auth)
+            var monthlyWantController = new ExpensesController(mockEL.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = 5000;
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = monthlyWantController.Get(1);
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
         public void Post_UserExpenseCreated()
         {
             //mock expense logic

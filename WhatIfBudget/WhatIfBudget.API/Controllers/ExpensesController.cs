@@ -37,6 +37,32 @@ namespace WhatIfBudget.API.Controllers
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
+        [HttpGet("budgets/{budgetId}/monthlyExpense")]
+        public IActionResult GetmonthlyExpense([FromRoute] int budgetId)
+        {
+            //pass the ID from the route to the logic function
+            var res = _expenseLogic.GetBudgetMonthlyExpense(budgetId);
+            //return a status of 200 with all the current user's income
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
+        [HttpGet("budgets/{budgetId}/monthlyNeeds")]
+        public IActionResult GetmonthlyNeeds([FromRoute] int budgetId)
+        {
+            //pass the ID from the route to the logic function
+            var res = _expenseLogic.GetBudgetMonthlyExpense(budgetId);
+            //return a status of 200 with all the current user's income
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
+        [HttpGet("budgets/{budgetId}/monthlyWants")]
+        public IActionResult GetmonthlyWants([FromRoute] int budgetId)
+        {
+            //pass the ID from the route to the logic function
+            var res = _expenseLogic.GetBudgetMonthlyExpense(budgetId);
+            //return a status of 200 with all the current user's income
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
 
         [HttpPost]
         public IActionResult Post(UserExpense apiExpense)

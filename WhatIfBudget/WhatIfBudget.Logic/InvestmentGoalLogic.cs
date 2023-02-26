@@ -14,15 +14,15 @@ namespace WhatIfBudget.Logic
     public class InvestmentGoalLogic : IInvestmentGoalLogic
     {
         private readonly IInvestmentGoalService _investmentGoalService;
-        private readonly IBudgetService _budgetService;
-        public InvestmentGoalLogic(IInvestmentGoalService investmentGoalService, IBudgetService budgetService) { 
+        private readonly IInvestmentService _investmentService;
+        public InvestmentGoalLogic(IInvestmentGoalService investmentGoalService, IInvestmentService investmentService) { 
             _investmentGoalService = investmentGoalService;
-            _budgetService = budgetService;
+            _investmentService = investmentService;
         }
 
         private double GetTotalMonthlyContributions(UserInvestmentGoal investmentGoal)
         {
-
+            return investmentGoal.additionalBudgetAllocation;
         }
 
         private IList<double> GetBalanceOverTime(UserInvestmentGoal investmentGoal)
@@ -35,38 +35,41 @@ namespace WhatIfBudget.Logic
             }
 
 
-            IList<double> balance = new List<double>(iMax);
-            balance[0] = investmentGoal.TotalBalance;
+            List<double> balanceList = new List<double>(iMax);
+            balanceList[0] = investmentGoal.TotalBalance;
 
             for (int i = 1; i < iMax; i++)
             {
 
             }
 
-            return balance;
+            return balanceList;
         }
 
-        public UserInvestmentGoal? GetBudgetInvestmentGoal(int budgetId)
+        public UserInvestmentGoal? GetInvestmentGoal(int investmentGoalId)
         {
-            // Get the investment goal associated with this budget
-            var dbBudget = _budgetService.GetBudget(budgetId);
-            if (dbBudget is null) return null;
-            
-            var investmentGoal = _investmentGoalService.GetInvestmentGoal(dbBudget.InvestmentGoalId);
+            var investmentGoal = _investmentGoalService.GetInvestmentGoal(investmentGoalId);
             if(investmentGoal is null) return null;
 
             return UserInvestmentGoal.FromInvestmentGoal(investmentGoal);
         }
 
-        public UserInvestmentGoal? GetBudgetInvestmentGoal(UserBudget budget)
+        public double GetBalanceAtTarget(int investmentGoalId)
         {
-            // Get the investment goal associated with this budget
-            var investmentGoal = _investmentGoalService.GetInvestmentGoal(budget.InvestmentGoalId);
-            if (investmentGoal is null) return null;
-            return UserInvestmentGoal.FromInvestmentGoal(investmentGoal);
+            var dbInvestmentGoal = _investmentGoalService.GetInvestmentGoal(investmentGoalId);
+            if (dbInvestmentGoal is null) { throw new NullReferenceException(); }
+            UserInvestmentGoal investmentGoal = UserInvestmentGoal.FromInvestmentGoal(dbInvestmentGoal);
+
+            var balanceList = GetBalanceOverTime(investmentGoal);
+            return balanceList[investmentGoal.YearsToTarget + 1];
         }
 
-        public UserInvestmentGoal? AddUserInvestmentGoal(Guid userId, UserInvestmentGoal investmentGoal)
+        public IList<double> GetBalanceOverTime(int investmentGoalId)
+        {
+            return new List<double>(2) { 1.0, 2.0 };
+        }
+
+            public UserInvestmentGoal? AddUserInvestmentGoal(Guid userId, UserInvestmentGoal investmentGoal)
         {
             var toCreate = investmentGoal.ToInvestmentGoal();
 

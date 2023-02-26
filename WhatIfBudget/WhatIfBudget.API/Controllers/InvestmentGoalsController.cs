@@ -12,34 +12,18 @@ namespace WhatIfBudget.API.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class InvestmentGoalController : ControllerBase
+    public class InvestmentGoalsController : ControllerBase
     {
         private readonly IInvestmentGoalLogic _investmentGoalLogic;
-        public InvestmentGoalController(IInvestmentGoalLogic investmentGoalLogic) {
+        public InvestmentGoalsController(IInvestmentGoalLogic investmentGoalLogic) {
             _investmentGoalLogic = investmentGoalLogic;
         }
 
-        //[HttpGet("{budgetId}")]
-        //public IActionResult Get([FromRoute] int budgetId)
-        //{
-        //    //pass the ID from the route to the logic function
-        //    var res = _investmentGoalLogic.GetBudgetInvestmentGoal(budgetId);
-        //    //return a status of 200 with all the current user's income
-        //    if (res == null)
-        //    {
-        //        return StatusCode(StatusCodes.Status400BadRequest, res);
-        //    }
-        //    else
-        //    {
-        //        return StatusCode(StatusCodes.Status200OK, res);
-        //    }
-        //}
-
-        [HttpGet]
-        public IActionResult Get(UserBudget apiBudget)
+        [HttpGet("{investmentGoalId}")]
+        public IActionResult Get(int investmentGoalId)
         {
             //pass the ID from the route to the logic function
-            var res = _investmentGoalLogic.GetBudgetInvestmentGoal(apiBudget);
+            var res = _investmentGoalLogic.GetInvestmentGoal(investmentGoalId);
             //return a status of 200 with all the current user's income
             if (res == null)
             {
@@ -51,16 +35,20 @@ namespace WhatIfBudget.API.Controllers
             }
         }
 
-        [HttpGet("{investmentGoalId}/BalanceAtMaturation")]
-        public IActionResult GetBalanceAtMaturation(int investmentGoalId)
+        [HttpGet("{investmentGoalId}/BalanceAtTarget")]
+        public IActionResult GetBalanceAtTarget(int investmentGoalId)
         {
-
+            //pass the ID from the route to the logic function
+            var res = _investmentGoalLogic.GetInvestmentGoal(investmentGoalId);
+            return StatusCode(StatusCodes.Status200OK, res);
         }
 
         [HttpGet("{investmentGoalId}/BalanceOverTime")]
         public IActionResult GetBalanceOverTime(int investmentGoalId)
         {
-
+            //pass the ID from the route to the logic function
+            var res = _investmentGoalLogic.GetInvestmentGoal(investmentGoalId);
+            return StatusCode(StatusCodes.Status200OK, res);
         }
 
         [HttpPut]
