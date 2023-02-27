@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { InvestmentGoalService } from '../../../../services/investment.goal.service';
 import { InvestmentService } from '../../../../services/investment.service';
+import { SharedService } from '../../../../services/shared.service';
 import { Investment } from '../../../../shared/models/investment';
 import { InvestmentGoal } from '../../../../shared/models/investment-goal';
 
@@ -14,10 +15,10 @@ export class InvestmentComponent implements OnInit {
   investments: Investment[] = [];
   investmentGoals: InvestmentGoal[] = [];
 
-  constructor(private investmentService: InvestmentService, private investmentGoalService: InvestmentGoalService) { }
+  constructor(private investmentService: InvestmentService, private investmentGoalService: InvestmentGoalService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
-    this.investmentService.getInvestments().subscribe((res: Investment[]) => {
+    this.investmentService.getInvestmentsByGoalId(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: Investment[]) => {
       if (res) this.investments = res;
     });
     this.investmentGoalService.getInvestmentGoals().subscribe((res: InvestmentGoal[]) => {
@@ -26,7 +27,7 @@ export class InvestmentComponent implements OnInit {
   }
 
   investmentAdded(): void {
-    this.investmentService.getInvestments().subscribe((res: Investment[]) => {
+    this.investmentService.getInvestmentsByGoalId(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: Investment[]) => {
       if (res) this.investments = res;
     });
   }

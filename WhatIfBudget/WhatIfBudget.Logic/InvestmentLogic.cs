@@ -29,12 +29,43 @@ namespace WhatIfBudget.Logic
                                     .ToList();
         }
 
+        public IList<UserInvestment> GetUserInvestmentsByGoalId(Guid userId, int goalId)
+        {
+            var investmentGoalInvestments = _igiService.GetAllInvestmentGoalInvestments()
+                                                                        .Where(x => x.InvestmentGoalId == goalId)
+                                                                        .Select(x => x.InvestmentId).ToList();
+            if (investmentGoalInvestments.Any())
+            {
+                return _investmentService.GetAllInvestments()
+                                        .Where(x => investmentGoalInvestments.Contains(x.Id))
+                                        .Select(x => UserInvestment.FromInvestment(x, goalId))
+                                        .ToList();
+            }
+            else
+            {
+                return new List<UserInvestment>();
+            }
+        }
+
         public UserInvestment? AddUserInvestment(Guid userId, UserInvestment userInvestment)
         {
             var dbInvestment = _investmentService.AddNewInvestment(userInvestment.ToInvestment(userId));
             if (dbInvestment == null)
             {
                 throw new NullReferenceException();
+            }
+            if(userInvestment.GoalId > 0)
+            {
+                var dbIGI = new InvestmentGoalInvestment()
+                {
+                    InvestmentGoalId = userInvestment.GoalId,
+                    InvestmentId = dbInvestment.Id
+                };
+                dbIGI = _igiService.AddNewInvestmentGoalInvestment(dbIGI);
+                if(dbIGI == null)
+                {
+                    throw new NullReferenceException();
+                }
             }
 
             return UserInvestment.FromInvestment(dbInvestment);

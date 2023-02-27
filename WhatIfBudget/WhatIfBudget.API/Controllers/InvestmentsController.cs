@@ -30,6 +30,18 @@ namespace WhatIfBudget.API.Controllers
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
+
+        [HttpGet("goals/{goalId}")]
+        public IActionResult GetInvestmentsByGoalId(int goalId)
+        {
+            //grab the user from the passed auth token
+            var currentUser = AuthUser.Current(User);
+            //pass the ID from the auth token to the logic function
+            var res = _investmentLogic.GetUserInvestmentsByGoalId(currentUser.Id, goalId);
+            //return a status of 200 with all the current user's budget
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
         [HttpPost]
         public IActionResult Post(UserInvestment investment)
         {

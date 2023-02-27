@@ -24,12 +24,13 @@ namespace WhatIfBudget.Logic.Models
             };
         }
 
-        public static UserInvestment FromInvestment(Investment investment)
+        public static UserInvestment FromInvestment(Investment investment, int goalId = 0)
         {
             return new UserInvestment()
             {
                 Id = investment.Id,
                 Name = investment.Name,
+                GoalId = goalId,
                 CurrentBalance = investment.CurrentBalance,
                 MonthlyPersonalContribution = investment.MonthlyPersonalContribution,
                 MonthlyEmployerContribution = investment.MonthlyEmployerContribution
