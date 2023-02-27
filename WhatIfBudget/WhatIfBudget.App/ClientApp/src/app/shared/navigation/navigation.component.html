@@ -4,7 +4,12 @@
       <img src="./assets/whatifbudget.webp" height="40" class="mr-2">
     </ng-template>
     <ng-template pTemplate="end">
-      <button pButton icon="pi pi-user" class="p-button-rounded p-button-text" (click)="profile.toggle($event)"></button>
+      <div class="d-flex">
+        <div class="d-flex flex-column justify-content-center" *ngIf="$isLoading | async as loading">
+          <p-progressSpinner strokeWidth="2" [style]="{width: '20px', height: '20px'}"></p-progressSpinner>
+        </div>
+        <button pButton icon="pi pi-user" class="p-button-rounded p-button-text" (click)="profile.toggle($event)"></button>
+      </div>
     </ng-template>
   </p-menubar>
   <p-overlayPanel #profile>
