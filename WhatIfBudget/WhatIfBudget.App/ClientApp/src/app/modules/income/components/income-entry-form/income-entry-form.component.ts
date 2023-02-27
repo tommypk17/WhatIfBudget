@@ -24,6 +24,7 @@ export class IncomeEntryFormComponent implements OnInit {
 
   onSubmit(event: NgForm): void {
     let income: Income = event.value as Income;
+    income.budgetId = this.sharedService.budget.id;
     if (this.model.id && this.model.id > 0) {
       this.incomeService.updateIncome(this.model).subscribe((res: Income) => {
         this.updated.emit();

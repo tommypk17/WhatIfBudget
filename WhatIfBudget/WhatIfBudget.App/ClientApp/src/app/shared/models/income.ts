@@ -5,4 +5,5 @@ export class Income {
   name: string | undefined;
   amount: number | undefined;
   frequency: EFrequency | undefined;
+  budgetId: number | undefined;
 }

@@ -90,7 +90,7 @@ namespace WhatIfBudget.Logic
             var budgetIncomeToCreate = new BudgetIncome
             {
                 BudgetId = income.BudgetId,
-                IncomeId = income.Id
+                IncomeId = dbIncome.Id
             };
 
             var dbBudgetIncome = _budgetIncomeService.AddNewBudgetIncome(budgetIncomeToCreate);
