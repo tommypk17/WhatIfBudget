@@ -147,7 +147,7 @@ namespace WhatIfBudget.Logic
             var budgetExpenseToCreate = new BudgetExpense
             {
                 BudgetId = expense.BudgetId,
-                ExpenseId = expense.Id
+                ExpenseId = dbExpense.Id
             };
 
             var dbBudgetExpense = _budgetExpenseService.AddNewBudgetExpense(budgetExpenseToCreate);

@@ -13,6 +13,7 @@ import { ListboxModule } from 'primeng/listbox';
 import { FormsModule } from '@angular/forms';
 import { BudgetEntryFormComponent } from './budget-entry-form/budget-entry-form.component';
 import { InputTextModule } from 'primeng/inputtext';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { InputTextModule } from 'primeng/inputtext';
     TabMenuModule,
     OverlayPanelModule,
     ListboxModule,
-    InputTextModule
+    InputTextModule,
+    ProgressSpinnerModule
   ],
   exports: [
     NavigationComponent

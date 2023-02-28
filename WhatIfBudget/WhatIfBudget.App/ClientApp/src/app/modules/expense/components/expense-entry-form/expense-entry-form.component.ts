@@ -24,13 +24,15 @@ export class ExpenseEntryFormComponent implements OnInit {
   }
 
   onSubmit(event: NgForm): void {
+    let expense: Expense = this.model as Expense;
+    expense.budgetId = this.sharedService.budget.id;
     if (this.model.id && this.model.id > 0) {
-      this.expenseService.updateExpense(this.model).subscribe((res: Expense) => {
+      this.expenseService.updateExpense(expense).subscribe((res: Expense) => {
         this.updated.emit();
         this.model = new Expense();
       });
     } else {
-      this.expenseService.saveExpense(event.value as Expense).subscribe((res: Expense) => {
+      this.expenseService.saveExpense(expense).subscribe((res: Expense) => {
         this.added.emit();
         this.model = new Expense();
       });

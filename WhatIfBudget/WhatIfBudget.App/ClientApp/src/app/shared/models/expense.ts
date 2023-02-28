@@ -7,4 +7,5 @@ export class Expense {
   amount: number | undefined;
   frequency: EFrequency | undefined;
   priority: EPriority | undefined;
+  budgetId: number | undefined;
 }

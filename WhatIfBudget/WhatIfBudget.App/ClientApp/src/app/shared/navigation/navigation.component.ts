@@ -5,6 +5,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { BudgetEntryFormComponent } from '../budget-entry-form/budget-entry-form.component';
 import { SharedService } from '../../services/shared.service';
 import { AuthService } from '../../services/auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-navigation',
@@ -13,6 +14,7 @@ import { AuthService } from '../../services/auth.service';
   providers: [DialogService]
 })
 export class NavigationComponent implements OnInit {
+  $isLoading: Observable<boolean> = this.sharedService.isLoadingEmit.asObservable();
 
   constructor(private dialogService: DialogService, private sharedService: SharedService, private authService: AuthService) { }
 

@@ -20,7 +20,9 @@ export class InvestmentEntryFormComponent implements OnInit {
   }
 
   onSubmit(event: NgForm): void {
-    this.investmentService.saveInvestments(event.value as Investment).subscribe((res: Investment) => {
+    let investment: Investment = event.value as Investment;
+    investment.goalId = this.sharedService.budget.investmentGoalId;
+    this.investmentService.saveInvestments(investment).subscribe((res: Investment) => {
       this.added.emit();
       this.model = new Investment();
     });

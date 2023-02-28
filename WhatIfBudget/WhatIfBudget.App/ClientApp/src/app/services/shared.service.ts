@@ -1,6 +1,7 @@
 import { KeyValue } from '@angular/common';
 import { EventEmitter, Injectable } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
+import { BehaviorSubject } from 'rxjs';
 import { EFrequency } from '../shared/enums/efrequency';
 import { EPriority } from '../shared/enums/epriority';
 import { Budget } from '../shared/models/budget';
@@ -9,6 +10,9 @@ import { Budget } from '../shared/models/budget';
   providedIn: 'root'
 })
 export class SharedService {
+  private _loadingQueue: string[] = [];
+
+  isLoadingEmit: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loggedInEmit: EventEmitter<void> = new EventEmitter<void>();
   budgetLoadedEmit: EventEmitter<void> = new EventEmitter<void>();
 
@@ -60,4 +64,20 @@ export class SharedService {
     localStorage.removeItem('budget');
     this.msalService.logout();
   }
+
+  queueLoading(name: string): void {
+    this._loadingQueue.push(name);
+    this.isLoadingEmit.next(this.loadingQueue.length > 0);
+  }
+
+  dequeueLoading(name: string): void {
+    let foundIdx = this._loadingQueue.findIndex(x => x == name);
+    if (foundIdx > -1) this._loadingQueue.splice(foundIdx, 1);
+    this.isLoadingEmit.next(this.loadingQueue.length > 0);
+  }
+
+  get loadingQueue(): string[] {
+    return this._loadingQueue;
+  }
+
 }
