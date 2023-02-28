@@ -30,7 +30,6 @@ export class BudgetService {
   public saveBudget(budget: Budget): Observable<Budget> {
     //this.sharedService.queueLoading('saveIncome');
     return this.http.post<Budget>(environment.URL + '/api/budgets', budget).pipe(
-      retry(3),
       catchError((err, caught) => {
         this.handleError(err);
         return new Observable<Budget>((subscriber) => {
@@ -46,7 +45,6 @@ export class BudgetService {
   public updateBudget(budget: Budget): Observable<Budget> {
     //this.sharedService.queueLoading('updateIncome');
     return this.http.put<Budget>(environment.URL + '/api/budgets', budget).pipe(
-      retry(3),
       catchError((err, caught) => {
         this.handleError(err);
         return new Observable<Budget>((subscriber) => {

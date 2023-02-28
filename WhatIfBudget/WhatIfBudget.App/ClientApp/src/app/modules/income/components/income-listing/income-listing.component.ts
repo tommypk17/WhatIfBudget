@@ -36,10 +36,8 @@ export class IncomeListingComponent implements OnInit {
       accept: () => {
         this.incomeService.deleteIncome(income).subscribe((res: Income) => {
           if (res) {
-            this.messageService.add({ severity: 'success', summary: 'Income Deleted' });
             this.refreshTable();
           }
-          else this.messageService.add({ severity: 'error', summary: 'Income Delete Failed'});
         });
       }
     });
@@ -58,7 +56,7 @@ export class IncomeListingComponent implements OnInit {
   }
 
   refreshTable(): void {
-    this.incomeService.getIncomes().subscribe((res: Income[]) => {
+    this.incomeService.getIncomesByBudgetId(this.sharedService.budget.id!).subscribe((res: Income[]) => {
       if (res) this.model = res;
     });
   }

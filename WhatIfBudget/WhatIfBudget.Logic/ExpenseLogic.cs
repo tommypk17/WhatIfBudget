@@ -174,12 +174,11 @@ namespace WhatIfBudget.Logic
         public UserExpense? DeleteBudgetExpense(int expenseId, int budgetId)
         {
             // De-associate expense element from current budget
-            var budgetExpenseToDelete = new BudgetExpense 
-            {
-                BudgetId = budgetId,
-                ExpenseId = expenseId
-            };
-            var dbBudgetExpense = _budgetExpenseService.DeleteBudgetExpense(budgetExpenseToDelete.Id);
+            var idToDelete = _budgetExpenseService.GetAllBudgetExpenses()
+                .Where(x => x.ExpenseId == expenseId && x.BudgetId == budgetId)
+                .Select(x => x.Id)
+                .FirstOrDefault();
+            var dbBudgetExpense = _budgetExpenseService.DeleteBudgetExpense(idToDelete);
             if (dbBudgetExpense == null)
             {
                 throw new NullReferenceException();

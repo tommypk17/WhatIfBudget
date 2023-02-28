@@ -31,7 +31,6 @@ export class InvestmentGoalService {
   public saveInvestmentGoals(investmentGoal: InvestmentGoal): Observable<InvestmentGoal> {
     //this.sharedService.queueLoading('saveIncome');
     return this.http.post<InvestmentGoal>(environment.URL + '/api/investments', investmentGoal).pipe(
-      retry(3),
       catchError((err, caught) => {
         this.handleError(err);
         return new Observable<InvestmentGoal>((subscriber) => {
@@ -47,7 +46,6 @@ export class InvestmentGoalService {
   public updateInvestmentGoal(investmentGoal: InvestmentGoal): Observable<InvestmentGoal> {
     //this.sharedService.queueLoading('updateIncome');
     return this.http.put<InvestmentGoal>(environment.URL + '/api/investmentGoals', investmentGoal).pipe(
-      retry(3),
       catchError((err, caught) => {
         this.handleError(err);
         return new Observable<InvestmentGoal>((subscriber) => {
@@ -63,7 +61,6 @@ export class InvestmentGoalService {
   public deleteInvestmentGoal(investmentGoal: InvestmentGoal): Observable<InvestmentGoal> {
     //this.sharedService.queueLoading('saveIncome');
     return this.http.delete<InvestmentGoal>(environment.URL + '/api/investmentGoals/' + investmentGoal.id).pipe(
-      retry(3),
       catchError((err, caught) => {
         this.handleError(err);
         return new Observable<InvestmentGoal>((subscriber) => {

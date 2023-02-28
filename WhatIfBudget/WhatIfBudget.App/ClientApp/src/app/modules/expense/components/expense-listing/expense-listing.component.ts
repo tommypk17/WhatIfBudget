@@ -42,10 +42,8 @@ export class ExpenseListingComponent implements OnInit {
       accept: () => {
         this.expenseService.deleteExpense(expense).subscribe((res: Expense) => {
           if (res) {
-            this.messageService.add({ severity: 'success', summary: 'Expense Deleted' });
             this.refreshTable();
           }
-          else this.messageService.add({ severity: 'error', summary: 'Expense Delete Failed' });
         });
       }
     });
@@ -64,7 +62,7 @@ export class ExpenseListingComponent implements OnInit {
   }
 
   refreshTable(): void {
-    this.expenseService.getExpenses().subscribe((res: Expense[]) => {
+    this.expenseService.getExpensesByBudgetId(this.sharedService.budget.id!).subscribe((res: Expense[]) => {
       if (res) this.model = res;
     });
   }

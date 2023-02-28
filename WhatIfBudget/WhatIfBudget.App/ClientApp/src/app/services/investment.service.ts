@@ -61,7 +61,6 @@ export class InvestmentService {
   public updateInvestment(investment: Investment): Observable<Investment> {
     //this.sharedService.queueLoading('updateIncome');
     return this.http.put<Investment>(environment.URL + '/api/investments', investment).pipe(
-      retry(3),
       catchError((err, caught) => {
         this.handleError(err);
         return new Observable<Investment>((subscriber) => {
@@ -77,7 +76,6 @@ export class InvestmentService {
   public deleteInvestment(investment: Investment): Observable<Investment> {
     //this.sharedService.queueLoading('saveIncome');
     return this.http.delete<Investment>(environment.URL + '/api/investments/' + investment.id).pipe(
-      retry(3),
       catchError((err, caught) => {
         this.handleError(err);
         return new Observable<Investment>((subscriber) => {
