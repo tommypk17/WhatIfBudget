@@ -14,6 +14,8 @@ namespace WhatIfBudget.Logic.Interfaces
 
         public UserBudget? GetBudget(int budgetId);
 
+        public double GetSumOfGoalAllocations(int budgetId);
+
         public UserBudget? CreateUserBudget(Guid userId, UserBudget budget);
 
         public UserBudget? ModifyUserBudget(Guid userId, UserBudget budget);

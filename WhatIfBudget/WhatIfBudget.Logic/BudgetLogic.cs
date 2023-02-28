@@ -56,6 +56,7 @@ namespace WhatIfBudget.Logic
                                                 .Select(x => UserBudget.FromBudget(x))
                                                 .ToList();
         }
+
         public UserBudget? GetBudget(int budgetId)
         {
             var dbBudget = _budgetService.GetAllBudgets()
@@ -65,6 +66,18 @@ namespace WhatIfBudget.Logic
             if (dbBudget == null) { throw new NullReferenceException(); }
             else { return dbBudget; }
         }
+
+        public double GetSumOfGoalAllocations(int budgetId)
+        {
+            // TODO: complete this as other goal services are fleshed out.
+
+            var dbInvestmentGoal = _investmentGoalService.GetInvestmentGoal(budgetId);
+            if (dbInvestmentGoal == null) { throw new NullReferenceException(); }
+            UserInvestmentGoal investmentGoal = UserInvestmentGoal.FromInvestmentGoal(dbInvestmentGoal);
+
+            return investmentGoal.additionalBudgetAllocation /* + savingGoal.additionalBudgetAllocation...*/;
+        }
+
         public UserBudget? CreateUserBudget(Guid userId, UserBudget budget)
         {
             // Create goals for this budget

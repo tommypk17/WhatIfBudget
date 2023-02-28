@@ -39,6 +39,16 @@ namespace WhatIfBudget.API.Controllers
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
+        [HttpGet("{budgetId}/goalAllocationSum")]
+        public IActionResult GetGoalAllocationSum([FromRoute] int budgetId)
+        {
+            //pass the budget ID from the route to the logic function
+            var res = _budgetLogic.GetSumOfGoalAllocations(budgetId);
+            //return a status of 200 with all the current user's budget
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
+
 
         [HttpPost]
         public IActionResult Post(UserBudget apiBudget)
