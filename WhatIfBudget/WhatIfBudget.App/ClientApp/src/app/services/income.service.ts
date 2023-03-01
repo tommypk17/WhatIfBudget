@@ -43,6 +43,21 @@ export class IncomeService {
     );
   }
 
+  public getMonthlyIncomeByBudgetId(budgetId: number): Observable<number> {
+    return this.http.get<number>(environment.URL + `/api/incomes/budgets/${budgetId}/monthlyIncome`).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<number>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
   public saveIncome(income: Income): Observable<Income> {
     //this.sharedService.queueLoading('saveIncome');
     return this.http.post<Income>(environment.URL + '/api/incomes', income).pipe(
