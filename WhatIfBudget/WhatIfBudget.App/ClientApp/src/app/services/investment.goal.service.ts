@@ -1,3 +1,4 @@
+import { KeyValue } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, finalize, Observable, retry } from 'rxjs';
@@ -12,13 +13,29 @@ export class InvestmentGoalService {
 
   constructor(private http: HttpClient) { }
 
-  public getInvestmentGoals(): Observable<InvestmentGoal[]> {
+  public getInvestmentGoals(goalId: number): Observable<InvestmentGoal[]> {
     //this.sharedService.queueLoading('saveIncome');
-    return this.http.get<InvestmentGoal[]>(environment.URL + '/api/investmentGoals').pipe(
+    return this.http.get<InvestmentGoal[]>(environment.URL + `/api/investmentGoals/${goalId}`).pipe(
       retry(3),
       catchError((err, caught) => {
         this.handleError(err);
         return new Observable<InvestmentGoal[]>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
+  public getBalanceOverTime(investmentGoalId: number): Observable<Map<number, number>> {
+    //this.sharedService.queueLoading('saveIncome');
+    return this.http.get<Map<number, number>>(environment.URL + `/api/investmentGoals/${investmentGoalId}/balanceOverTime`).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<Map<number, number>>((subscriber) => {
           subscriber.next(undefined);
         })
       }),

@@ -18,7 +18,9 @@
   </div>
   <div class="d-flex justify-content-between">
     <p-card styleClass="m-2" class="w-100" header="Mortgage Payoff Chart"></p-card>
-    <p-card styleClass="m-2" class="w-100" header="Investments Chart"></p-card>
+    <p-card styleClass="m-2" class="w-100" header="Investments">
+      <app-investments-chart></app-investments-chart>
+    </p-card>
   </div>
 </ng-container>
 <ng-container *ngIf="!budget || !budget.id">
