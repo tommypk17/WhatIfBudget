@@ -48,7 +48,7 @@ namespace WhatIfBudget.API.Controllers
         {
             //pass the ID from the route to the logic function
             var res = _investmentGoalLogic.GetBalanceOverTime(investmentGoalId);
-            return StatusCode(StatusCodes.Status200OK, res);
+            return StatusCode(StatusCodes.Status200OK, res.ToList());
         }
 
         [HttpPut]

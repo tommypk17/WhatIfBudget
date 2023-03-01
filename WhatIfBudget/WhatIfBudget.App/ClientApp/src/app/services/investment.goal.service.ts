@@ -29,13 +29,13 @@ export class InvestmentGoalService {
     );
   }
 
-  public getBalanceOverTime(investmentGoalId: number): Observable<Map<number, number>> {
+  public getBalanceOverTime(investmentGoalId: number): Observable<KeyValue<number, number>[]> {
     //this.sharedService.queueLoading('saveIncome');
-    return this.http.get<Map<number, number>>(environment.URL + `/api/investmentGoals/${investmentGoalId}/balanceOverTime`).pipe(
+    return this.http.get<KeyValue<number, number>[]>(environment.URL + `/api/investmentGoals/${investmentGoalId}/balanceOverTime`).pipe(
       retry(3),
       catchError((err, caught) => {
         this.handleError(err);
-        return new Observable<Map<number, number>>((subscriber) => {
+        return new Observable<KeyValue<number, number>[]>((subscriber) => {
           subscriber.next(undefined);
         })
       }),
