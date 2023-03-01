@@ -21,7 +21,7 @@ export class InvestmentComponent implements OnInit {
     this.investmentService.getInvestmentsByGoalId(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: Investment[]) => {
       if (res) this.investments = res;
     });
-    this.investmentGoalService.getInvestmentGoals().subscribe((res: InvestmentGoal[]) => {
+    this.investmentGoalService.getInvestmentGoals(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: InvestmentGoal[]) => {
       if (res) this.investmentGoals = res;
     });
   }
@@ -33,7 +33,7 @@ export class InvestmentComponent implements OnInit {
   }
 
   investmentGoalAdded(): void {
-    this.investmentGoalService.getInvestmentGoals().subscribe((res: InvestmentGoal[]) => {
+    this.investmentGoalService.getInvestmentGoals(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: InvestmentGoal[]) => {
       if (res) this.investmentGoals = res;
     });
   }
