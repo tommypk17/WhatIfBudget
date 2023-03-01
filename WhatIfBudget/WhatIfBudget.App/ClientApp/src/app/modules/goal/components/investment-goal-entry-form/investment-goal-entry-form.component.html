@@ -9,20 +9,20 @@
         <label for="name">Name</label>
       </span>
       <span class="p-float-label w-100 mt-1">
-        <p-inputNumber id="amount"
-                       [required]="true"
-                       [(ngModel)]="model.amount" name="amount"
-                       #amount="ngModel" class="w-100" styleClass="w-100">
-        </p-inputNumber>
-        <label for="amount">Amount</label>
-      </span>
-      <span class="p-float-label w-100 mt-1">
         <p-inputNumber id="years"
                        [required]="true"
                        [(ngModel)]="model.years" name="years"
                        #amount="ngModel" class="w-100" styleClass="w-100">
         </p-inputNumber>
         <label for="years">Years</label>
+      </span>
+      <span class="p-float-label w-100 mt-1">
+        <p-inputNumber id="annualRateofReturn_percent"
+                       [required]="true"
+                       [(ngModel)]="model.annualRateofReturn_percent" name="annualRateofReturn_percent"
+                       #amount="ngModel" class="w-100" styleClass="w-100">
+        </p-inputNumber>
+        <label for="annualRateofReturn_percent">Annual Rate of Return (%)</label>
       </span>
     </div>
   </div>

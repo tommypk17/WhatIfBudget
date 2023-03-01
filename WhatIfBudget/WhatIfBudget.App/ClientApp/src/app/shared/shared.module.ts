@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { BudgetEntryFormComponent } from './budget-entry-form/budget-entry-form.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ChartModule } from 'primeng/chart';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     OverlayPanelModule,
     ListboxModule,
     InputTextModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    ChartModule
   ],
   exports: [
     NavigationComponent

@@ -28,6 +28,7 @@ import { SharedModule } from './shared/shared.module';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { ResponseInterceptor } from './interceptors/response.interceptor';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
@@ -81,6 +82,11 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: LoadingInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ResponseInterceptor,
       multi: true
     },
     {

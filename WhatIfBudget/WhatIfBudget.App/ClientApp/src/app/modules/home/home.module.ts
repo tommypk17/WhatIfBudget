@@ -11,13 +11,16 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
+import { ChartModule } from 'primeng/chart';
+import { InvestmentsChartComponent } from './components/investments-chart/investments-chart.component';
 
 
 @NgModule({
   declarations: [
     HomeComponent,
     LoginComponent,
-    LoginBlockComponent
+    LoginBlockComponent,
+    InvestmentsChartComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +30,8 @@ import { DropdownModule } from 'primeng/dropdown';
     CardModule,
     ButtonModule,
     InputNumberModule,
-    DropdownModule
+    DropdownModule,
+    ChartModule
   ]
 })
 export class HomeModule { }

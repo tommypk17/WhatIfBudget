@@ -6,8 +6,8 @@
         <th></th>
         <th>Name</th>
         <th>Balance</th>
-        <th>Contribution Rate</th>
-        <th>Rate of Return</th>
+        <th>Monthly Personal Contribution</th>
+        <th>Monthly Employer Contribution</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-investment>
@@ -19,9 +19,9 @@
           </div>
         </td>
         <td>{{investment.name}}</td>
-        <td>{{investment.balance}}</td>
-        <td>{{investment.contributionRate}}</td>
-        <td>{{investment.rateOfReturn}}</td>
+        <td>{{investment.currentBalance }}</td>
+        <td>{{investment.monthlyPersonalContribution}}</td>
+        <td>{{investment.monthlyEmployerContribution}}</td>
       </tr>
     </ng-template>
   </p-table>
