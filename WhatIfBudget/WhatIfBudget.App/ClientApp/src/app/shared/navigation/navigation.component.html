@@ -1,21 +1,19 @@
-<div>
-  <p-menubar [model]="navs">
-    <ng-template pTemplate="start">
-      <img src="./assets/whatifbudget.webp" height="40" class="mr-2">
-    </ng-template>
-    <ng-template pTemplate="end">
-      <div class="d-flex">
-        <div class="d-flex flex-column justify-content-center" *ngIf="$isLoading | async as loading">
-          <p-progressSpinner strokeWidth="2" [style]="{width: '20px', height: '20px'}"></p-progressSpinner>
-        </div>
-        <button pButton icon="pi pi-user" class="p-button-rounded p-button-text" (click)="profile.toggle($event)"></button>
+<p-menubar [model]="navs">
+  <ng-template pTemplate="start">
+    <img src="./assets/whatifbudget.webp" height="40" class="mr-2">
+  </ng-template>
+  <ng-template pTemplate="end">
+    <div class="d-flex">
+      <div class="d-flex flex-column justify-content-center" *ngIf="$isLoading | async as loading">
+        <p-progressSpinner strokeWidth="2" [style]="{width: '20px', height: '20px'}"></p-progressSpinner>
       </div>
-    </ng-template>
-  </p-menubar>
-  <p-overlayPanel #profile>
-    <ng-template pTemplate>
-      <button *ngIf="loggedIn" pButton class="p-button-text p-button-danger" label="Logout" icon="pi pi-fw pi-sign-out" (click)="logout()"></button>
-      <button *ngIf="!loggedIn" pButton class="p-button-text" label="Login" icon="pi pi-fw pi-sign-in" (click)="login()"></button>
-    </ng-template>
-  </p-overlayPanel>
-</div>
+      <button pButton icon="pi pi-user" class="p-button-rounded p-button-text" (click)="profile.toggle($event)"></button>
+    </div>
+  </ng-template>
+</p-menubar>
+<p-overlayPanel #profile>
+  <ng-template pTemplate>
+    <button *ngIf="loggedIn" pButton class="p-button-text p-button-danger" label="Logout" icon="pi pi-fw pi-sign-out" (click)="logout()"></button>
+    <button *ngIf="!loggedIn" pButton class="p-button-text" label="Login" icon="pi pi-fw pi-sign-in" (click)="login()"></button>
+  </ng-template>
+</p-overlayPanel>
