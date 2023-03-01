@@ -33,7 +33,7 @@ export class InvestmentsChartComponent implements OnInit {
               label: '$',
               data: values,
               fill: false,
-              borderColor: '#42A5F5',
+              backgroundColor: 'rgba(16,124,16,1)',
               tension: .4
             }
           ]
