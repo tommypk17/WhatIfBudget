@@ -19,30 +19,30 @@ export class InvestmentsChartComponent implements OnInit {
     let values: number[] = []
 
 
-    this.investmentGoalService.getBalanceOverTime(this.sharedService.budget.investmentGoalId!).subscribe((res: Map<number, number>) => {
+    this.investmentGoalService.getBalanceOverTime(this.sharedService.budget.investmentGoalId!).subscribe((res: KeyValue<number, number>[]) => {
       if (res) {
-        for (let key in res.keys) {
-          years.push('Year' + key);
-        }
-        for (let value in res.values) {
-          years.push(value);
-        }
+        res.forEach((v) => {
+          years.push('Year ' + v.key)
+          values.push(v.value);
+        });
+
+        this.basicData = {
+          labels: years,
+          datasets: [
+            {
+              label: '$',
+              data: values,
+              fill: false,
+              borderColor: '#42A5F5',
+              tension: .4
+            }
+          ]
+        };
       }
     });
 
 
-    this.basicData = {
-      labels: years,
-      datasets: [
-        {
-          label: '',
-          data: values,
-          fill: false,
-          borderColor: '#42A5F5',
-          tension: .4
-        }
-      ]
-    };
+
 
     this.basicOptions = {
       plugins: {
