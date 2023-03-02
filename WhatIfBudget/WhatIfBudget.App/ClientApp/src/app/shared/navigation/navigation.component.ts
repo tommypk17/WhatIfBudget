@@ -49,7 +49,7 @@ export class NavigationComponent implements OnInit {
       { label: "Home", icon: "pi pi-home", routerLink: "/" },
       { label: "Incomes", icon: "pi pi-money-bill", routerLink: "/incomes" },
       { label: "Expenses", icon: "pi pi-chart-pie", routerLink: "/expenses" },
-      { label: "Goals", icon: "pi pi-chart-line", routerLink: "/goals" },
+      { label: "Goals", icon: "pi pi-chart-line", routerLink: "/goals/summary" },
       {
         label: "Budgets", icon: "pi pi-list", items:
           [{ label: 'Start New Budget', icon: 'pi pi-fw pi-refresh', command: () => { this.budgetCreate() } },

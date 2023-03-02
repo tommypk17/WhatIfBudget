@@ -7,7 +7,7 @@ import { MortgageComponent } from './pages/mortgage/mortgage.component';
 import { SavingComponent } from './pages/saving/saving.component';
 
 const routes: Routes = [
-  { path: '', component: GoalComponent },
+  { path: 'summary', component: GoalComponent },
   { path: 'savings', component: SavingComponent },
   { path: 'debts', component: DebtComponent },
   { path: 'mortgages', component: MortgageComponent },
