@@ -17,7 +17,6 @@ namespace WhatIfBudget.Logic.Models
             return new InvestmentGoal()
             {
                 Id = Id,
-                TotalBalance = TotalBalance,
                 AnnualReturnRate_Percent = AnnualReturnRate_Percent,
                 YearsToTarget = YearsToTarget,
                 AdditionalBudgetAllocation = additionalBudgetAllocation
@@ -29,7 +28,6 @@ namespace WhatIfBudget.Logic.Models
             return new UserInvestmentGoal()
             {
                 Id = investmentGoal.Id,
-                TotalBalance = investmentGoal.TotalBalance,
                 AnnualReturnRate_Percent = investmentGoal.AnnualReturnRate_Percent,
                 YearsToTarget = investmentGoal.YearsToTarget,
                 additionalBudgetAllocation = investmentGoal.AdditionalBudgetAllocation

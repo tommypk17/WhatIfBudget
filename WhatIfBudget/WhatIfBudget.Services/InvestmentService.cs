@@ -68,5 +68,18 @@ namespace WhatIfBudget.Services
                 return null;
             }
         }
+
+        public IList<Investment> GetInvestmentsByInvestmentGoalId(int id)
+        {
+            var investments = _ctx.InvestmentGoalInvestments
+                        .Include(x => x.Investment)
+                        .Where(x => x.InvestmentGoalId == id && x.Investment != null)
+                        .Select(x => x.Investment).ToList();
+            if (investments.Any())
+            {
+                return investments!;
+            }
+            return new List<Investment>();
+        }
     }
 }

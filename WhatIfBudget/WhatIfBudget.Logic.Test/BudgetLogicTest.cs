@@ -257,7 +257,6 @@ namespace WhatIfBudget.Logic.Test
                 new InvestmentGoal()
                 {
                     Id = 1,
-                    TotalBalance = 0,
                     AnnualReturnRate_Percent = 0,
                     YearsToTarget = 0,
                     AdditionalBudgetAllocation = 0,

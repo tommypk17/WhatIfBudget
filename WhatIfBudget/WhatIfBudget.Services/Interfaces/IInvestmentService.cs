@@ -13,6 +13,7 @@ namespace WhatIfBudget.Services.Interfaces
         public Investment? AddNewInvestment(Investment newInvestment);
         public Investment? UpdateInvestment(Investment modifiedInvestment);
         public Investment? DeleteInvestment(int id);
+        public IList<Investment> GetInvestmentsByInvestmentGoalId(int id);
 
 
     }

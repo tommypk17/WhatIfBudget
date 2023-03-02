@@ -78,9 +78,13 @@ namespace WhatIfBudget.Logic
         public UserInvestmentGoal? GetInvestmentGoal(int investmentGoalId)
         {
             var investmentGoal = _investmentGoalService.GetInvestmentGoal(investmentGoalId);
+            var investments = _investmentService.GetInvestmentsByInvestmentGoalId(investmentGoalId);
             if(investmentGoal is null) return null;
 
-            return UserInvestmentGoal.FromInvestmentGoal(investmentGoal);
+            var res = UserInvestmentGoal.FromInvestmentGoal(investmentGoal);
+            res.TotalBalance = investments.Select(x => x.CurrentBalance).Sum();
+
+            return res;
         }
 
         public double GetBalanceAtTarget(int investmentGoalId)
