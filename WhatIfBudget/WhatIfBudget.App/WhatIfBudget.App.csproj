@@ -8,36 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ClientApp\dist\**" />
-    <Content Remove="ClientApp\dist\**" />
-    <EmbeddedResource Remove="ClientApp\dist\**" />
-    <None Remove="ClientApp\dist\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="ClientApp\src\app\shared\enums\epriority.ts" />
-    <None Remove="ClientApp\src\app\shared\models\budget.ts" />
-    <None Remove="ClientApp\src\app\shared\models\expense.ts" />
-    <None Remove="ClientApp\src\app\shared\models\income - Copy.ts" />
-    <None Remove="ClientApp\src\app\shared\models\income.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.13" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.9.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\shared\enums\efrequency.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\shared\enums\epriority.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\shared\models\budget.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\shared\models\expense.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\shared\models\income.ts" />
   </ItemGroup>
 
 </Project>
