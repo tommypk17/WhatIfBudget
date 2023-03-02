@@ -379,6 +379,7 @@ namespace WhatIfBudget.Logic.Test
                     CreatedOn = DateTime.MinValue,
                     UpdatedOn = DateTime.MinValue
                 });
+
             mockIGIS.Setup(x => x.GetAllInvestmentGoalInvestments()).Returns(
                 (IList<InvestmentGoalInvestment>)new List<InvestmentGoalInvestment>()
                 {
@@ -387,8 +388,40 @@ namespace WhatIfBudget.Logic.Test
                     new InvestmentGoalInvestment() { Id = 3, InvestmentGoalId = 2, InvestmentId = 3 },
                     new InvestmentGoalInvestment() { Id = 4, InvestmentGoalId = 2, InvestmentId = 2 }
             });
+            mockIGIS.Setup(x => x.DeleteInvestmentGoalInvestment(It.IsAny<int>())).Returns(
+                new InvestmentGoalInvestment());
+            mockInvS.Setup(x => x.DeleteInvestment(It.IsAny<int>())).Returns(
+                new Investment());
+            mockIGS.Setup(x => x.DeleteInvestmentGoal(It.IsAny<int>())).Returns(
+                new InvestmentGoal());
 
+            mockBIS.Setup(x => x.GetAllBudgetIncomes()).Returns(
+                (IList<BudgetIncome>)new List<BudgetIncome>()
+                {
+                    new BudgetIncome() { Id = 1, BudgetId = 1, IncomeId = 1 },
+                    new BudgetIncome() { Id = 2, BudgetId = 1, IncomeId = 2 },
+                    new BudgetIncome() { Id = 3, BudgetId = 2, IncomeId = 3 },
+                    new BudgetIncome() { Id = 4, BudgetId = 2, IncomeId = 2 },
+                });
+            mockBIS.Setup(x => x.DeleteBudgetIncome(It.IsAny<int>())).Returns(
+                new BudgetIncome());
+            mockIS.Setup(x => x.DeleteIncome(It.IsAny<int>())).Returns(
+                new Income());
 
+            mockBES.Setup(x => x.GetAllBudgetExpenses()).Returns(
+                (IList<BudgetExpense>)new List<BudgetExpense>()
+                {
+                    new BudgetExpense() { Id = 1, BudgetId = 1, ExpenseId = 1 },
+                    new BudgetExpense() { Id = 2, BudgetId = 1, ExpenseId = 2 },
+                    new BudgetExpense() { Id = 3, BudgetId = 2, ExpenseId = 3 },
+                    new BudgetExpense() { Id = 4, BudgetId = 2, ExpenseId = 2 },
+                });
+            mockBES.Setup(x => x.DeleteBudgetExpense(It.IsAny<int>())).Returns(
+                new BudgetExpense());
+            mockES.Setup(x => x.DeleteExpense(It.IsAny<int>())).Returns(
+                new Expense());
+
+            //==================================================================================
             var budgetLogic = new BudgetLogic(mockBS.Object, mockIS.Object,
                                       mockES.Object, mockBIS.Object,
                                       mockBES.Object, mockIGS.Object,

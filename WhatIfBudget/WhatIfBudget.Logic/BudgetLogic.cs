@@ -132,17 +132,17 @@ namespace WhatIfBudget.Logic
             // TODO
 
             // Delete associated investments
-            var igiList = _igiService.GetAllInvestmentGoalInvestments()
-                .Where(x => x.InvestmentGoalId == budget.InvestmentGoalId)
+            var allIGI_List = _igiService.GetAllInvestmentGoalInvestments()
                 .ToList();
-            foreach (var igi in igiList)
+            var budgetIGI_List = allIGI_List.Where(x => x.InvestmentGoalId == budget.InvestmentGoalId).ToList();
+            foreach (var igi in budgetIGI_List)
             {
                 var dbIGI = _igiService.DeleteInvestmentGoalInvestment(igi.Id);
                 if (dbIGI == null) { throw new NullReferenceException(); }
+                allIGI_List.Remove(igi);
                 // Delete investment element if it has no remaining associations
-                if (!_igiService.GetAllInvestmentGoalInvestments()
-                    .Where(x => x.InvestmentId == dbIGI.InvestmentId)
-                    .Any())
+                if (!allIGI_List.Where(x => x.InvestmentId == igi.InvestmentId)
+                                .Any())
                 {
                     var dbInvestment = _investmentService.DeleteInvestment(igi.InvestmentId);
                     if (dbInvestment == null) { throw new NullReferenceException(); }
@@ -150,25 +150,26 @@ namespace WhatIfBudget.Logic
             }
 
             // Delete associated goals
-            var dbInvestmentGoal = _investmentGoalService.DeleteInvestmentGoal(budget.InvestmentGoalId);
+            var dbIG = _investmentGoalService.DeleteInvestmentGoal(budget.InvestmentGoalId);
+            if (dbIG == null) { throw new NullReferenceException(); }
             /*
-            dbSavingGoal = _savingGoalService.DeleteSavingGoal(budget.SavingGoalId);
-            dbDebtGoal = _debtGoalService.DeleteDebtGoal(budget.DebtGoalId);
-            dbMortgageGoal = _mortgageGoalService.DeleteMortageGoal(budget.MortageGoalId);
+            dbSG = _savingGoalService.DeleteSavingGoal(budget.SavingGoalId);
+            dbDG = _debtGoalService.DeleteDebtGoal(budget.DebtGoalId);
+            dbMG = _mortgageGoalService.DeleteMortageGoal(budget.MortageGoalId);
             */
 
             // Delete associated incomes
-            var budgetIncomeList = _budgetIncomeService.GetAllBudgetIncomes()
-                .Where(x => x.BudgetId == budget.Id)
+            var allBI_List = _budgetIncomeService.GetAllBudgetIncomes()
                 .ToList();
-            foreach (var budgetIncome in budgetIncomeList)
+            var biList = allBI_List.Where(x => x.BudgetId == budget.Id).ToList();
+            foreach (var budgetIncome in biList)
             {
                 var dbBudgetIncome = _budgetIncomeService.DeleteBudgetIncome(budgetIncome.Id);
                 if (dbBudgetIncome == null) { throw new NullReferenceException(); }
+                allBI_List.Remove(budgetIncome);
                 // Delete income element if it has no remaining associations
-                if (!_budgetIncomeService.GetAllBudgetIncomes()
-                        .Where(x => x.IncomeId == dbBudgetIncome.IncomeId)
-                        .Any())
+                if (allBI_List.Where(x => x.IncomeId == budgetIncome.IncomeId)
+                              .Any())
                 {
                     var dbIncome = _incomeService.DeleteIncome(dbBudgetIncome.IncomeId);
                     if (dbIncome == null) { throw new NullReferenceException(); }
@@ -176,24 +177,22 @@ namespace WhatIfBudget.Logic
             }
 
             // Delete associated expenses
-            var budgetExpenseList = _budgetExpenseService.GetAllBudgetExpenses()
-                .Where(x => x.BudgetId == budget.Id)
+            var allBE_List = _budgetExpenseService.GetAllBudgetExpenses()
                 .ToList();
-            foreach (var budgetExpense in budgetExpenseList)
+            var beList = allBE_List.Where(x => x.BudgetId == budget.Id).ToList();
+            foreach (var budgetExpense in beList)
             {
                 var dbBudgetExpense = _budgetExpenseService.DeleteBudgetExpense(budgetExpense.Id);
                 if (dbBudgetExpense == null) { throw new NullReferenceException(); }
-
+                allBE_List.Remove(budgetExpense);
                 // Delete income element that is not associated with any other budget Id
-                if (!_budgetExpenseService.GetAllBudgetExpenses()
-                        .Where(x => x.ExpenseId == dbBudgetExpense.ExpenseId)
-                        .Any())
+                if (!allBE_List.Where(x => x.ExpenseId == budgetExpense.ExpenseId)
+                               .Any())
                 {
                     var dbExpense = _expenseService.DeleteExpense(dbBudgetExpense.ExpenseId);
                     if (dbExpense == null) { throw new NullReferenceException(); }
                 }
             }
-
 
             var dbBudget = _budgetService.DeleteBudget(budget.Id);
             if (dbBudget == null) { throw new NullReferenceException(); }
