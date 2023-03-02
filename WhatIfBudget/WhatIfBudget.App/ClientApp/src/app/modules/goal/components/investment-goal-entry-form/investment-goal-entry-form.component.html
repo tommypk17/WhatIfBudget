@@ -1,28 +1,30 @@
 <form (ngSubmit)="onSubmit(form)" #form="ngForm">
   <div class="d-flex">
     <div class="d-flex flex-column w-100 mr-1">
-      <span class="p-float-label w-100 mt-1">
-        <input pInputText id="name"
-               [required]="true"
-               [(ngModel)]="model.name" name="name"
-               #name="ngModel" class="w-100" />
-        <label for="name">Name</label>
+      <span class="p-float-label w-100 mt-1 mb-1">
+        <p-inputNumber id="yearsToTarget"
+                       [required]="true"
+                       [(ngModel)]="model.yearsToTarget" name="yearsToTarget"
+                       #yearsToTarget="ngModel" class="w-100" styleClass="w-100" suffix=" years">
+        </p-inputNumber>
+        <label for="yearsToTarget">Years</label>
+      </span>
+      <span class="p-float-label w-100 mt-1 mb-1">
+        <p-inputNumber id="annualReturnRate_Percent"
+                       [required]="true"
+                       [(ngModel)]="model.annualReturnRate_Percent" name="annualReturnRate_Percent"
+                       #annualReturnRate_Percent="ngModel" class="w-100" styleClass="w-100"
+                       prefix="%">
+        </p-inputNumber>
+        <label for="annualReturnRate_Percent">Annual Rate of Return (%)</label>
       </span>
       <span class="p-float-label w-100 mt-1">
-        <p-inputNumber id="years"
-                       [required]="true"
-                       [(ngModel)]="model.years" name="years"
-                       #amount="ngModel" class="w-100" styleClass="w-100">
+        <p-inputNumber id="totalBalance"
+                       [(ngModel)]="model.totalBalance" name="totalBalance"
+                       #totalBalance="ngModel" class="w-100" styleClass="w-100" [disabled]="true"
+                       prefix="$">
         </p-inputNumber>
-        <label for="years">Years</label>
-      </span>
-      <span class="p-float-label w-100 mt-1">
-        <p-inputNumber id="annualRateofReturn_percent"
-                       [required]="true"
-                       [(ngModel)]="model.annualRateofReturn_percent" name="annualRateofReturn_percent"
-                       #amount="ngModel" class="w-100" styleClass="w-100">
-        </p-inputNumber>
-        <label for="annualRateofReturn_percent">Annual Rate of Return (%)</label>
+        <label for="totalBalance">Total Balance</label>
       </span>
     </div>
   </div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { InvestmentGoalService } from '../../../../services/investment.goal.service'
 import { SharedService } from '../../../../services/shared.service';
@@ -10,9 +10,9 @@ import { InvestmentGoal } from '../../../../shared/models/investment-goal';
   styleUrls: ['./investment-goal-entry-form.component.scss']
 })
 export class InvestmentGoalEntryFormComponent implements OnInit {
-  @Output('added') added: EventEmitter<void> = new EventEmitter();
+  @Output('updated') updated: EventEmitter<void> = new EventEmitter();
 
-  model: InvestmentGoal = new InvestmentGoal();
+  @Input('investmentGoal') model: InvestmentGoal = new InvestmentGoal();
 
   constructor(private investmentGoalService: InvestmentGoalService, private sharedService: SharedService) { }
 
@@ -20,9 +20,8 @@ export class InvestmentGoalEntryFormComponent implements OnInit {
   }
 
   onSubmit(event: NgForm): void {
-    this.investmentGoalService.saveInvestmentGoals(event.value as InvestmentGoal).subscribe((res: InvestmentGoal) => {
-      this.added.emit();
-      this.model = new InvestmentGoal();
+    this.investmentGoalService.saveInvestmentGoal(this.model as InvestmentGoal).subscribe((res: InvestmentGoal) => {
+      this.updated.emit();
     });
   }
 
