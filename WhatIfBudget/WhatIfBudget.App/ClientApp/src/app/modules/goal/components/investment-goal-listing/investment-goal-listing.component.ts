@@ -50,9 +50,9 @@ export class InvestmentGoalListingComponent implements OnInit {
   }
 
   refreshTable(): void {
-    this.investmentGoalService.getInvestmentGoals(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: InvestmentGoal[]) => {
-      if (res) this.model = res;
-    });
+    //this.investmentGoalService.getInvestmentGoals(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: InvestmentGoal[]) => {
+    //  if (res) this.model = res;
+    //});
   }
 
 }

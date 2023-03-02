@@ -14,6 +14,8 @@ export class ExpenseDetailSectionComponent implements OnInit {
 
   myMonthlyExpense: number = 50;
   myMonthlyIncome: number = 100;
+  myMonthlyNeed: number = 30;
+  myMonthlyWant: number = 20;
 
   data: any;
   chartOptions: any;
@@ -22,16 +24,18 @@ export class ExpenseDetailSectionComponent implements OnInit {
 
   ngOnInit() {
     this.data = {
-      labels: ['Expense', 'Remaining Income'],
+      labels: ['Needs', 'Wants', 'Remaining Income'],
       datasets: [
         {
-          data: [this.myMonthlyExpense, (this.myMonthlyIncome - this.myMonthlyExpense)],
+          data: [this.myMonthlyNeed, this.myMonthlyWant, (this.myMonthlyIncome - this.myMonthlyNeed - this.myMonthlyWant)],
           backgroundColor: [
-            "orange",
+            "red",
+            "blue",
             "green",
           ],
           hoverBackgroundColor: [
-            "darkorange",
+            "darkred",
+            "darkblue",
             "darkgreen",
           ]
         }
@@ -39,12 +43,26 @@ export class ExpenseDetailSectionComponent implements OnInit {
     };
   }
 
-
-
   monthlyExpense(): void {
     if (this.sharedService.budget.id) {
       this.expenseService.getMonthlyExpenseByBudgetId(this.sharedService.budget.id).subscribe((res: number) => {
         if (res) this.myMonthlyExpense = res;
+      });
+    }
+  }
+
+  monthlyNeed(): void {
+    if (this.sharedService.budget.id) {
+      this.expenseService.GetMonthlyNeeds(this.sharedService.budget.id).subscribe((res: number) => {
+        if (res) this.myMonthlyNeed = res;
+      });
+    }
+  }
+
+  monthlyWant(): void {
+    if (this.sharedService.budget.id) {
+      this.expenseService.GetMonthlyWants(this.sharedService.budget.id).subscribe((res: number) => {
+        if (res) this.myMonthlyWant = res;
       });
     }
   }

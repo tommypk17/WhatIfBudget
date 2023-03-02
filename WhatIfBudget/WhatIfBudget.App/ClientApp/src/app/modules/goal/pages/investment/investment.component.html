@@ -10,15 +10,10 @@
       </div>
     </p-card>
   </div>
-</div>
-<div class="d-flex justify-content-between">
-  <div class="d-flex w-100 flex-column m-2">
-    <p-card header="Investment Goals">
+  <div class="d-flex w-40 flex-column m-2">
+    <p-card header="Investment Goal">
       <div class="mb-1">
-        <app-investment-goal-entry-form (added)="investmentGoalAdded()"></app-investment-goal-entry-form>
-      </div>
-      <div class="mt-1">
-        <app-investment-goal-listing [investmentGoals]="investmentGoals"></app-investment-goal-listing>
+        <app-investment-goal-entry-form (updated)="investmentGoalUpdated()" [investmentGoal]="investmentGoal"></app-investment-goal-entry-form>
       </div>
     </p-card>
   </div>

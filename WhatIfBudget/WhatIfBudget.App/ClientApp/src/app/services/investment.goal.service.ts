@@ -13,13 +13,13 @@ export class InvestmentGoalService {
 
   constructor(private http: HttpClient) { }
 
-  public getInvestmentGoals(goalId: number): Observable<InvestmentGoal[]> {
+  public getInvestmentGoal(goalId: number): Observable<InvestmentGoal> {
     //this.sharedService.queueLoading('saveIncome');
-    return this.http.get<InvestmentGoal[]>(environment.URL + `/api/investmentGoals/${goalId}`).pipe(
+    return this.http.get<InvestmentGoal>(environment.URL + `/api/investmentGoals/${goalId}`).pipe(
       retry(3),
       catchError((err, caught) => {
         this.handleError(err);
-        return new Observable<InvestmentGoal[]>((subscriber) => {
+        return new Observable<InvestmentGoal>((subscriber) => {
           subscriber.next(undefined);
         })
       }),
@@ -45,9 +45,9 @@ export class InvestmentGoalService {
     );
   }
 
-  public saveInvestmentGoals(investmentGoal: InvestmentGoal): Observable<InvestmentGoal> {
+  public saveInvestmentGoal(investmentGoal: InvestmentGoal): Observable<InvestmentGoal> {
     //this.sharedService.queueLoading('saveIncome');
-    return this.http.post<InvestmentGoal>(environment.URL + '/api/investments', investmentGoal).pipe(
+    return this.http.put<InvestmentGoal>(environment.URL + '/api/investmentGoals', investmentGoal).pipe(
       catchError((err, caught) => {
         this.handleError(err);
         return new Observable<InvestmentGoal>((subscriber) => {
