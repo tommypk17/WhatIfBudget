@@ -9,7 +9,7 @@ import { Expense } from '../../../../shared/models/expense';
   styleUrls: ['./expense.component.scss']
 })
 export class ExpenseComponent implements OnInit {
-
+  reloadGraph: boolean = true;
   expenses: Expense[] = [];
 
   constructor(private expenseService: ExpenseService, private sharedService: SharedService) { }
@@ -22,10 +22,12 @@ export class ExpenseComponent implements OnInit {
     }
   }
 
-  expenseAdded(): void {
+  updateExpenses(): void {
+    this.reloadGraph = false;
     if (this.sharedService.budget.id) {
       this.expenseService.getExpensesByBudgetId(this.sharedService.budget.id).subscribe((res: Expense[]) => {
         if (res) this.expenses = res;
+        this.reloadGraph = true;
       });
     }
   }

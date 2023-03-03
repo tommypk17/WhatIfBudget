@@ -1,5 +1,5 @@
 import { KeyValue } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ExpenseService } from '../../../../services/expense.service';
 import { SharedService } from '../../../../services/shared.service';
@@ -11,6 +11,9 @@ import { Expense } from '../../../../shared/models/expense';
   styleUrls: ['./expense-listing.component.scss']
 })
 export class ExpenseListingComponent implements OnInit {
+  @Output('deleted') deleted: EventEmitter<void> = new EventEmitter();
+  @Output('updated') updated: EventEmitter<void> = new EventEmitter();
+
   @Input('expenses') model: Expense[] = [];
 
   editModal: boolean = false;
@@ -43,6 +46,7 @@ export class ExpenseListingComponent implements OnInit {
         this.expenseService.deleteExpense(expense).subscribe((res: Expense) => {
           if (res) {
             this.refreshTable();
+            this.deleted.emit();
           }
         });
       }
@@ -57,7 +61,7 @@ export class ExpenseListingComponent implements OnInit {
   editComplete(): void {
     this.editExpense = undefined;
     this.editModal = false;
-
+    this.updated.emit();
     this.refreshTable();
   }
 

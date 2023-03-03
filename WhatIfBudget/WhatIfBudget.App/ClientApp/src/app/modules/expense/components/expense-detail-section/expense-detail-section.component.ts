@@ -11,10 +11,10 @@ import { SharedService } from '../../../../services/shared.service';
 })
 export class ExpenseDetailSectionComponent implements OnInit {
 
-  myMonthlyExpense: number = 50;
-  myMonthlyIncome: number = 100;
-  myMonthlyNeed: number = 30;
-  myMonthlyWant: number = 20;
+  private _monthlyExpense: number = 0;
+  private _monthlyIncome: number = 0;
+  private _monthlyNeed: number = 0;
+  private _monthlyWant: number = 0;
 
   data: any;
   chartOptions: any;
@@ -25,36 +25,42 @@ export class ExpenseDetailSectionComponent implements OnInit {
     // Monthly expenses by budget id
     if (this.sharedService.budget.id) {
       this.expenseService.getMonthlyExpenseByBudgetId(this.sharedService.budget.id).subscribe((res: number) => {
-        if (res) this.myMonthlyExpense = res;
+        if (res) this._monthlyExpense = res;
+        this.data = this.refreshData();
       });
     }
 
     // Monthly needs
     if (this.sharedService.budget.id) {
       this.expenseService.GetMonthlyNeeds(this.sharedService.budget.id).subscribe((res: number) => {
-        if (res) this.myMonthlyNeed = res;
+        if (res) this._monthlyNeed = res;
+        this.data = this.refreshData();
       });
     }
 
     // Monthly wants
     if (this.sharedService.budget.id) {
       this.expenseService.GetMonthlyWants(this.sharedService.budget.id).subscribe((res: number) => {
-        if (res) this.myMonthlyWant = res;
+        if (res) this._monthlyWant = res;
+        this.data = this.refreshData();
       });
     }
 
     // Monthly income by budget id
     if (this.sharedService.budget.id) {
       this.incomeService.getMonthlyIncomeByBudgetId(this.sharedService.budget.id).subscribe((res: number) => {
-        if (res) this.myMonthlyIncome = res;
+        if (res) this._monthlyIncome = res;
+        this.data = this.refreshData();
       });
     }
+  }
 
-    this.data = {
+  private refreshData(): any {
+    return {
       labels: ['Needs', 'Wants', 'Remaining Income'],
       datasets: [
         {
-          data: [this.myMonthlyNeed, this.myMonthlyWant, (this.myMonthlyIncome - this.myMonthlyNeed - this.myMonthlyWant)],
+          data: [this._monthlyNeed, this._monthlyWant, (this._monthlyIncome - this._monthlyNeed - this._monthlyWant)],
           backgroundColor: [
             "red",
             "blue",
@@ -70,35 +76,4 @@ export class ExpenseDetailSectionComponent implements OnInit {
     };
   }
 
-  monthlyExpense(): void {
-    if (this.sharedService.budget.id) {
-      this.expenseService.getMonthlyExpenseByBudgetId(this.sharedService.budget.id).subscribe((res: number) => {
-        if (res) this.myMonthlyExpense = res;
-      });
-    }
-  }
-
-  monthlyNeed(): void {
-    if (this.sharedService.budget.id) {
-      this.expenseService.GetMonthlyNeeds(this.sharedService.budget.id).subscribe((res: number) => {
-        if (res) this.myMonthlyNeed = res;
-      });
-    }
-  }
-
-  monthlyWant(): void {
-    if (this.sharedService.budget.id) {
-      this.expenseService.GetMonthlyWants(this.sharedService.budget.id).subscribe((res: number) => {
-        if (res) this.myMonthlyWant = res;
-      });
-    }
-  }
-
-  monthlyIncome(): void {
-    if (this.sharedService.budget.id) {
-      this.incomeService.getMonthlyIncomeByBudgetId(this.sharedService.budget.id).subscribe((res: number) => {
-        if (res) this.myMonthlyIncome = res;
-      });
-    }
-  }
 }
