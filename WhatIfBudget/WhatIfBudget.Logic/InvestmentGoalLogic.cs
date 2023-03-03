@@ -57,7 +57,7 @@ namespace WhatIfBudget.Logic
 
         private Dictionary<int, double> GetBalanceOverTime(UserInvestmentGoal investmentGoal)
         {
-            int iMax = investmentGoal.YearsToTarget + 10;
+            int iMax = investmentGoal.YearsToTarget;
             Dictionary<int, double> contributionList = GetTotalMonthlyContributions(investmentGoal, iMax);
 
 
@@ -65,7 +65,7 @@ namespace WhatIfBudget.Logic
             double iBalance = investmentGoal.TotalBalance;
             balanceDict[0] =iBalance;
 
-            for (int i = 1; i < iMax; i++)
+            for (int i = 1; i <= iMax; i++)
             {
                 iBalance += contributionList[i - 1];
                 iBalance = Math.Pow(iBalance, 1.0 + investmentGoal.AnnualReturnRate_Percent / 100.0);
