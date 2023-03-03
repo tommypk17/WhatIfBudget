@@ -1,9 +1,21 @@
 <ng-container *ngIf="budget && budget.id">
   <div class="d-flex flex-column mt-2">
     <div class="d-flex justify-content-between">
-        <p-card class="w-100 mx-2" header="Total Income"></p-card>
-        <p-card class="w-100 mx-2" header="Total Expenses"></p-card>
-        <p-card class="w-100 mx-2" header="Net Monthly"></p-card>
+        <p-card class="w-100 mx-2" header="Total Income">
+          <p class="breakdown">
+            ${{myMonthlyIncome | number : '.2-2'}}
+          </p>
+        </p-card>
+        <p-card class="w-100 mx-2" header="Total Expenses">
+          <p class="breakdown">
+            ${{myMonthlyExpenses | number : '.2-2'}}
+          </p>
+        </p-card>
+        <p-card class="w-100 mx-2" header="Net Monthly">
+          <p class="breakdown">
+            ${{(myMonthlyIncome - myMonthlyExpenses)  | number : '.2-2'}}
+          </p>
+        </p-card>
         <p-card class="w-100 mx-2" header="Current Net Worth"></p-card>
     </div>
     <div class="d-flex flex-column">
