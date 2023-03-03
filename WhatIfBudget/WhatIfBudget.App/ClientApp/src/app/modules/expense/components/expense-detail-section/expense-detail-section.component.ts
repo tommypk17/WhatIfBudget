@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartModule } from 'primeng/chart';
 import { ExpenseService } from '../../../../services/expense.service';
 import { IncomeService } from '../../../../services/income.service';
 import { SharedService } from '../../../../services/shared.service';
@@ -22,12 +21,40 @@ export class ExpenseDetailSectionComponent implements OnInit {
   
   constructor(private expenseService: ExpenseService, private sharedService: SharedService, private incomeService: IncomeService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    // Monthly expenses by budget id
+    if (this.sharedService.budget.id) {
+      this.expenseService.getMonthlyExpenseByBudgetId(this.sharedService.budget.id).subscribe((res: number) => {
+        if (res) this.myMonthlyExpense = res;
+      });
+    }
+
+    // Monthly needs
+    if (this.sharedService.budget.id) {
+      this.expenseService.GetMonthlyNeeds(this.sharedService.budget.id).subscribe((res: number) => {
+        if (res) this.myMonthlyNeed = res;
+      });
+    }
+
+    // Monthly wants
+    if (this.sharedService.budget.id) {
+      this.expenseService.GetMonthlyWants(this.sharedService.budget.id).subscribe((res: number) => {
+        if (res) this.myMonthlyWant = res;
+      });
+    }
+
+    // Monthly income by budget id
+    if (this.sharedService.budget.id) {
+      this.incomeService.getMonthlyIncomeByBudgetId(this.sharedService.budget.id).subscribe((res: number) => {
+        if (res) this.myMonthlyIncome = res;
+      });
+    }
+
     this.data = {
       labels: ['Needs', 'Wants', 'Remaining Income'],
       datasets: [
         {
-          data: [this.myMonthlyNeed, this.myMonthlyWant, (this.myMonthlyIncome - this.myMonthlyNeed - this.myMonthlyWant)],
+          data: [this.myMonthlyNeed, this.myMonthlyExpense, (this.myMonthlyIncome)], //- this.myMonthlyNeed - this.myMonthlyWant)],
           backgroundColor: [
             "red",
             "blue",

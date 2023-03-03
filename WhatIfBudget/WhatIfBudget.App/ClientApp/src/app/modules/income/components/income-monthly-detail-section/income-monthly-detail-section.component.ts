@@ -14,9 +14,6 @@ export class IncomeMonthlyDetailSectionComponent implements OnInit {
   constructor(private incomeService: IncomeService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
-
-  }
-  monthlyIncome(): void {
     if (this.sharedService.budget.id) {
       this.incomeService.getMonthlyIncomeByBudgetId(this.sharedService.budget.id).subscribe((res: number) => {
         if (res) this.myMonthlyIncome = res;
