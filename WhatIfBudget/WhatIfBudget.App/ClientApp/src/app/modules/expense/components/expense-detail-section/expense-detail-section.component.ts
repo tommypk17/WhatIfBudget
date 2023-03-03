@@ -54,7 +54,7 @@ export class ExpenseDetailSectionComponent implements OnInit {
       labels: ['Needs', 'Wants', 'Remaining Income'],
       datasets: [
         {
-          data: [this.myMonthlyNeed, this.myMonthlyExpense, (this.myMonthlyIncome)], //- this.myMonthlyNeed - this.myMonthlyWant)],
+          data: [this.myMonthlyNeed, this.myMonthlyWant, (this.myMonthlyIncome - this.myMonthlyNeed - this.myMonthlyWant)],
           backgroundColor: [
             "red",
             "blue",
