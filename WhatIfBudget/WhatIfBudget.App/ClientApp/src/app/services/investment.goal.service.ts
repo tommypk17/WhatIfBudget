@@ -45,6 +45,22 @@ export class InvestmentGoalService {
     );
   }
 
+  public getBalanceAtTarget(investmentGoalId: number): Observable<number> {
+    //this.sharedService.queueLoading('saveIncome');
+    return this.http.get<number>(environment.URL + `/api/investmentGoals/${investmentGoalId}/balanceAtTarget`).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<number>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
   public saveInvestmentGoal(investmentGoal: InvestmentGoal): Observable<InvestmentGoal> {
     //this.sharedService.queueLoading('saveIncome');
     return this.http.put<InvestmentGoal>(environment.URL + '/api/investmentGoals', investmentGoal).pipe(

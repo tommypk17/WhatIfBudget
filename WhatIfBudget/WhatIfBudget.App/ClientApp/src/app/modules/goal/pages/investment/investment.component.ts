@@ -11,7 +11,7 @@ import { InvestmentGoal } from '../../../../shared/models/investment-goal';
   styleUrls: ['./investment.component.scss']
 })
 export class InvestmentComponent implements OnInit {
-
+  balanceAtTarget: number = 0;
   investments: Investment[] = [];
   investmentGoal: InvestmentGoal = new InvestmentGoal();
 
@@ -21,20 +21,29 @@ export class InvestmentComponent implements OnInit {
     this.investmentService.getInvestmentsByGoalId(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: Investment[]) => {
       if (res) this.investments = res;
     });
-    this.investmentGoalService.getInvestmentGoal(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: InvestmentGoal) => {
-      if (res) this.investmentGoal = res;
-    });
+    this.updateTotals();
   }
 
   investmentAdded(): void {
     this.investmentService.getInvestmentsByGoalId(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: Investment[]) => {
       if (res) this.investments = res;
+      this.updateTotals();
     });
   }
 
   investmentGoalUpdated(): void {
+    this.updateTotals();
     //this.investmentGoalService.getInvestmentGoals(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: InvestmentGoal[]) => {
     //  if (res) this.investmentGoals = res;
     //});
+  }
+
+  updateTotals(): void {
+    this.investmentGoalService.getInvestmentGoal(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: InvestmentGoal) => {
+      if (res) this.investmentGoal = res;
+    });
+    this.investmentGoalService.getBalanceAtTarget(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: number) => {
+      if (res) this.balanceAtTarget = res;
+    });
   }
 }
