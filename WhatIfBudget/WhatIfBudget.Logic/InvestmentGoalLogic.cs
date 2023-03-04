@@ -63,13 +63,13 @@ namespace WhatIfBudget.Logic
 
             Dictionary<int, double> balanceDict = new Dictionary<int, double>();
             double iBalance = investmentGoal.TotalBalance;
-            balanceDict[0] =iBalance;
+            balanceDict[0] = iBalance;
 
             for (int i = 1; i <= iMax; i++)
             {
-                iBalance += contributionList[i - 1];
-                iBalance = Math.Pow(iBalance, 1.0 + investmentGoal.AnnualReturnRate_Percent / 100.0);
-                balanceDict[i] =iBalance;
+                iBalance = contributionList[i - 1];
+                // new balance = ( previous balance + ( total contributions * months ) ) * ( 1 + interest rate )
+                balanceDict[i] = ((balanceDict[i-1] + (iBalance * 12)) * (1 + (investmentGoal.AnnualReturnRate_Percent / 100.0)));
             }
 
             return balanceDict;
