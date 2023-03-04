@@ -13,6 +13,9 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 export class IncomeListingComponent implements OnInit {
   @Input('incomes') model: Income[] = [];
 
+  @Output('deleted') deleted: EventEmitter<void> = new EventEmitter();
+  @Output('updated') updated: EventEmitter<void> = new EventEmitter();
+
   editModal: boolean = false;
   editIncome: Income | undefined;
 
@@ -37,6 +40,7 @@ export class IncomeListingComponent implements OnInit {
         this.incomeService.deleteIncome(income).subscribe((res: Income) => {
           if (res) {
             this.refreshTable();
+            this.deleted.emit();
           }
         });
       }
@@ -51,7 +55,7 @@ export class IncomeListingComponent implements OnInit {
   editComplete(): void {
     this.editIncome = undefined;
     this.editModal = false;
-
+    this.updated.emit();
     this.refreshTable();
   }
 

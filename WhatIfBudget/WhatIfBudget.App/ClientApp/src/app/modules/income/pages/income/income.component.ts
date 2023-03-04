@@ -9,7 +9,7 @@ import { Income } from '../../../../shared/models/income';
   styleUrls: ['./income.component.scss']
 })
 export class IncomeComponent implements OnInit {
-
+  reloadIncome: boolean = true;
   incomes: Income[] = [];
 
   constructor(private incomeService: IncomeService, private sharedService: SharedService) { }
@@ -22,10 +22,12 @@ export class IncomeComponent implements OnInit {
     }
   }
 
-  incomeAdded(): void {
+  updateIncomes(): void {
+    this.reloadIncome = false;
     if (this.sharedService.budget.id) {
       this.incomeService.getIncomesByBudgetId(this.sharedService.budget.id).subscribe((res: Income[]) => {
         if (res) this.incomes = res;
+        this.reloadIncome = true;
       });
     }
   }
