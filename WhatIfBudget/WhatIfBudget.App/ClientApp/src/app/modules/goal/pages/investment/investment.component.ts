@@ -24,7 +24,7 @@ export class InvestmentComponent implements OnInit {
     this.updateTotals();
   }
 
-  investmentAdded(): void {
+  updateInvestments(): void {
     this.investmentService.getInvestmentsByGoalId(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: Investment[]) => {
       if (res) this.investments = res;
       this.updateTotals();

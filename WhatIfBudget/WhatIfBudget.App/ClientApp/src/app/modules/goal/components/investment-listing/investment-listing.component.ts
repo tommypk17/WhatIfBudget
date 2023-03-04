@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { InvestmentService } from '../../../../services/investment.service';
 import { SharedService } from '../../../../services/shared.service';
@@ -11,6 +11,9 @@ import { Investment } from '../../../../shared/models/investment';
 })
 export class InvestmentListingComponent implements OnInit {
   @Input('investments') model: Investment[] = [];
+
+  @Output('deleted') deleted: EventEmitter<void> = new EventEmitter();
+  @Output('updated') updated: EventEmitter<void> = new EventEmitter();
 
   editModal: boolean = false;
   editInvestment: Investment | undefined;
@@ -28,10 +31,9 @@ export class InvestmentListingComponent implements OnInit {
       accept: () => {
         this.investmentService.deleteInvestment(investment).subscribe((res: Investment) => {
           if (res) {
-            this.messageService.add({ severity: 'success', summary: 'Investment Deleted' });
             this.refreshTable();
+            this.deleted.emit();
           }
-          else this.messageService.add({ severity: 'error', summary: 'Investment Delete Failed' });
         });
       }
     });
@@ -45,12 +47,12 @@ export class InvestmentListingComponent implements OnInit {
   editComplete(): void {
     this.editInvestment = undefined;
     this.editModal = false;
-
+    this.updated.emit();
     this.refreshTable();
   }
 
   refreshTable(): void {
-    this.investmentService.getInvestments().subscribe((res: Investment[]) => {
+    this.investmentService.getInvestmentsByGoalId(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: Investment[]) => {
       if (res) this.model = res;
     });
   }
