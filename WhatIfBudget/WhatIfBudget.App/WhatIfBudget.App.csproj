@@ -4,37 +4,15 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>e849d1c8-6388-4231-9cdb-d0d23f561881</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ClientApp\dist\**" />
-    <Content Remove="ClientApp\dist\**" />
-    <EmbeddedResource Remove="ClientApp\dist\**" />
-    <None Remove="ClientApp\dist\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="ClientApp\src\app\shared\enums\epriority.ts" />
-    <None Remove="ClientApp\src\app\shared\models\expense.ts" />
-    <None Remove="ClientApp\src\app\shared\models\income - Copy.ts" />
-    <None Remove="ClientApp\src\app\shared\models\income.ts" />
+    <Compile Include="ClientApp\**" Exclude="ClientApp\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.13" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ClientApp\src\app\services\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\shared\enums\efrequency.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\shared\enums\epriority.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\shared\models\expense.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\shared\models\income.ts" />
   </ItemGroup>
 
 </Project>

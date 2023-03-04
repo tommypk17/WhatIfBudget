@@ -1,21 +1,44 @@
-<div class="d-flex justify-content-between">
-  <div class="w-100 d-flex flex-column m-2">
-    <p-card styleClass="h-100" class="mb-2" header="Total Income"></p-card>
-    <p-card styleClass="h-100" class="mt-2" header="Total Expenses"></p-card>
+<ng-container *ngIf="budget && budget.id">
+  <div class="d-flex flex-column mt-2">
+    <div class="d-flex justify-content-between">
+        <p-card class="w-100 mx-2" header="Total Income">
+          <p class="breakdown">
+            ${{myMonthlyIncome | number : '.2-2'}}
+          </p>
+        </p-card>
+        <p-card class="w-100 mx-2" header="Total Expenses">
+          <p class="breakdown">
+            ${{myMonthlyExpenses | number : '.2-2'}}
+          </p>
+        </p-card>
+        <p-card class="w-100 mx-2" header="Net Monthly">
+          <p class="breakdown">
+            ${{(myMonthlyIncome - myMonthlyExpenses)  | number : '.2-2'}}
+          </p>
+        </p-card>
+        <p-card class="w-100 mx-2" header="Current Net Worth"></p-card>
+    </div>
+    <div class="d-flex flex-column">
+      <div class="d-flex justify-content-between mt-2">
+        <p-card class="w-100 mx-2" header="Net Worth Chart"></p-card>
+        <p-card class="w-100 mx-2" header="Short Term Savings Chart"></p-card>
+        <p-card class="w-100 mx-2" header="Investments">
+          <app-investments-chart></app-investments-chart>
+        </p-card>
+      </div>
+      <div class="d-flex justify-content-between mt-2">
+        <p-card class="w-100 mx-2" header="Mortgage Payoff Chart"></p-card>
+        <p-card class="w-100 mx-2" header="Debt Payoff Chart"></p-card>
+      </div>
+    </div>
   </div>
-  <div class="w-100 d-flex m-2">
-      <p-card styleClass="mr-2 h-100" header="Net Monthly"></p-card>
-      <p-card styleClass="ml-2 h-100" header="Current Net Worth"></p-card>
+</ng-container>
+<ng-container *ngIf="!budget || !budget.id">
+  <div class="panel">
+    <div class="block">
+      <p-card header="Load a Budget">
+        Use the navigation to create a new budget or load an existing. If creating a new budget, please subsequently load it.
+      </p-card>
+    </div>
   </div>
-</div>
-<div class="d-flex">
-  <p-card class="w-100" styleClass="m-2" header="Net Worth Chart"></p-card>
-</div>
-<div class="d-flex justify-content-between">
-    <p-card styleClass="m-2" class="w-100" header="Short Term Savings Chart"></p-card>
-    <p-card styleClass="m-2" class="w-100" header="Debt Payoff Chart"></p-card>
-</div>
-<div class="d-flex justify-content-between">
-    <p-card styleClass="m-2" class="w-100" header="Mortgage Payoff Chart"></p-card>
-    <p-card styleClass="m-2" class="w-100" header="Investments Chart"></p-card>
-</div>
+</ng-container>

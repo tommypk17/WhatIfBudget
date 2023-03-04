@@ -1,5 +1,5 @@
 import { KeyValue } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ExpenseService } from '../../../../services/expense.service';
 import { SharedService } from '../../../../services/shared.service';
@@ -12,10 +12,11 @@ import { Expense } from '../../../../shared/models/expense';
 })
 export class ExpenseEntryFormComponent implements OnInit {
   @Output('added') added: EventEmitter<void> = new EventEmitter();
+  @Output('updated') updated: EventEmitter<void> = new EventEmitter();
 
   frequencies: KeyValue<number, string>[] = this.sharedService.frequencies;
   priorities: KeyValue<number, string>[] = this.sharedService.priorities;
-  model: Expense = new Expense();
+  @Input('expense') model: Expense = new Expense();
 
   constructor(private expenseService: ExpenseService, private sharedService: SharedService) { }
 
@@ -23,10 +24,19 @@ export class ExpenseEntryFormComponent implements OnInit {
   }
 
   onSubmit(event: NgForm): void {
-    this.expenseService.saveExpense(event.value as Expense).subscribe((res: Expense) => {
-      this.added.emit();
-      this.model = new Expense();
-    });
+    let expense: Expense = this.model as Expense;
+    expense.budgetId = this.sharedService.budget.id;
+    if (this.model.id && this.model.id > 0) {
+      this.expenseService.updateExpense(expense).subscribe((res: Expense) => {
+        this.updated.emit();
+        this.model = new Expense();
+      });
+    } else {
+      this.expenseService.saveExpense(expense).subscribe((res: Expense) => {
+        this.added.emit();
+        this.model = new Expense();
+      });
+    }
   }
 
 }

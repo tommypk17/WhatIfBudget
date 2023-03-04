@@ -15,7 +15,9 @@ import { IncomeListingComponent } from './components/income-listing/income-listi
 import { IncomeDetailSectionComponent } from './components/income-detail-section/income-detail-section.component';
 import { IncomeMonthlyDetailSectionComponent } from './components/income-monthly-detail-section/income-monthly-detail-section.component';
 import { InputTextModule } from 'primeng/inputtext';
-
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmationService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,10 @@ import { InputTextModule } from 'primeng/inputtext';
     InputTextModule,
     InputNumberModule,
     DropdownModule,
-    TableModule
-  ]
+    TableModule,
+    ConfirmPopupModule,
+    DialogModule
+  ],
+  providers: [ConfirmationService]
 })
 export class IncomeModule { }

@@ -20,7 +20,7 @@ namespace WhatIfBudget.API.Test
         {
             //mock income logic
             var mockIncomeLogic = new Mock<IIncomeLogic>();
-            mockIncomeLogic.Setup(x => x.GetUserIncomes(Guid.Empty)).Returns(new List<UserIncome>()
+            mockIncomeLogic.Setup(x => x.GetBudgetIncomes(It.IsAny<int>())).Returns(new List<UserIncome>()
                 {
                     new UserIncome() { Id = 1, Amount = 100, Frequency = 0 },
                     new UserIncome() { Id = 2, Amount = 100, Frequency = 0 },
@@ -49,7 +49,37 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = incomeController.Get();
+            var actual = incomeController.Get(1);
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void Get_BudgetMonthlyIncome()
+        {
+            //mock income logic
+            var mockIL = new Mock<IIncomeLogic>();
+            mockIL.Setup(x => x.GetBudgetMonthlyIncome(It.IsAny<int>())).Returns(5000.0);
+
+            //Setup the http context (for auth)
+            var monthlyIncomeController = new IncomesController(mockIL.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = 5000.0;
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = monthlyIncomeController.GetMonthlyIncome(1);
+
 
 
             actual.Should().BeEquivalentTo(expected);
@@ -120,7 +150,7 @@ namespace WhatIfBudget.API.Test
         {
             //mock income logic
             var mockIncomeLogic = new Mock<IIncomeLogic>();
-            mockIncomeLogic.Setup(x => x.DeleteUserIncome(Guid.Empty, It.IsAny<int>()))
+            mockIncomeLogic.Setup(x => x.DeleteBudgetIncome(1, It.IsAny<int>()))
                             .Returns(new UserIncome() { Id = 1, Amount = 100, Frequency = 0 });
 
             //Setup the http context (for auth)
@@ -139,7 +169,7 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = incomeController.Delete(1);
+            var actual = incomeController.Delete(1, 1);
 
 
             actual.Should().BeEquivalentTo(expected);

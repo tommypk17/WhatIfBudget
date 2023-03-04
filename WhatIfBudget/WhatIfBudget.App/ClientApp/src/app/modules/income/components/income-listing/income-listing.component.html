@@ -1,7 +1,11 @@
 <div>
-  <p-table [value]="model">
+  <p-confirmPopup></p-confirmPopup>
+  <p-table [value]="model"
+           [scrollable]="true"
+           scrollHeight="25rem">
     <ng-template pTemplate="header">
       <tr>
+        <th></th>
         <th>Name</th>
         <th>Amount</th>
         <th>Frequency</th>
@@ -9,10 +13,20 @@
     </ng-template>
     <ng-template pTemplate="body" let-income>
       <tr>
+        <td>
+          <div class="d-flex">
+            <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="delete($event, income)"></button>
+            <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-secondary p-button-text" (click)="edit($event, income)"></button>
+          </div>
+        </td>
         <td>{{income.name}}</td>
-        <td>{{income.amount}}</td>
+        <td>${{income.amount}}</td>
         <td>{{displayFrequencies(income.frequency)}}</td>
       </tr>
     </ng-template>
   </p-table>
 </div>
+<p-dialog header="Edit Income" [(visible)]="editModal" [modal]="true" [style]="{width: '50vw'}"
+          [draggable]="false" [resizable]="false">
+  <app-income-entry-form *ngIf="editIncome" [income]="editIncome" (updated)="editComplete()"></app-income-entry-form>
+</p-dialog>

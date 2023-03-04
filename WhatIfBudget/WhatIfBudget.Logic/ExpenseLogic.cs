@@ -8,31 +8,155 @@ using WhatIfBudget.Logic.Models;
 using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
 using WhatIfBudget.Services;
+using WhatIfBudget.Common.Enumerations;
 
 namespace WhatIfBudget.Logic
 {
     public class ExpenseLogic : IExpenseLogic
     {
         private readonly IExpenseService _expenseService;
-        public ExpenseLogic(IExpenseService expenseService) { 
+        private readonly IBudgetExpenseService _budgetExpenseService;
+        private readonly IBudgetService _budgetService;
+
+        public ExpenseLogic(IExpenseService expenseService,
+                            IBudgetExpenseService budgetExpenseService,
+                            IBudgetService budgetService) { 
             _expenseService = expenseService;
+            _budgetExpenseService= budgetExpenseService;
+            _budgetService = budgetService;
         }
 
         public IList<UserExpense> GetUserExpenses(Guid userId)
         {
-            return _expenseService.GetAllExpenses().Where(x => x.UserId == userId).Select(x => UserExpense.FromExpense(x)).ToList();
+            return _expenseService.GetAllExpenses().Where(x => x.UserId == userId)
+                                                   .Select(x => UserExpense.FromExpense(x, 0)) // TODO: budgetId
+                                                   .ToList();
         }
 
-        public UserExpense AddUserExpense(Guid userId, UserExpense expense)
+        public IList<UserExpense> GetBudgetExpenses(int budgetId)
         {
-            var toCreate = expense.ToExpense(userId);
+            var budgetExpenseIdList = _budgetExpenseService.GetAllBudgetExpenses()
+                .Where(x => x.BudgetId == budgetId)
+                .Select(x => x.ExpenseId)
+                .ToList();
 
-            var dbExpense = _expenseService.AddNewExpense(toCreate);
+            return _expenseService.GetAllExpenses().Where(x => budgetExpenseIdList.Contains(x.Id))
+                                                   .Select(x => UserExpense.FromExpense(x, budgetId))
+                                                   .ToList();
+        }
+
+        public double GetBudgetMonthlyExpense(int budgetId)
+        {
+            var expenseIdList = _budgetExpenseService.GetAllBudgetExpenses()
+                .Where(x => x.BudgetId == budgetId)
+                .Select(x => x.ExpenseId)
+                .ToList();
+            var expenseList = _expenseService.GetAllExpenses()
+                .Where(x => expenseIdList.Contains(x.Id))
+                .Select(x => UserExpense.FromExpense(x, budgetId))
+                .ToList();
+
+            double monthlyExpense = 0;
+            var noneFreqList = expenseList.Where(x => x.Frequency == EFrequency.None).Select(x => x.Amount).ToList();
+            var weekFreqList = expenseList.Where(x => x.Frequency == EFrequency.Weekly).Select(x => x.Amount).ToList();
+            var monthFreqList = expenseList.Where(x => x.Frequency == EFrequency.Monthly).Select(x => x.Amount).ToList();
+            var quartFreqList = expenseList.Where(x => x.Frequency == EFrequency.Quarterly).Select(x => x.Amount).ToList();
+            var yearFreqList = expenseList.Where(x => x.Frequency == EFrequency.Yearly).Select(x => x.Amount).ToList();
+
+            monthlyExpense += noneFreqList.Sum();
+            monthlyExpense += weekFreqList.Sum() * 4;
+            monthlyExpense += monthFreqList.Sum();
+            monthlyExpense += quartFreqList.Sum() / 3;
+            monthlyExpense += yearFreqList.Sum() / 12;
+
+            return monthlyExpense;
+        }
+
+        public double GetBudgetMonthlyNeed(int budgetId)
+        {
+            var expenseIdList = _budgetExpenseService.GetAllBudgetExpenses()
+                .Where(x => x.BudgetId == budgetId)
+                .Select(x => x.ExpenseId)
+                .ToList();
+            var needList = _expenseService.GetAllExpenses()
+                .Where(x => expenseIdList.Contains(x.Id) && x.Priority == EPriority.Need)
+                .Select(x => UserExpense.FromExpense(x, budgetId))
+                .ToList();
+
+            double monthlyNeed = 0;
+            var noneFreqList = needList.Where(x => x.Frequency == EFrequency.None).Select(x => x.Amount).ToList();
+            var weekFreqList = needList.Where(x => x.Frequency == EFrequency.Weekly).Select(x => x.Amount).ToList();
+            var monthFreqList = needList.Where(x => x.Frequency == EFrequency.Monthly).Select(x => x.Amount).ToList();
+            var quartFreqList = needList.Where(x => x.Frequency == EFrequency.Quarterly).Select(x => x.Amount).ToList();
+            var yearFreqList = needList.Where(x => x.Frequency == EFrequency.Yearly).Select(x => x.Amount).ToList();
+
+            monthlyNeed += noneFreqList.Sum();
+            monthlyNeed += weekFreqList.Sum() * 4;
+            monthlyNeed += monthFreqList.Sum();
+            monthlyNeed += quartFreqList.Sum() / 3;
+            monthlyNeed += yearFreqList.Sum() / 12;
+
+            return monthlyNeed;
+        }
+
+        public double GetBudgetMonthlyWant(int budgetId)
+        {
+            var expenseIdList = _budgetExpenseService.GetAllBudgetExpenses()
+                .Where(x => x.BudgetId == budgetId)
+                .Select(x => x.ExpenseId)
+                .ToList();
+            var wantList = _expenseService.GetAllExpenses()
+                .Where(x => expenseIdList.Contains(x.Id) && x.Priority == EPriority.Want)
+                .Select(x => UserExpense.FromExpense(x, budgetId))
+                .ToList();
+
+            double monthlyWant = 0;
+            var noneFreqList = wantList.Where(x => x.Frequency == EFrequency.None).Select(x => x.Amount).ToList();
+            var weekFreqList = wantList.Where(x => x.Frequency == EFrequency.Weekly).Select(x => x.Amount).ToList();
+            var monthFreqList = wantList.Where(x => x.Frequency == EFrequency.Monthly).Select(x => x.Amount).ToList();
+            var quartFreqList = wantList.Where(x => x.Frequency == EFrequency.Quarterly).Select(x => x.Amount).ToList();
+            var yearFreqList = wantList.Where(x => x.Frequency == EFrequency.Yearly).Select(x => x.Amount).ToList();
+
+            monthlyWant += noneFreqList.Sum();
+            monthlyWant += weekFreqList.Sum() * 4;
+            monthlyWant += monthFreqList.Sum();
+            monthlyWant += quartFreqList.Sum() / 3;
+            monthlyWant += yearFreqList.Sum() / 12;
+
+            return monthlyWant;
+        }
+
+        public UserExpense? AddUserExpense(Guid userId, UserExpense expense)
+        {
+            if (!_budgetService.Exists(expense.BudgetId)) return null;
+            if (expense.BudgetId == 0) return null;
+            // Create expense element if it does not yet exist
+            var dbExpense = _expenseService.GetAllExpenses()
+                .Where(x => x.Id == expense.Id)
+                .FirstOrDefault();
             if (dbExpense == null)
+            {
+                dbExpense = _expenseService.AddNewExpense(expense.ToExpense(userId));
+                if (dbExpense == null)
+                {
+                    throw new NullReferenceException();
+                }
+            }
+
+            // Associate expense element to current budget
+            var budgetExpenseToCreate = new BudgetExpense
+            {
+                BudgetId = expense.BudgetId,
+                ExpenseId = dbExpense.Id
+            };
+
+            var dbBudgetExpense = _budgetExpenseService.AddNewBudgetExpense(budgetExpenseToCreate);
+            if (dbBudgetExpense == null)
             {
                 throw new NullReferenceException();
             }
-            return UserExpense.FromExpense(dbExpense);
+            return UserExpense.FromExpense(dbExpense, expense.BudgetId);
+
         }
 
         public UserExpense? ModifyUserExpense(Guid userId, UserExpense expense)
@@ -44,17 +168,45 @@ namespace WhatIfBudget.Logic
             {
                 throw new NullReferenceException();
             }
-            return UserExpense.FromExpense(dbExpense);
+            return UserExpense.FromExpense(dbExpense, expense.BudgetId);
         }
 
-        public UserExpense? DeleteUserExpense(Guid userId, int id)
+        public UserExpense? DeleteBudgetExpense(int expenseId, int budgetId)
         {
-            var dbExpense = _expenseService.DeleteExpense(id);
-            if (dbExpense == null)
+            // De-associate expense element from current budget
+            var idToDelete = _budgetExpenseService.GetAllBudgetExpenses()
+                .Where(x => x.ExpenseId == expenseId && x.BudgetId == budgetId)
+                .Select(x => x.Id)
+                .FirstOrDefault();
+            var dbBudgetExpense = _budgetExpenseService.DeleteBudgetExpense(idToDelete);
+            if (dbBudgetExpense == null)
             {
                 throw new NullReferenceException();
             }
-            return UserExpense.FromExpense(dbExpense);
+            // Delete expense element if it is not associated with any other budget Id
+            if (!_budgetExpenseService.GetAllBudgetExpenses()
+                    .Where(x => x.ExpenseId == expenseId)
+                    .Any())
+            {
+                var dbDeleteExpense = _expenseService.DeleteExpense(dbBudgetExpense.ExpenseId);
+                if (dbDeleteExpense == null)
+                {
+                    throw new NullReferenceException();
+                }
+                return UserExpense.FromExpense(dbDeleteExpense, budgetId);
+            }
+            else
+            {
+                // Keep expense element in database for use by other budgets
+                var dbDeleteExpense = _expenseService.GetAllExpenses()
+                    .Where(x => x.Id == expenseId)
+                    .FirstOrDefault();
+                if (dbDeleteExpense == null)
+                {
+                    throw new NullReferenceException();
+                }
+                else { return UserExpense.FromExpense(dbDeleteExpense, budgetId); }
+            }
         }
     }
 }

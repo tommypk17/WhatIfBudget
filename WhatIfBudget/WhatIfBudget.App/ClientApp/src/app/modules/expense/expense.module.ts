@@ -14,6 +14,10 @@ import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
+import { ConfirmationService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ChartModule } from 'primeng/chart';
 
 @NgModule({
   declarations: [
@@ -33,7 +37,11 @@ import { InputTextModule } from 'primeng/inputtext';
     InputTextModule,
     InputNumberModule,
     DropdownModule,
-    TableModule
-  ]
+    TableModule,
+    DialogModule,
+    ConfirmPopupModule,
+    ChartModule
+  ],
+  providers: [ConfirmationService]
 })
 export class ExpenseModule { }

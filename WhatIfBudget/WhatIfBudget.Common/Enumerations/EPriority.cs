@@ -8,7 +8,7 @@ namespace WhatIfBudget.Common.Enumerations
 {
     public enum EPriority
     {
-        Need,
-        Want
+        Want,
+        Need
     }
 }

@@ -1,14 +1,23 @@
 import { KeyValue } from '@angular/common';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
+import { MsalService } from '@azure/msal-angular';
+import { AccountInfo } from '@azure/msal-browser';
+import { BehaviorSubject } from 'rxjs';
 import { EFrequency } from '../shared/enums/efrequency';
 import { EPriority } from '../shared/enums/epriority';
+import { Budget } from '../shared/models/budget';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedService {
+  private _loadingQueue: string[] = [];
 
-  constructor() { }
+  isLoadingEmit: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  loggedInEmit: EventEmitter<void> = new EventEmitter<void>();
+  budgetLoadedEmit: EventEmitter<void> = new EventEmitter<void>();
+
+  constructor(private msalService: MsalService) { }
 
   get frequencies(): KeyValue<number, string>[] {
     let frequencies: KeyValue<number, string>[] = [];
@@ -24,5 +33,58 @@ export class SharedService {
       frequencies.push({ key: i, value: v as string });
     });
     return frequencies;
+  }
+
+  set budget(budget: Budget) {
+    localStorage.setItem("budget", JSON.stringify(budget));
+    this.budgetLoadedEmit.emit();
+  }
+
+  get budget(): Budget {
+    let temp: string | null = localStorage.getItem("budget");
+    if (temp != null) {
+      try {
+        return JSON.parse(temp) as Budget;
+      } catch {
+
+      }
+    }
+    return new Budget();
+  }
+
+  get budgetLoaded(): boolean {
+    if (this.budget && this.budget.id) return true;
+    else return false;
+  }
+
+  get loggedIn(): boolean {
+    return !!this.msalService.instance.getAllAccounts()[0];
+  }
+
+  logout(): void {
+    localStorage.removeItem('budget');
+    this.msalService.logout();
+  }
+
+  queueLoading(name: string): void {
+    this._loadingQueue.push(name);
+    this.isLoadingEmit.next(this.loadingQueue.length > 0);
+  }
+
+  dequeueLoading(name: string): void {
+    let foundIdx = this._loadingQueue.findIndex(x => x == name);
+    if (foundIdx > -1) this._loadingQueue.splice(foundIdx, 1);
+    this.isLoadingEmit.next(this.loadingQueue.length > 0);
+  }
+
+  get loadingQueue(): string[] {
+    return this._loadingQueue;
+  }
+
+  get user(): AccountInfo | undefined {
+    if (this.loggedIn) {
+      return this.msalService.instance.getAllAccounts()[0];
+    }
+    return undefined;
   }
 }

@@ -1,8 +1,20 @@
-<div class="d-flex">
-  <button pButton class="m-1" label="Home" icon="pi pi-home" routerLink="/"></button>
-  <button pButton class="m-1" label="Incomes" icon="pi pi-money-bill" routerLink="/incomes"></button>
-  <button pButton class="m-1" label="Expenses" icon="pi pi-chart-pie" routerLink="/expenses"></button>
-  <button pButton class="m-1" label="Goals" icon="pi pi-chart-line" routerLink="/goals"></button>
-  <p-menu #menu [popup]="true" [model]="items"></p-menu>
-  <button type="button" pButton class="m-1" icon="pi pi-list" label="Show" (click)="menu.toggle($event)"></button>
-</div>
+<p-menubar [model]="navs">
+  <ng-template pTemplate="start">
+    <img src="./assets/whatifbudget.webp" height="40" class="mr-2">
+  </ng-template>
+  <ng-template pTemplate="end">
+    <div class="d-flex align-items-center">
+      <ng-container *ngIf="$isLoading | async as loading">
+        <p-progressSpinner strokeWidth="2" [style]="{width: '25px', height: '25px'}"></p-progressSpinner>
+      </ng-container>
+      <p *ngIf="currentBudget" class="mx-2 my-0">{{currentBudget}} Budget</p>
+      <button *ngIf="loggedIn" pButton icon="pi pi-user" class="p-button-rounded p-button-text" (click)="profile.toggle($event)"></button>
+    </div>
+  </ng-template>
+</p-menubar>
+<p-overlayPanel #profile>
+  <ng-template pTemplate>
+    <button *ngIf="loggedIn" pButton class="p-button-text p-button-danger" label="Logout" icon="pi pi-fw pi-sign-out" (click)="logout()"></button>
+    <button *ngIf="!loggedIn" pButton class="p-button-text" label="Login" icon="pi pi-fw pi-sign-in" (click)="login()"></button>
+  </ng-template>
+</p-overlayPanel>

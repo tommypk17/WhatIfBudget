@@ -6,18 +6,36 @@ import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuModule } from 'primeng/menu';
+import { TabMenuModule } from 'primeng/tabmenu';
+import { BudgetListingComponent } from './budget-listing/budget-listing.component';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ListboxModule } from 'primeng/listbox';
+import { FormsModule } from '@angular/forms';
+import { BudgetEntryFormComponent } from './budget-entry-form/budget-entry-form.component';
+import { InputTextModule } from 'primeng/inputtext';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ChartModule } from 'primeng/chart';
 
 @NgModule({
   declarations: [
-    NavigationComponent
+    NavigationComponent,
+    BudgetListingComponent,
+    BudgetEntryFormComponent,
   ],
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule,
     MenubarModule,
     ButtonModule,
     SplitButtonModule,
-    MenuModule
+    MenuModule,
+    TabMenuModule,
+    OverlayPanelModule,
+    ListboxModule,
+    InputTextModule,
+    ProgressSpinnerModule,
+    ChartModule
   ],
   exports: [
     NavigationComponent

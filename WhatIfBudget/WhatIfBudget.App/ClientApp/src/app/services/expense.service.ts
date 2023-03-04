@@ -27,10 +27,100 @@ export class ExpenseService {
     );
   }
 
+  public getExpensesByBudgetId(budgetId: number): Observable<Expense[]> {
+    //this.sharedService.queueLoading('saveIncome');
+    return this.http.get<Expense[]>(environment.URL + `/api/expenses/budgets/${budgetId}`).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<Expense[]>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
+  public getMonthlyExpenseByBudgetId(budgetId: number): Observable<number> {
+    return this.http.get<number>(environment.URL + `/api/expenses/budgets/${budgetId}/monthlyExpense`).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<number>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
+  public GetMonthlyNeeds(budgetId: number): Observable<number> {
+    return this.http.get<number>(environment.URL + `/api/expenses/budgets/${budgetId}/monthlyNeeds`).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<number>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
+  public GetMonthlyWants(budgetId: number): Observable<number> {
+    return this.http.get<number>(environment.URL + `/api/expenses/budgets/${budgetId}/monthlyWants`).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<number>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
   public saveExpense(expense: Expense): Observable<Expense> {
     //this.sharedService.queueLoading('saveIncome');
     return this.http.post<Expense>(environment.URL + '/api/expenses', expense).pipe(
-      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<Expense>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
+  public updateExpense(expense: Expense): Observable<Expense> {
+    //this.sharedService.queueLoading('updateIncome');
+    return this.http.put<Expense>(environment.URL + '/api/expenses', expense).pipe(
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<Expense>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('updateIncome');
+      })
+    );
+  }
+
+  public deleteExpense(expense: Expense): Observable<Expense> {
+    //this.sharedService.queueLoading('saveIncome');
+    return this.http.delete<Expense>(environment.URL + `/api/expenses/ ${expense.id}/${expense.budgetId}`).pipe(
       catchError((err, caught) => {
         this.handleError(err);
         return new Observable<Expense>((subscriber) => {

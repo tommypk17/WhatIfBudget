@@ -29,6 +29,41 @@ namespace WhatIfBudget.API.Controllers
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
+        [HttpGet("budgets/{budgetId}")]
+        public IActionResult Get([FromRoute] int budgetId)
+        {
+            //pass the ID from the route to the logic function
+            var res = _expenseLogic.GetBudgetExpenses(budgetId);
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
+        [HttpGet("budgets/{budgetId}/monthlyExpense")]
+        public IActionResult GetMonthlyExpense([FromRoute] int budgetId)
+        {
+            //pass the ID from the route to the logic function
+            var res = _expenseLogic.GetBudgetMonthlyExpense(budgetId);
+            //return a status of 200 with all the current user's income
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
+        [HttpGet("budgets/{budgetId}/monthlyNeeds")]
+        public IActionResult GetMonthlyNeeds([FromRoute] int budgetId)
+        {
+            //pass the ID from the route to the logic function
+            var res = _expenseLogic.GetBudgetMonthlyNeed(budgetId);
+            //return a status of 200 with all the current user's income
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
+        [HttpGet("budgets/{budgetId}/monthlyWants")]
+        public IActionResult GetMonthlyWants([FromRoute] int budgetId)
+        {
+            //pass the ID from the route to the logic function
+            var res = _expenseLogic.GetBudgetMonthlyWant(budgetId);
+            //return a status of 200 with all the current user's income
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
         [HttpPost]
         public IActionResult Post(UserExpense apiExpense)
         {
@@ -63,13 +98,10 @@ namespace WhatIfBudget.API.Controllers
             }
         }
 
-        [HttpDelete]
-        public IActionResult Delete(int id)
+        [HttpDelete("{expenseId}/{budgetId}")]
+        public IActionResult Delete([FromRoute] int expenseId, [FromRoute] int budgetId)
         {
-            //grab the user from the passed auth token
-            var currentUser = AuthUser.Current(User);
-
-            var res = _expenseLogic.DeleteUserExpense(currentUser.Id, id);
+            var res = _expenseLogic.DeleteBudgetExpense(expenseId, budgetId);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);

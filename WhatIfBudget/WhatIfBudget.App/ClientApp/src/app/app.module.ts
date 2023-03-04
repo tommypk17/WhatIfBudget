@@ -25,6 +25,10 @@ import { environment } from '../environments/environment';
 import { AuthService } from './services/auth.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { ResponseInterceptor } from './interceptors/response.interceptor';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
@@ -70,10 +74,21 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     HttpClientModule,
     MsalModule,
     SharedModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
 
+    ToastModule
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ResponseInterceptor,
+      multi: true
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
@@ -94,7 +109,9 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     AuthService,
     MsalService,
     MsalGuard,
-    MsalBroadcastService],
+    MsalBroadcastService,
+    MessageService
+  ],
   bootstrap: [AppComponent, MsalRedirectComponent]
 })
 export class AppModule { }

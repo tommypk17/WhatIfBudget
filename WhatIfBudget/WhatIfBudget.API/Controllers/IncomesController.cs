@@ -6,6 +6,7 @@ using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
 using WhatIfBudget.Logic.Models;
 using Microsoft.AspNetCore.Authorization;
+using WhatIfBudget.Logic;
 
 namespace WhatIfBudget.API.Controllers
 {
@@ -24,8 +25,25 @@ namespace WhatIfBudget.API.Controllers
         {
             //grab the user from the passed auth token
             var currentUser = AuthUser.Current(User);
-            //pass the ID from the auth token to the logic function
             var res = _incomeLogic.GetUserIncomes(currentUser.Id);
+            //return a status of 200 with all the current user's income
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
+        [HttpGet("budgets/{budgetId}")]
+        public IActionResult Get([FromRoute] int budgetId)
+        {
+            //pass the ID from the route to the logic function
+            var res = _incomeLogic.GetBudgetIncomes(budgetId);
+            //return a status of 200 with all the current user's income
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
+        [HttpGet("budgets/{budgetId}/monthlyIncome")]
+        public IActionResult GetMonthlyIncome([FromRoute] int budgetId)
+        {
+            //pass the ID from the route to the logic function
+            var res = _incomeLogic.GetBudgetMonthlyIncome(budgetId);
             //return a status of 200 with all the current user's income
             return StatusCode(StatusCodes.Status200OK, res);
         }
@@ -64,13 +82,10 @@ namespace WhatIfBudget.API.Controllers
             }
         }
 
-        [HttpDelete]
-        public IActionResult Delete(int id)
+        [HttpDelete("{incomeId}/{budgetId}")]
+        public IActionResult Delete([FromRoute] int incomeId, [FromRoute] int budgetId)
         {
-            //grab the user from the passed auth token
-            var currentUser = AuthUser.Current(User);
-
-            var res = _incomeLogic.DeleteUserIncome(currentUser.Id, id);
+            var res = _incomeLogic.DeleteBudgetIncome(incomeId, budgetId);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);

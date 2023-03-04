@@ -19,40 +19,116 @@ namespace WhatIfBudget.Logic.Test
 
 
         [TestMethod]
-        public void GetUserIncomes_CollectionAreEqual()
+        public void GetBudgetIncomes_CollectionAreEqual()
         {
-            var mock = new Mock<IIncomeService>();
-            mock.Setup(x => x.GetAllIncome()).Returns(
+            var mockIS = new Mock<IIncomeService>();
+            mockIS.Setup(x => x.GetAllIncomes()).Returns(
                 (IList<Income>) new List<Income>()
                 {
-                    new Income() { Id = 1, Amount = 100, Frequency = 0, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
-                    new Income() { Id = 2, Amount = 100, Frequency = 0, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
-                    new Income() { Id = 3, Amount = 100, Frequency = 0, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
-                    new Income() { Id = 4, Amount = 100, Frequency = 0, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
-                    new Income() { Id = 5, Amount = 100, Frequency = 0, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
-                    new Income() { Id = 6, Amount = 100, Frequency = 0, UserId = Guid.NewGuid(), CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue }
+                    new Income() { Id = 1, Amount = 100, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 2, Amount = 100, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 3, Amount = 100, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 4, Amount = 100, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 5, Amount = 100, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 6, Amount = 100, Frequency = EFrequency.None, UserId = Guid.NewGuid(), CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue }
                 }
                 );
-            var incomeLogic = new IncomeLogic(mock.Object);
+            var mockBIS = new Mock<IBudgetIncomeService>();
+            mockBIS.Setup(x => x.GetAllBudgetIncomes()).Returns(
+                (IList<BudgetIncome>)new List<BudgetIncome>()
+                {
+                    new BudgetIncome() { Id = 1, BudgetId = 1, IncomeId =  1},
+                    new BudgetIncome() { Id = 2, BudgetId = 1, IncomeId =  2},
+                    new BudgetIncome() { Id = 3, BudgetId = 1, IncomeId =  3},
+                    new BudgetIncome() { Id = 4, BudgetId = 1, IncomeId =  4},
+                    new BudgetIncome() { Id = 5, BudgetId = 1, IncomeId =  5},
+                    new BudgetIncome() { Id = 6, BudgetId = 2, IncomeId =  6},
+                    new BudgetIncome() { Id = 7, BudgetId = 2, IncomeId =  6}
+                }
+                );
+
+            var mock3 = new Mock<IBudgetService>();
+
+            var incomeLogic = new IncomeLogic(mockIS.Object, mockBIS.Object, mock3.Object);
 
             var expected = new List<UserIncome>()
             {
-                new UserIncome() {Id = 1, Amount = 100, Frequency = 0},
-                new UserIncome() {Id = 2, Amount = 100, Frequency = 0},
-                new UserIncome() {Id = 3, Amount = 100, Frequency = 0},
-                new UserIncome() {Id = 4, Amount = 100, Frequency = 0},
-                new UserIncome() {Id = 5, Amount = 100, Frequency = 0}
+                new UserIncome() {Id = 1, BudgetId = 1, Amount = 100, Frequency = 0},
+                new UserIncome() {Id = 2, BudgetId = 1, Amount = 100, Frequency = 0},
+                new UserIncome() {Id = 3, BudgetId = 1, Amount = 100, Frequency = 0},
+                new UserIncome() {Id = 4, BudgetId = 1, Amount = 100, Frequency = 0},
+                new UserIncome() {Id = 5, BudgetId = 1, Amount = 100, Frequency = 0}
             };
 
-            var actual = incomeLogic.GetUserIncomes(Guid.Empty);
+            var actual = incomeLogic.GetBudgetIncomes(1);
 
             actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void GetBudgetMonthlyIncome()
+        {
+            var mockIS = new Mock<IIncomeService>();
+            var mockBIS = new Mock<IBudgetIncomeService>();
+            var mockBS = new Mock<IBudgetService>();
+
+            mockIS.Setup(x => x.GetAllIncomes()).Returns(
+                (IList<Income>)new List<Income>()
+                {
+                    new Income() { Id = 1, Amount = 100, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 2, Amount = 100, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 3, Amount = 100, Frequency = EFrequency.Weekly, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 4, Amount = 100, Frequency = EFrequency.Monthly, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 5, Amount = 120, Frequency = EFrequency.Quarterly, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 6, Amount = 100, Frequency = EFrequency.Yearly, UserId = Guid.NewGuid(), CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 7, Amount = 100, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
+                    new Income() { Id = 8, Amount = 100, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue }
+                }
+                );
+            mockBIS.Setup(x => x.GetAllBudgetIncomes()).Returns(
+                (IList<BudgetIncome>)new List<BudgetIncome>()
+                {
+                    new BudgetIncome() { Id = 1, BudgetId = 1, IncomeId =  1},
+                    new BudgetIncome() { Id = 2, BudgetId = 1, IncomeId =  2},
+                    new BudgetIncome() { Id = 3, BudgetId = 1, IncomeId =  3},
+                    new BudgetIncome() { Id = 4, BudgetId = 1, IncomeId =  4},
+                    new BudgetIncome() { Id = 5, BudgetId = 1, IncomeId =  5},
+                    new BudgetIncome() { Id = 6, BudgetId = 2, IncomeId =  6},
+                    new BudgetIncome() { Id = 7, BudgetId = 2, IncomeId =  7},
+                    new BudgetIncome() { Id = 8, BudgetId = 2, IncomeId =  8},
+                    new BudgetIncome() { Id = 9, BudgetId = 2, IncomeId =  1}
+                }
+                );
+            var incomeLogic = new IncomeLogic(mockIS.Object, mockBIS.Object, mockBS.Object);
+
+            var expected = 740.0;
+
+            var actual = incomeLogic.GetBudgetMonthlyIncome(1);
+
+            actual.Should().Be(expected);
         }
 
         [TestMethod]
         public void AddUserIncome_CollectionAreEqual()
         {
             var mock = new Mock<IIncomeService>();
+            var mock2 = new Mock<IBudgetIncomeService>();
+            var mock3 = new Mock<IBudgetService>();
+
+            mock.Setup(x => x.GetAllIncomes()).Returns(
+                new List<Income>()
+                {
+                    new Income()
+                    {
+                        Id = 1,
+                        Amount = 100,
+                        Frequency = EFrequency.None,
+                        UserId = Guid.Empty,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                }
+            );
 
             mock.Setup(x => x.AddNewIncome(It.IsAny<Income>())).Returns(
                     new Income()
@@ -65,12 +141,29 @@ namespace WhatIfBudget.Logic.Test
                         UpdatedOn = DateTime.MinValue
                     }
                 );
-            var incomeLogic = new IncomeLogic(mock.Object);
+
+            mock2.Setup(x => x.AddNewBudgetIncome(It.IsAny<BudgetIncome>())).Returns(
+                new BudgetIncome()
+                {
+                    Id = 1,
+                    BudgetId = 1,
+                    IncomeId = 1,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                }
+            );
+
+            mock3.Setup(x => x.Exists(It.IsAny<int>())).Returns(
+                true
+            );
+
+            var incomeLogic = new IncomeLogic(mock.Object, mock2.Object, mock3.Object);
 
             var expected = new UserIncome()
             {
                 Id = 1,
                 Amount = 100,
+                BudgetId = 1,
                 Frequency = EFrequency.None,
             };
 
@@ -78,6 +171,7 @@ namespace WhatIfBudget.Logic.Test
             {
                 Id = 1,
                 Amount = 100,
+                BudgetId = 1,
                 Frequency = EFrequency.None,
             });
 
@@ -88,6 +182,8 @@ namespace WhatIfBudget.Logic.Test
         public void ModifyUserIncome_CollectionAreEqual()
         {
             var mock = new Mock<IIncomeService>();
+            var mock2 = new Mock<IBudgetIncomeService>();
+            var mock3 = new Mock<IBudgetService>();
 
             mock.Setup(x => x.UpdateIncome(It.IsAny<Income>())).Returns(
                     new Income()
@@ -100,7 +196,7 @@ namespace WhatIfBudget.Logic.Test
                         UpdatedOn = DateTime.MinValue
                     }
                 );
-            var incomeLogic = new IncomeLogic(mock.Object);
+            var incomeLogic = new IncomeLogic(mock.Object, mock2.Object, mock3.Object);
 
             var expected = new UserIncome()
             {
@@ -123,6 +219,8 @@ namespace WhatIfBudget.Logic.Test
         public void DeleteUserIncome_CollectionAreEqual()
         {
             var mock = new Mock<IIncomeService>();
+            var mock2 = new Mock<IBudgetIncomeService>();
+            var mock3 = new Mock<IBudgetService>();
 
             mock.Setup(x => x.DeleteIncome(It.IsAny<int>())).Returns(
                     new Income()
@@ -135,16 +233,57 @@ namespace WhatIfBudget.Logic.Test
                         UpdatedOn = DateTime.MinValue
                     }
                 );
-            var incomeLogic = new IncomeLogic(mock.Object);
+
+            mock.Setup(x => x.GetAllIncomes()).Returns(
+                    new List<Income>(){
+                        new Income()
+                        {
+                            Id = 1,
+                            Amount = 101,
+                            Frequency = EFrequency.None,
+                            UserId = Guid.Empty,
+                            CreatedOn = DateTime.MinValue,
+                            UpdatedOn = DateTime.MinValue
+                        }
+                    }
+                );
+
+            mock2.Setup(x => x.DeleteBudgetIncome(It.IsAny<int>())).Returns(
+                new BudgetIncome()
+                {
+                    Id = 1,
+                    BudgetId = 1,
+                    IncomeId = 1,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                }
+            );
+
+            mock2.Setup(x => x.GetAllBudgetIncomes()).Returns(
+                new List<BudgetIncome>()
+                {
+                    new BudgetIncome()
+                    {
+                        Id = 1,
+                        BudgetId = 1,
+                        IncomeId = 1,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                }
+            );
+
+            var incomeLogic = new IncomeLogic(mock.Object, mock2.Object, mock3.Object);
 
             var expected = new UserIncome()
             {
                 Id = 1,
                 Amount = 101,
+                BudgetId = 1,
                 Frequency = EFrequency.None,
             };
 
-            var actual = incomeLogic.DeleteUserIncome(Guid.Empty, 1);
+            var actual = incomeLogic.DeleteBudgetIncome(1, 1);
 
             actual.Should().BeEquivalentTo(expected);
         }

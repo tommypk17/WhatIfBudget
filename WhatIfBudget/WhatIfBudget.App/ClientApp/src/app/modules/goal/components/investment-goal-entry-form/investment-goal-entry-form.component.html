@@ -1,0 +1,34 @@
+<form (ngSubmit)="onSubmit(form)" #form="ngForm">
+  <div class="d-flex">
+    <div class="d-flex flex-column w-100 mr-1">
+      <span class="p-float-label w-100 mt-1 mb-1">
+        <p-inputNumber id="yearsToTarget"
+                       [required]="true"
+                       [(ngModel)]="model.yearsToTarget" name="yearsToTarget"
+                       #yearsToTarget="ngModel" class="w-100" styleClass="w-100" suffix=" years">
+        </p-inputNumber>
+        <label for="yearsToTarget">Years</label>
+      </span>
+      <span class="p-float-label w-100 mt-1 mb-1">
+        <p-inputNumber id="annualReturnRate_Percent"
+                       [required]="true"
+                       [(ngModel)]="model.annualReturnRate_Percent" name="annualReturnRate_Percent"
+                       #annualReturnRate_Percent="ngModel" class="w-100" styleClass="w-100"
+                       suffix="%">
+        </p-inputNumber>
+        <label for="annualReturnRate_Percent">Annual Rate of Return (%)</label>
+      </span>
+      <span class="p-float-label w-100 mt-1">
+        <p-inputNumber id="totalBalance"
+                       [(ngModel)]="model.totalBalance" name="totalBalance"
+                       #totalBalance="ngModel" class="w-100" styleClass="w-100" [disabled]="true"
+                       prefix="$">
+        </p-inputNumber>
+        <label for="totalBalance">Total Balance</label>
+      </span>
+    </div>
+  </div>
+  <div class="d-flex flex-end mt-2">
+    <button pButton type="submit" label="Save" [disabled]="!form.form.valid"></button>
+  </div>
+</form>
