@@ -1,6 +1,7 @@
 import { KeyValue } from '@angular/common';
 import { EventEmitter, Injectable } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
+import { AccountInfo } from '@azure/msal-browser';
 import { BehaviorSubject } from 'rxjs';
 import { EFrequency } from '../shared/enums/efrequency';
 import { EPriority } from '../shared/enums/epriority';
@@ -80,4 +81,10 @@ export class SharedService {
     return this._loadingQueue;
   }
 
+  get user(): AccountInfo | undefined {
+    if (this.loggedIn) {
+      return this.msalService.instance.getAllAccounts()[0];
+    }
+    return undefined;
+  }
 }

@@ -15,6 +15,7 @@ import { Observable } from 'rxjs';
 })
 export class NavigationComponent implements OnInit {
   $isLoading: Observable<boolean> = this.sharedService.isLoadingEmit.asObservable();
+  currentBudget: string | undefined;
 
   constructor(private dialogService: DialogService, private sharedService: SharedService, private authService: AuthService) { }
 
@@ -26,14 +27,21 @@ export class NavigationComponent implements OnInit {
     }
     if (this.sharedService.budgetLoaded && this.sharedService.loggedIn) {
       this.navs = this.loadFullNavigation();
+      this.currentBudget = this.sharedService.budget.name;
     }
     this.sharedService.budgetLoadedEmit.subscribe(() => {
       if (this.sharedService.loggedIn) this.navs = this.loadBasicNavigation();
-      if (this.sharedService.budgetLoaded) this.navs = this.loadFullNavigation();
+      if (this.sharedService.budgetLoaded) {
+        this.navs = this.loadFullNavigation();
+        this.currentBudget = this.sharedService.budget.name;
+      }
     });
     this.sharedService.loggedInEmit.subscribe(() => {
       if (this.sharedService.loggedIn) this.navs = this.loadBasicNavigation();
-      if (this.sharedService.budgetLoaded) this.navs = this.loadFullNavigation();
+      if (this.sharedService.budgetLoaded) {
+        this.navs = this.loadFullNavigation();
+        this.currentBudget = this.sharedService.budget.name;
+      }
     });
   }
 
