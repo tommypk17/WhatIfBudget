@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { InvestmentService } from '../../../../services/investment.service'
 import { SharedService } from '../../../../services/shared.service';
@@ -11,8 +11,9 @@ import { Investment } from '../../../../shared/models/investment';
 })
 export class InvestmentEntryFormComponent implements OnInit {
   @Output('added') added: EventEmitter<void> = new EventEmitter();
+  @Output('updated') updated: EventEmitter<void> = new EventEmitter();
 
-  model: Investment = new Investment();
+  @Input('investment') model: Investment = new Investment();
 
   constructor(private investmentService: InvestmentService, private sharedService: SharedService) { }
 
@@ -21,11 +22,19 @@ export class InvestmentEntryFormComponent implements OnInit {
 
   onSubmit(event: NgForm): void {
     let investment: Investment = event.value as Investment;
+    investment.id = this.model.id;
     investment.goalId = this.sharedService.budget.investmentGoalId;
-    this.investmentService.saveInvestments(investment).subscribe((res: Investment) => {
-      this.added.emit();
-      this.model = new Investment();
-    });
+    if (investment.id && investment.id > 0) {
+      this.investmentService.updateInvestment(investment).subscribe((res: Investment) => {
+        this.updated.emit();
+        this.model = new Investment();
+      });
+    } else {
+      this.investmentService.saveInvestments(investment).subscribe((res: Investment) => {
+        this.added.emit();
+        this.model = new Investment();
+      });
+    }
   }
 
 }
