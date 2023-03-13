@@ -20,7 +20,7 @@
           </div>
         </td>
         <td>{{income.name}}</td>
-        <td>${{income.amount}}</td>
+        <td>${{income.amount | number : '.2-2'}}</td>
         <td>{{displayFrequencies(income.frequency)}}</td>
       </tr>
     </ng-template>

@@ -13,6 +13,7 @@
                        [required]="true"
                        [(ngModel)]="model.currentBalance" name="currentBalance"
                        #amount="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
                        prefix="$">
         </p-inputNumber>
         <label for="currentBalance">Current Balance</label>
@@ -24,6 +25,7 @@
                          [required]="true"
                          [(ngModel)]="model.monthlyPersonalContribution" name="monthlyPersonalContribution"
                          #amount="ngModel" class="w-100" styleClass="w-100"
+                         [minFractionDigits]="2" [maxFractionDigits]="2"
                          prefix="$">
           </p-inputNumber>
           <label for="monthlyPersonalContribution">Monthly Personal Contribution</label>
@@ -33,6 +35,7 @@
                          [required]="true"
                          [(ngModel)]="model.monthlyEmployerContribution" name="monthlyEmployerContribution"
                          #amount="ngModel" class="w-100" styleClass="w-100"
+                         [minFractionDigits]="2" [maxFractionDigits]="2"
                          prefix="$">
           </p-inputNumber>
           <label for="monthlyEmployerContribution">Monthly Employer Contribution</label>

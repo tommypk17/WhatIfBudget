@@ -19,9 +19,9 @@
           </div>
         </td>
         <td>{{investment.name}}</td>
-        <td>${{investment.currentBalance }}</td>
-        <td>${{investment.monthlyPersonalContribution}}</td>
-        <td>${{investment.monthlyEmployerContribution}}</td>
+        <td>${{investment.currentBalance | number : '.2-2'}}</td>
+        <td>${{investment.monthlyPersonalContribution | number : '.2-2'}}</td>
+        <td>${{investment.monthlyEmployerContribution | number : '.2-2'}}</td>
       </tr>
     </ng-template>
   </p-table>

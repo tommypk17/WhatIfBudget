@@ -22,6 +22,7 @@
         <p-inputNumber id="totalBalance"
                        [(ngModel)]="model.totalBalance" name="totalBalance"
                        #totalBalance="ngModel" class="w-100" styleClass="w-100" [disabled]="true"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
                        prefix="$">
         </p-inputNumber>
         <label for="totalBalance">Total Balance</label>
