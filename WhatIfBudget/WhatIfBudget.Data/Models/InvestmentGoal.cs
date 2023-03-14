@@ -13,6 +13,6 @@ namespace WhatIfBudget.Data.Models
         public UInt16 YearsToTarget { get; set; } = 0;
         public double AdditionalBudgetAllocation { get; set; } = 0;
 
-        public virtual ICollection<Budget>? Budgets { get; set; }
+        public virtual Budget? Budget { get; set; }
     }
 }
