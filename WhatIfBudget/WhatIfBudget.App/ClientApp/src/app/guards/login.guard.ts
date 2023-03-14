@@ -18,14 +18,7 @@ export class LoginGuard implements CanActivate {
     return new Observable<boolean>((subscriber) => {
       this.authService.isLoggedIn().subscribe((res: boolean) => {
         if (res) {
-          let silent: SilentRequest = {
-            scopes: [environment.AzureAd.defaultScope],
-            forceRefresh: true,
-            account: this.msalService.instance.getAllAccounts()[0]
-          };
-          this.msalService.instance.acquireTokenSilent(silent).then((res: AuthenticationResult) => {
-            subscriber.next(true);
-          });
+          subscriber.next(true);
         } else {
           sessionStorage.setItem('afterLogin', state.url);
           this.router.navigate(['/login'], {skipLocationChange: true});
