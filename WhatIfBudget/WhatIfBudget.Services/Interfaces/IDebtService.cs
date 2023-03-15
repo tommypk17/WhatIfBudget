@@ -10,5 +10,7 @@ namespace WhatIfBudget.Services.Interfaces
     public interface IDebtService
     {
         public IList<Debt> GetAllDebts();
+        public Debt? AddNewDebt(Debt newDebt);
+
     }
 }

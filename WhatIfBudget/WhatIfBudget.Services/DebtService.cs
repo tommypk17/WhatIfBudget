@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,20 @@ namespace WhatIfBudget.Services
         public IList<Debt> GetAllDebts()
         {
             return _ctx.Debts.ToList();
+        }
+
+        public Debt? AddNewDebt(Debt debt)
+        {
+            _ctx.Debts.Add(debt);
+            try
+            {
+                _ctx.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                return null;
+            }
+            return _ctx.Debts.FirstOrDefault(x => x.Id == debt.Id);
         }
     }
 }

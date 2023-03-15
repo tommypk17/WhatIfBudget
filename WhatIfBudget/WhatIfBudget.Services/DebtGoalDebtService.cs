@@ -22,5 +22,19 @@ namespace WhatIfBudget.Services
         {
             return _ctx.DebtGoalDebts.ToList();
         }
+
+        public DebtGoalDebt? AddNewDebtGoalDebt(DebtGoalDebt debtGoalDebt)
+        {
+            _ctx.DebtGoalDebts.Add(debtGoalDebt);
+            try
+            {
+                _ctx.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                return null;
+            }
+            return _ctx.DebtGoalDebts.FirstOrDefault(x => x.Id == debtGoalDebt.Id);
+        }
     }
 }

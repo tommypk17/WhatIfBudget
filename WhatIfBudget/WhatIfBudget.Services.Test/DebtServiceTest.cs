@@ -48,6 +48,41 @@ namespace WhatIfBudget.Services.Test
             actual.Should().BeEquivalentTo(expected);
         }
 
+        [TestMethod]
+        public void AddNewDebt_CollectionAreEqual()
+        {
+            var expected = new List<Debt>
+            {
+                new Debt()
+                {
+                    Id = 11,
+                    Name = "Test",
+                    CurrentBalance = 1,
+                    InterestRate = 0,
+                    MinimumPayment = 0,
+                    UserId = Guid.Empty,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                }
+            };
+
+            _debtService.AddNewDebt(new Debt()
+            {
+                Id = 11,
+                Name = "Test",
+                CurrentBalance = 1,
+                InterestRate = 0,
+                MinimumPayment = 0,
+                UserId = Guid.Empty,
+                CreatedOn = DateTime.MinValue,
+                UpdatedOn = DateTime.MinValue
+            });
+
+            var actual = _ctx.Debts.Where(x => x.UserId == Guid.Empty).ToList();
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
         public void Helper_SeedDB()
         {
             _ctx.Debts.AddRange(Helper_SeedDebts());

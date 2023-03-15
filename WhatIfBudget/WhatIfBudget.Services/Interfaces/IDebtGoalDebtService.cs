@@ -10,5 +10,7 @@ namespace WhatIfBudget.Services.Interfaces
     public interface IDebtGoalDebtService
     {
         public IList<DebtGoalDebt> GetAllDebtGoalDebts();
+        public DebtGoalDebt? AddNewDebtGoalDebt(DebtGoalDebt newDebtGoalDebt);
+
     }
 }

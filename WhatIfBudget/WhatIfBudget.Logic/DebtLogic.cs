@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WhatIfBudget.Data.Models;
 using WhatIfBudget.Logic.Interfaces;
 using WhatIfBudget.Logic.Models;
 using WhatIfBudget.Services;
@@ -43,6 +44,30 @@ namespace WhatIfBudget.Logic
             {
                 return new List<UserDebt>();
             }
+        }
+
+        public UserDebt? AddUserDebt(Guid userId, UserDebt userDebt)
+        {
+            var dbDebt = _debtService.AddNewDebt(userDebt.ToDebt(userId));
+            if (dbDebt == null)
+            {
+                throw new NullReferenceException();
+            }
+            if (userDebt.GoalId > 0)
+            {
+                var dbDGD = new DebtGoalDebt()
+                {
+                    DebtGoalId = userDebt.GoalId,
+                    DebtId = dbDebt.Id
+                };
+                dbDGD = _dgdService.AddNewDebtGoalDebt(dbDGD);
+                if (dbDGD == null)
+                {
+                    throw new NullReferenceException();
+                }
+            }
+
+            return UserDebt.FromDebt(dbDebt);
         }
     }
 }
