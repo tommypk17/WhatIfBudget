@@ -10,6 +10,7 @@ namespace WhatIfBudget.Logic.Interfaces
     public interface IDebtLogic
     {
         public IList<UserDebt> GetUserDebts(Guid userId);
+        public IList<UserDebt> GetUserDebtsByGoalId(Guid userId, int goalId);
 
     }
 }

@@ -25,6 +25,7 @@ namespace WhatIfBudget.Logic.Test
         public void GetUserDebts_CollectionAreEqual()
         {
             var mock = new Mock<IDebtService>();
+            var mock2 = new Mock<IDebtGoalDebtService>();
 
             mock.Setup(x => x.GetAllDebts()).Returns(
                 (IList<Debt>)new List<Debt>()
@@ -37,7 +38,7 @@ namespace WhatIfBudget.Logic.Test
                     new Debt() { Id = 6, Name = "Test", CurrentBalance = 100, InterestRate = 0.1f, MinimumPayment = 0,  UserId = Guid.NewGuid(), CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue },
                 }
                 );
-            var DebtLogic = new DebtLogic(mock.Object);
+            var DebtLogic = new DebtLogic(mock.Object, mock2.Object);
 
             var expected = new List<UserDebt>()
             {

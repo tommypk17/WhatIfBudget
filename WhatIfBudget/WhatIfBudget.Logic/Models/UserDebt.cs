@@ -10,6 +10,7 @@ namespace WhatIfBudget.Logic.Models
     public class UserDebt
     {
         public int Id { get; set; }
+        public int GoalId { get; set; } = 0;
         public string Name { get; set; } = String.Empty;
         public double CurrentBalance { get; set; } = 0;
         public float InterestRate { get; set; } = 0;
@@ -28,12 +29,13 @@ namespace WhatIfBudget.Logic.Models
             };
         }
 
-        public static UserDebt FromDebt(Debt debt)
+        public static UserDebt FromDebt(Debt debt, int goalId = 0)
         {
             return new UserDebt()
             {
                 Id = debt.Id,
                 Name = debt.Name,
+                GoalId = goalId,
                 InterestRate= debt.InterestRate,
                 MinimumPayment = debt.MinimumPayment,
                 CurrentBalance = debt.CurrentBalance
