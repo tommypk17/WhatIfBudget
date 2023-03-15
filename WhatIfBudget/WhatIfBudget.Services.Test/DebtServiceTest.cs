@@ -38,7 +38,7 @@ namespace WhatIfBudget.Services.Test
         }
 
         [TestMethod]
-        public void GetAllExpense_CollectionAreEqual()
+        public void GetAllDebt_CollectionAreEqual()
         {
             Helper_SeedDB();
             var expected = (List<Debt>)Helper_SeedDebts();
