@@ -37,6 +37,7 @@ builder.Services.AddScoped<IIncomeLogic, IncomeLogic>();
 builder.Services.AddScoped<IBudgetLogic, BudgetLogic>();
 builder.Services.AddScoped<IInvestmentLogic, InvestmentLogic>();
 builder.Services.AddScoped<IInvestmentGoalLogic, InvestmentGoalLogic>();
+builder.Services.AddScoped<ISavingGoalLogic, SavingGoalLogic>();
 builder.Services.AddScoped<IDebtLogic, DebtLogic>();
 
 

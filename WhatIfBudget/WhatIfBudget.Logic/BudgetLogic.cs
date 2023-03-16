@@ -69,13 +69,18 @@ namespace WhatIfBudget.Logic
 
         public double GetSumOfGoalAllocations(int budgetId)
         {
+            var dbBudget = _budgetService.GetAllBudgets().Where(x => x.Id == budgetId).FirstOrDefault();
+            if (dbBudget == null) { throw new NullReferenceException(); }
+
             // TODO: complete this as other goal services are fleshed out.
 
-            var dbInvestmentGoal = _investmentGoalService.GetInvestmentGoal(budgetId);
+            var dbInvestmentGoal = _investmentGoalService.GetInvestmentGoal(dbBudget.InvestmentGoalId);
             if (dbInvestmentGoal == null) { throw new NullReferenceException(); }
-            UserInvestmentGoal investmentGoal = UserInvestmentGoal.FromInvestmentGoal(dbInvestmentGoal);
 
-            return investmentGoal.additionalBudgetAllocation /* + savingGoal.additionalBudgetAllocation...*/;
+            var dbSavingGoal = _savingGoalService.GetSavingGoal(dbBudget.SavingGoalId);
+            if (dbSavingGoal == null) { throw new NullReferenceException(); }
+
+            return dbInvestmentGoal.AdditionalBudgetAllocation + dbSavingGoal.AdditionalBudgetAllocation;
         }
 
         public UserBudget? CreateUserBudget(Guid userId, UserBudget budget)
@@ -152,10 +157,12 @@ namespace WhatIfBudget.Logic
             // Delete associated goals
             var dbIG = _investmentGoalService.DeleteInvestmentGoal(budget.InvestmentGoalId);
             if (dbIG == null) { throw new NullReferenceException(); }
+
+            var dbSG = _savingGoalService.DeleteSavingGoal(budget.SavingGoalId);
+            if (dbSG == null) { throw new NullReferenceException(); }
             /*
-            dbSG = _savingGoalService.DeleteSavingGoal(budget.SavingGoalId);
-            dbDG = _debtGoalService.DeleteDebtGoal(budget.DebtGoalId);
-            dbMG = _mortgageGoalService.DeleteMortageGoal(budget.MortageGoalId);
+            var dbDG = _debtGoalService.DeleteDebtGoal(budget.DebtGoalId);
+            var dbMG = _mortgageGoalService.DeleteMortageGoal(budget.MortageGoalId);
             */
 
             // Delete associated incomes

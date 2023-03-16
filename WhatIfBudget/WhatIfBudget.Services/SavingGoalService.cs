@@ -17,6 +17,12 @@ namespace WhatIfBudget.Services
         {
             _ctx = ctx;
         }
+
+        public SavingGoal? GetSavingGoal(int id)
+        {
+            return _ctx.SavingGoals.FirstOrDefault(x => x.Id == id);
+        }
+
         public SavingGoal? AddSavingGoal(SavingGoal savingGoal)
         {
             _ctx.SavingGoals.Add(savingGoal);
@@ -29,6 +35,38 @@ namespace WhatIfBudget.Services
                 return null;
             }
             return _ctx.SavingGoals.FirstOrDefault(x => x.Id == savingGoal.Id);
+        }
+
+        public SavingGoal? ModifySavingGoal(SavingGoal savingGoal)
+        {
+            _ctx.SavingGoals.Update(savingGoal);
+            try
+            {
+                _ctx.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                return null;
+            }
+            return _ctx.SavingGoals.FirstOrDefault(x => x.Id == savingGoal.Id);
+        }
+
+        public SavingGoal? DeleteSavingGoal(int id)
+        {
+            var SavingGoal = _ctx.SavingGoals.FirstOrDefault(x => x.Id == id);
+            if (SavingGoal != null)
+            {
+                _ctx.SavingGoals.Remove(SavingGoal);
+            }
+            try
+            {
+                _ctx.SaveChanges();
+                return SavingGoal;
+            }
+            catch (DbUpdateException)
+            {
+                return null;
+            }
         }
     }
 }

@@ -13,25 +13,25 @@ using WhatIfBudget.Logic.Models;
 namespace WhatIfBudget.API.Test
 {
     [TestClass]
-    public class InvestmentGoalControllerTest
+    public class SavingGoalControllerTest
     {
         [TestMethod]
-        public void Get_GetInvestmentGoal()
+        public void Get_GetSavingGoal()
         {
-            //mock investment logic
-            var mockIGL = new Mock<IInvestmentGoalLogic>();
-            mockIGL.Setup(x => x.GetInvestmentGoal(It.IsAny<int>())).Returns(
-                new UserInvestmentGoal() {
+            //mock saving goal logic
+            var mockSGL = new Mock<ISavingGoalLogic>();
+            mockSGL.Setup(x => x.GetSavingGoal(It.IsAny<int>())).Returns(
+                new UserSavingGoal() {
                     Id = 4,
-                    TotalBalance = 1000,
-                    AnnualReturnRate_Percent = 5,
-                    YearsToTarget = 20,
+                    CurrentBalance = 1111.0,
+                    TargetBalance = 5555.0,
+                    AnnualReturnRate_Percent = 2.0,
                     AdditionalBudgetAllocation = 500
                 }
             );
 
             //Setup the http context (for auth)
-            var investmentController = new InvestmentGoalsController(mockIGL.Object)
+            var savingController = new SavingGoalsController(mockSGL.Object)
             {
                 ControllerContext = new ControllerContext()
                 {
@@ -39,54 +39,12 @@ namespace WhatIfBudget.API.Test
                 }
             };
 
-            var expectedValue = new UserInvestmentGoal()
+            var expectedValue = new UserSavingGoal()
                 {
-                    Id = 4,
-                    TotalBalance = 1000,
-                    AnnualReturnRate_Percent = 5,
-                    YearsToTarget = 20,
-                    AdditionalBudgetAllocation = 500
-                };
-
-            var expected = new ObjectResult(expectedValue)
-            {
-                StatusCode = 200,
-            };
-
-            var actual = investmentController.Get(4);
-
-
-            actual.Should().BeEquivalentTo(expected);
-        }
-
-        [TestMethod]
-        public void Put_UserInvestmentGoalUpdated()
-        {
-            //mock income logic
-            var mock = new Mock<IInvestmentGoalLogic>();
-            mock.Setup(x => x.ModifyUserInvestmentGoal(It.IsAny<UserInvestmentGoal>()))
-                            .Returns(new UserInvestmentGoal() {
-                                Id = 2,
-                                TotalBalance = 1000,
-                                AnnualReturnRate_Percent = 5,
-                                YearsToTarget = 20,
-                                AdditionalBudgetAllocation = 500
-                            });
-
-            //Setup the http context (for auth)
-            var investmentController = new InvestmentGoalsController(mock.Object)
-            {
-                ControllerContext = new ControllerContext()
-                {
-                    HttpContext = Helper_MockHttpContext().Object
-                }
-            };
-
-            var expectedValue = new UserInvestmentGoal() {
-                Id = 2,
-                TotalBalance = 1000,
-                AnnualReturnRate_Percent = 5,
-                YearsToTarget = 20,
+                Id = 4,
+                CurrentBalance = 1111.0,
+                TargetBalance = 5555.0,
+                AnnualReturnRate_Percent = 2.0,
                 AdditionalBudgetAllocation = 500
             };
 
@@ -95,12 +53,54 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = investmentController.Put(new UserInvestmentGoal() {
+            var actual = savingController.Get(4);
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void Put_UserSavingGoalUpdated()
+        {
+            //mock saving goal logic
+            var mockSGL = new Mock<ISavingGoalLogic>();
+            mockSGL.Setup(x => x.ModifyUserSavingGoal(It.IsAny<UserSavingGoal>()))
+                            .Returns(new UserSavingGoal() {
+                                Id = 2,
+                                CurrentBalance = 111.0,
+                                TargetBalance = 7555.0,
+                                AnnualReturnRate_Percent = 1.0,
+                                AdditionalBudgetAllocation = 100
+                            });
+
+            //Setup the http context (for auth)
+            var savingController = new SavingGoalsController(mockSGL.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new UserSavingGoal() {
                 Id = 2,
-                TotalBalance = 1000.0,
-                AnnualReturnRate_Percent = 5.0,
-                YearsToTarget = 5,
-                AdditionalBudgetAllocation = 50.0
+                CurrentBalance = 111.0,
+                TargetBalance = 7555.0,
+                AnnualReturnRate_Percent = 1.0,
+                AdditionalBudgetAllocation = 100
+            };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = savingController.Put(new UserSavingGoal() {
+                Id = 2,
+                CurrentBalance = 111.0,
+                TargetBalance = 7555.0,
+                AnnualReturnRate_Percent = 1.0,
+                AdditionalBudgetAllocation = 100
             });
 
 
@@ -108,11 +108,40 @@ namespace WhatIfBudget.API.Test
         }
 
         [TestMethod]
-        public void Get_InvestmentBalanceOverTime()
+        public void Get_TimeToTarget()
         {
-            //mock income logic
-            var mockIGL = new Mock<IInvestmentGoalLogic>();
-            mockIGL.Setup(x => x.GetBalanceOverTime(It.IsAny<int>())).Returns
+            //mock saving goal logic
+            var mockSGL = new Mock<ISavingGoalLogic>();
+            mockSGL.Setup(x => x.GetTimeToTarget(It.IsAny<int>())).Returns(5);
+
+            //Setup the http context (for auth)
+            var savingController = new SavingGoalsController(mockSGL.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = 5;
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = savingController.GetTimeToTarget(1);
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+
+        [TestMethod]
+        public void Get_SavingBalanceOverTime()
+        {
+            //mock saving goal logic
+            var mockSGL = new Mock<ISavingGoalLogic>();
+            mockSGL.Setup(x => x.GetBalanceOverTime(It.IsAny<int>())).Returns
                 (new Dictionary<int, double>()
                 {
                     {0, 1000.0 },
@@ -124,7 +153,7 @@ namespace WhatIfBudget.API.Test
                 });
 
             //Setup the http context (for auth)
-            var investmentController = new InvestmentGoalsController(mockIGL.Object)
+            var savingController = new SavingGoalsController(mockSGL.Object)
             {
                 ControllerContext = new ControllerContext()
                 {
@@ -147,7 +176,7 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = investmentController.GetBalanceOverTime(1);
+            var actual = savingController.GetBalanceOverTime(1);
 
 
             actual.Should().BeEquivalentTo(expected);

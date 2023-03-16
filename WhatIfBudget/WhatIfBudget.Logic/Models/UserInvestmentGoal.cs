@@ -10,7 +10,7 @@ namespace WhatIfBudget.Logic.Models
         public double TotalBalance { get; set; } = 0;
         public double AnnualReturnRate_Percent { get; set; } = 0;
         public UInt16 YearsToTarget { get; set; } = 0;
-        public double additionalBudgetAllocation { get; set; } = 0;
+        public double AdditionalBudgetAllocation { get; set; } = 0;
 
         public InvestmentGoal ToInvestmentGoal()
         {
@@ -19,7 +19,7 @@ namespace WhatIfBudget.Logic.Models
                 Id = Id,
                 AnnualReturnRate_Percent = AnnualReturnRate_Percent,
                 YearsToTarget = YearsToTarget,
-                AdditionalBudgetAllocation = additionalBudgetAllocation
+                AdditionalBudgetAllocation = AdditionalBudgetAllocation
             };
         }
 
@@ -30,7 +30,7 @@ namespace WhatIfBudget.Logic.Models
                 Id = investmentGoal.Id,
                 AnnualReturnRate_Percent = investmentGoal.AnnualReturnRate_Percent,
                 YearsToTarget = investmentGoal.YearsToTarget,
-                additionalBudgetAllocation = investmentGoal.AdditionalBudgetAllocation
+                AdditionalBudgetAllocation = investmentGoal.AdditionalBudgetAllocation
             };
         }
     }

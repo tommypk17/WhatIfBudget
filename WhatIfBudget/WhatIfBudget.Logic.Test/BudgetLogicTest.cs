@@ -228,7 +228,7 @@ namespace WhatIfBudget.Logic.Test
                 new SavingGoal()
                 {
                     Id = 1,
-                    TotalBalance = 0,
+                    CurrentBalance = 0,
                     AnnualReturnRate_Percent = 0,
                     AdditionalBudgetAllocation = 0,
                     CreatedOn = DateTime.MinValue,
