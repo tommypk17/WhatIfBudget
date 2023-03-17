@@ -69,7 +69,6 @@ namespace WhatIfBudget.Logic.Test
                 AnnualReturnRate_Percent = 10.5,
                 YearsToTarget = 40,
                 AdditionalBudgetAllocation = 540.0,
-                TotalBalance = 12000.0
             };
 
             var actual = investmentGoalLogic.GetInvestmentGoal(1);
@@ -117,7 +116,7 @@ namespace WhatIfBudget.Logic.Test
         }
 
         [TestMethod]
-        public void InvestmentBalanceAtTarget()
+        public void Get_InvestmentTotals()
         {
             var mockIGS = new Mock<IInvestmentGoalService>();
             var mockIS = new Mock<IInvestmentService>();
@@ -162,11 +161,16 @@ namespace WhatIfBudget.Logic.Test
 
             var investmentGoalLogic = new InvestmentGoalLogic(mockIGS.Object, mockIS.Object);
 
-            var expected = 88450.52;
+            var expected = new InvestmentGoalTotals()
+            {
+                BalanceAtTarget = 86729.87,
+                TotalInterestAccrued = 24329.87,
+                AddedDueToContribution = 43985.92
+            };
 
-            var actual = investmentGoalLogic.GetBalanceAtTarget(1);
+            var actual = investmentGoalLogic.GetInvestmentTotals(1);
 
-            actual.Should().Be(expected);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [TestMethod]

@@ -7,7 +7,6 @@ namespace WhatIfBudget.Logic.Models
     public class UserInvestmentGoal
     {
         public int Id { get; set; }
-        public double TotalBalance { get; set; } = 0;
         public double AnnualReturnRate_Percent { get; set; } = 0;
         public UInt16 YearsToTarget { get; set; } = 0;
         public double AdditionalBudgetAllocation { get; set; } = 0;
@@ -33,5 +32,12 @@ namespace WhatIfBudget.Logic.Models
                 AdditionalBudgetAllocation = investmentGoal.AdditionalBudgetAllocation
             };
         }
+    }
+
+    public class InvestmentGoalTotals
+    {
+        public double BalanceAtTarget { get; set; } = 0;
+        public double TotalInterestAccrued { get; set; } = 0;
+        public double AddedDueToContribution { get; set; } = 0;
     }
 }

@@ -10,7 +10,7 @@ namespace WhatIfBudget.Logic.Interfaces
     public interface IInvestmentGoalLogic
     {
         public UserInvestmentGoal? GetInvestmentGoal(int investmentGoalId);
-        public double GetBalanceAtTarget(int investmentGoalId);
+        public InvestmentGoalTotals GetInvestmentTotals(int investmentGoalId);
         public Dictionary<int, double> GetBalanceOverTime(int investmentGoalId);
         public UserInvestmentGoal? ModifyUserInvestmentGoal(UserInvestmentGoal investmentGoal);
     }

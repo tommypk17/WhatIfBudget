@@ -108,11 +108,16 @@ namespace WhatIfBudget.API.Test
         }
 
         [TestMethod]
-        public void Get_TimeToTarget()
+        public void Get_SavingTotals()
         {
             //mock saving goal logic
             var mockSGL = new Mock<ISavingGoalLogic>();
-            mockSGL.Setup(x => x.GetTimeToTarget(It.IsAny<int>())).Returns(5);
+            mockSGL.Setup(x => x.GetSavingTotals(It.IsAny<int>())).Returns(
+                new SavingGoalTotals()
+                {
+                    MonthsToTarget = 5,
+                    TotalInterestAccrued = 20.0
+                });
 
             //Setup the http context (for auth)
             var savingController = new SavingGoalsController(mockSGL.Object)
@@ -123,14 +128,17 @@ namespace WhatIfBudget.API.Test
                 }
             };
 
-            var expectedValue = 5;
+            var expectedValue = new SavingGoalTotals()
+            {
+                MonthsToTarget = 5,
+                TotalInterestAccrued = 20.0
+            };
             var expected = new ObjectResult(expectedValue)
             {
                 StatusCode = 200,
             };
 
-            var actual = savingController.GetTimeToTarget(1);
-
+            var actual = savingController.GetSavingTotals(1);
 
             actual.Should().BeEquivalentTo(expected);
         }

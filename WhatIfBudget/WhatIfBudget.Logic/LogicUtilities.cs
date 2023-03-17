@@ -8,11 +8,12 @@ namespace WhatIfBudget.Logic
 {
     internal class LogicUtilities
     {
-        public double InterestStep (double startBalance, double monthlyInterest, double contribution)
+        public (double, double) InterestStep (double startBalance, double monthlyInterest, double contribution)
         {
             var newBalance = startBalance + contribution;
-            newBalance *= 1 + monthlyInterest;
-            return Math.Round(newBalance, 2);
+            var interestAccrued = newBalance * monthlyInterest;
+            newBalance += interestAccrued;
+            return (Math.Round(newBalance, 2), Math.Round(interestAccrued, 2));
         }
     }
 }

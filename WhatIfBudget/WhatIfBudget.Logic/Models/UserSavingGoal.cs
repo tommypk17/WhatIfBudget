@@ -34,4 +34,9 @@ namespace WhatIfBudget.Logic.Models
             };
         }
     }
+    public class SavingGoalTotals
+    {
+        public int MonthsToTarget { get; set; } = 0;
+        public double TotalInterestAccrued { get; set; } = 0;
+    }
 }

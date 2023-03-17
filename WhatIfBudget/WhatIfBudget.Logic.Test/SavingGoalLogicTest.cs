@@ -91,7 +91,7 @@ namespace WhatIfBudget.Logic.Test
         }
 
         [TestMethod]
-        public void SavingTimeToTarget()
+        public void Get_SavingTotals()
         {
             var mockSGS = new Mock<ISavingGoalService>();
 
@@ -110,16 +110,20 @@ namespace WhatIfBudget.Logic.Test
 
             var savingGoalLogic = new SavingGoalLogic(mockSGS.Object);
 
-            var expected = 4;
+            var expected = new SavingGoalTotals()
+            {
+                MonthsToTarget = 4,
+                TotalInterestAccrued = 11.77
+            };
 
-            var actual = savingGoalLogic.GetTimeToTarget(1);
+            var actual = savingGoalLogic.GetSavingTotals(1);
 
-            actual.Should().Be(expected);
+            actual.Should().BeEquivalentTo(expected);
         }
 
 
     [TestMethod]
-        public void SavingBalanceOverTime()
+        public void Get_SavingBalanceOverTime()
         {
             var mockSGS = new Mock<ISavingGoalService>();
 

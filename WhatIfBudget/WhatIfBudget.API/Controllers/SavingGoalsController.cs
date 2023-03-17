@@ -35,11 +35,11 @@ namespace WhatIfBudget.API.Controllers
             }
         }
 
-        [HttpGet("{savingGoalId}/TimeToTarget")]
-        public IActionResult GetTimeToTarget(int savingGoalId)
+        [HttpGet("{savingGoalId}/totals")]
+        public IActionResult GetSavingTotals(int savingGoalId)
         {
             //pass the ID from the route to the logic function
-            var res = _savingGoalLogic.GetTimeToTarget(savingGoalId);
+            var res = _savingGoalLogic.GetSavingTotals(savingGoalId);
             return StatusCode(StatusCodes.Status200OK, res);
         }
 

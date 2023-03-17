@@ -393,6 +393,8 @@ namespace WhatIfBudget.Logic.Test
                 new Investment());
             mockIGS.Setup(x => x.DeleteInvestmentGoal(It.IsAny<int>())).Returns(
                 new InvestmentGoal());
+            mockSGS.Setup(x => x.DeleteSavingGoal(It.IsAny<int>())).Returns(
+                new SavingGoal());
 
             mockBIS.Setup(x => x.GetAllBudgetIncomes()).Returns(
                 (IList<BudgetIncome>)new List<BudgetIncome>()

@@ -35,11 +35,11 @@ namespace WhatIfBudget.API.Controllers
             }
         }
 
-        [HttpGet("{investmentGoalId}/BalanceAtTarget")]
-        public IActionResult GetBalanceAtTarget(int investmentGoalId)
+        [HttpGet("{investmentGoalId}/totals")]
+        public IActionResult GetInvestmentTotals(int investmentGoalId)
         {
             //pass the ID from the route to the logic function
-            var res = _investmentGoalLogic.GetBalanceAtTarget(investmentGoalId);
+            var res = _investmentGoalLogic.GetInvestmentTotals(investmentGoalId);
             return StatusCode(StatusCodes.Status200OK, res);
         }
 

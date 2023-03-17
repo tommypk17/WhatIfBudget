@@ -10,7 +10,7 @@ namespace WhatIfBudget.Logic.Interfaces
     public interface ISavingGoalLogic
     {
         public UserSavingGoal? GetSavingGoal(int savingGoalId);
-        public int GetTimeToTarget(int savingGoalId);
+        public SavingGoalTotals GetSavingTotals(int savingGoalId);
         public Dictionary<int, double> GetBalanceOverTime(int savingGoalId);
         public UserSavingGoal? ModifyUserSavingGoal(UserSavingGoal savingGoal);
     }

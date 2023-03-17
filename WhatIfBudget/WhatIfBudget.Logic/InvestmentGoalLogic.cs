@@ -9,6 +9,7 @@ using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
 using WhatIfBudget.Logic;
 using System.Dynamic;
+using System.Globalization;
 
 namespace WhatIfBudget.Logic
 {
@@ -35,15 +36,21 @@ namespace WhatIfBudget.Logic
             return total;
         }
 
-        private Dictionary<int, double> CalculateBalanceOverTime(UserInvestmentGoal investmentGoal)
+        private (Dictionary<int, double>, InvestmentGoalTotals) CalculateBalanceOverTime(UserInvestmentGoal investmentGoal)
         {
             var utilities = new LogicUtilities();
-            int iMonth = 0;
-            double iBalance = investmentGoal.TotalBalance;
-            Dictionary<int, double> balanceDict = new Dictionary<int, double>();
             double monthlyInterestRate = investmentGoal.AnnualReturnRate_Percent / 1200;
-
             var investmentList = _investmentService.GetInvestmentsByInvestmentGoalId(investmentGoal.Id);
+            var startingBalance = investmentList.Select(x => x.CurrentBalance).Sum();
+
+            // Return Values
+            Dictionary<int, double> balanceDict = new Dictionary<int, double>();
+            var investmentGoalTotals = new InvestmentGoalTotals();
+            double iInterestAccrued = 0;
+            double iBalance = startingBalance;
+            double iAllocationBalance = 0;
+            double iAllocationInterest = 0;
+
             double baseContribution = investmentGoal.AdditionalBudgetAllocation;
             foreach (var inv in investmentList)
             {
@@ -51,54 +58,50 @@ namespace WhatIfBudget.Logic
                 baseContribution += inv.MonthlyEmployerContribution;
             }
 
+            int iMonth = 1;
+            balanceDict[0] = Math.Round(iBalance, 2);
             while (iMonth <= investmentGoal.YearsToTarget * 12)
             {
+                var iContribution = baseContribution; // + GetCompletedGoalContributions(investmentGoal, iMonth);
+                (iBalance, iInterestAccrued) = utilities.InterestStep(iBalance, monthlyInterestRate, iContribution);
+                (iAllocationBalance, iAllocationInterest) = utilities.InterestStep(iAllocationBalance, monthlyInterestRate, investmentGoal.AdditionalBudgetAllocation);
+                investmentGoalTotals.TotalInterestAccrued += iInterestAccrued;
+
                 if (iMonth % 12 == 0)
                 {
-                    balanceDict[iMonth / 12] = iBalance;
+                    balanceDict[iMonth / 12] = Math.Round(iBalance, 2);
                 }
-                var iContribution = baseContribution; // + GetCompletedGoalContributions(investmentGoal, iMonth);
-                // new balance = ( previous balance + ( total contributions * months ) ) * ( 1 + interest rate )
-                iBalance = utilities.InterestStep(iBalance, monthlyInterestRate, iContribution);
                 iMonth++;
             }
-
-            return balanceDict;
+            investmentGoalTotals.BalanceAtTarget = balanceDict[investmentGoal.YearsToTarget];
+            investmentGoalTotals.AddedDueToContribution = investmentGoalTotals.BalanceAtTarget - iAllocationBalance;
+            return (balanceDict, investmentGoalTotals);
         }
 
         public UserInvestmentGoal? GetInvestmentGoal(int investmentGoalId)
         {
             var investmentGoal = _investmentGoalService.GetInvestmentGoal(investmentGoalId);
-            var investments = _investmentService.GetInvestmentsByInvestmentGoalId(investmentGoalId);
             if(investmentGoal is null) return null;
-
-            var res = UserInvestmentGoal.FromInvestmentGoal(investmentGoal);
-            res.TotalBalance = investments.Select(x => x.CurrentBalance).Sum();
-
-            return res;
+            return UserInvestmentGoal.FromInvestmentGoal(investmentGoal);
         }
 
-        public double GetBalanceAtTarget(int investmentGoalId)
+        public InvestmentGoalTotals GetInvestmentTotals(int investmentGoalId)
         {
             var dbInvestmentGoal = _investmentGoalService.GetInvestmentGoal(investmentGoalId);
-            var investments = _investmentService.GetInvestmentsByInvestmentGoalId(investmentGoalId);
             if (dbInvestmentGoal is null) { throw new NullReferenceException(); }
             UserInvestmentGoal investmentGoal = UserInvestmentGoal.FromInvestmentGoal(dbInvestmentGoal);
-            investmentGoal.TotalBalance = investments.Select(x => x.CurrentBalance).Sum();
 
-            var balanceDict = CalculateBalanceOverTime(investmentGoal);
-            return balanceDict[investmentGoal.YearsToTarget];
+            (_, var totals) = CalculateBalanceOverTime(investmentGoal);
+            return totals;
         }
 
         public Dictionary<int, double> GetBalanceOverTime(int investmentGoalId)
         {
             var dbInvestmentGoal = _investmentGoalService.GetInvestmentGoal(investmentGoalId);
-            var investments = _investmentService.GetInvestmentsByInvestmentGoalId(investmentGoalId);
             if (dbInvestmentGoal is null) { throw new NullReferenceException(); }
             UserInvestmentGoal investmentGoal = UserInvestmentGoal.FromInvestmentGoal(dbInvestmentGoal);
-            investmentGoal.TotalBalance = investments.Select(x => x.CurrentBalance).Sum();
-
-            return CalculateBalanceOverTime(investmentGoal);
+            (var dict, _) = CalculateBalanceOverTime(investmentGoal);
+            return dict;
         }
 
         public UserInvestmentGoal? ModifyUserInvestmentGoal(UserInvestmentGoal investmentGoal)

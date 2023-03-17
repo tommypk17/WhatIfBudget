@@ -8,6 +8,7 @@ using WhatIfBudget.Logic.Models;
 using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
 using System.Dynamic;
+using System.Runtime.CompilerServices;
 
 namespace WhatIfBudget.Logic
 {
@@ -19,23 +20,30 @@ namespace WhatIfBudget.Logic
             _savingGoalService = savingGoalService;
         }
 
-        private Dictionary<int, double> GetBalanceOverTime(UserSavingGoal savingGoal)
+        private (Dictionary<int, double>, SavingGoalTotals) CalculateBalanceOverTime(UserSavingGoal savingGoal)
         {
             var utilities = new LogicUtilities();
-            int iMonth = 0;
-            double iBalance = savingGoal.CurrentBalance;
-            var balanceDict = new Dictionary<int, double> { { 0, 0.0 } };
             double monthlyRate = savingGoal.AnnualReturnRate_Percent / (12 * 100);
+
+            // Return Values
+            var balanceDict = new Dictionary<int, double> { { 0, 0.0 } };
+            var savingGoalTotals = new SavingGoalTotals();
+            double iBalance = savingGoal.CurrentBalance;
+            double iInterest;
+            double totalInterest = 0;
+            int iMonth = 0;
 
             while (iBalance < savingGoal.TargetBalance)
             {
                 balanceDict[iMonth] = iBalance;
-                iBalance = utilities.InterestStep(iBalance, monthlyRate, savingGoal.AdditionalBudgetAllocation);
+                (iBalance, iInterest) = utilities.InterestStep(iBalance, monthlyRate, savingGoal.AdditionalBudgetAllocation);
+                savingGoalTotals.TotalInterestAccrued += iInterest;
                 iMonth++;
             }
             // Final dictionary entry is full balance
             balanceDict[iMonth] = savingGoal.TargetBalance;
-            return balanceDict;
+            savingGoalTotals.MonthsToTarget = iMonth;
+            return (balanceDict, savingGoalTotals);
         }
 
         public UserSavingGoal? GetSavingGoal(int savingGoalId)
@@ -47,13 +55,13 @@ namespace WhatIfBudget.Logic
             return res;
         }
 
-        public int GetTimeToTarget(int savingGoalId)
+        public SavingGoalTotals GetSavingTotals(int savingGoalId)
         {
             var dbSavingGoal = _savingGoalService.GetSavingGoal(savingGoalId);
             if (dbSavingGoal is null) { throw new NullReferenceException(); }
             var res = UserSavingGoal.FromSavingGoal(dbSavingGoal);
-            var balanceDict = GetBalanceOverTime(res);
-            return balanceDict.Keys.Last();
+            (_, var totals) = CalculateBalanceOverTime(res);
+            return totals;
         }
 
         public Dictionary<int, double> GetBalanceOverTime(int savingGoalId)
@@ -61,7 +69,7 @@ namespace WhatIfBudget.Logic
             var dbSavingGoal = _savingGoalService.GetSavingGoal(savingGoalId);
             if (dbSavingGoal is null) return null;
             var res = UserSavingGoal.FromSavingGoal(dbSavingGoal);
-            var balanceDict = GetBalanceOverTime(res);
+            (var balanceDict, _) = CalculateBalanceOverTime(res);
             return balanceDict;
         }
 

@@ -9,6 +9,9 @@ namespace WhatIfBudget.Services.Interfaces
 {
     public interface IMortgageGoalService
     {
+        public MortgageGoal? GetMortgageGoal(int id);
         public MortgageGoal? AddMortgageGoal(MortgageGoal mortgageGoal);
+        public MortgageGoal? ModifyMortgageGoal(MortgageGoal mortgageGoal);
+        public MortgageGoal? DeleteMortgageGoal(int id);
     }
 }
