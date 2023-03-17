@@ -24,7 +24,7 @@ export class MortgageEntryFormComponent implements OnInit {
     let mortgage: Mortgage = event.value as Mortgage;
     mortgage.id = this.model.id;
     if (mortgage.id && mortgage.id > 0) {
-      this.mortgageService.updateInvestment(mortgage).subscribe((res: Mortgage) => {
+      this.mortgageService.updateMortgages(mortgage).subscribe((res: Mortgage) => {
         this.updated.emit();
         this.model = new Mortgage();
       });

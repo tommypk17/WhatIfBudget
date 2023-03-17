@@ -42,7 +42,7 @@ export class MortgageService {
     );
   }
 
-  public updateInvestment(mortgage: Mortgage): Observable<Mortgage> {
+  public updateMortgages(mortgage: Mortgage): Observable<Mortgage> {
     //this.sharedService.queueLoading('updateIncome');
     return this.http.put<Mortgage>(environment.URL + '/api/mortgages', mortgage).pipe(
       catchError((err, caught) => {
@@ -57,7 +57,7 @@ export class MortgageService {
     );
   }
 
-  public deleteInvestment(mortgage: Mortgage): Observable<Mortgage> {
+  public deleteMortgages(mortgage: Mortgage): Observable<Mortgage> {
     //this.sharedService.queueLoading('saveIncome');
     return this.http.delete<Mortgage>(environment.URL + `/api/mortgages/${mortgage.id}`).pipe(
       catchError((err, caught) => {
