@@ -16,5 +16,7 @@ namespace WhatIfBudget.Services.Interfaces
         public Income? UpdateIncome(Income modifiedIncome);
 
         public Income? DeleteIncome(int id);
+
+        public IList<Income> GetIncomesByBudgetId(int budgetId);
     }
 }

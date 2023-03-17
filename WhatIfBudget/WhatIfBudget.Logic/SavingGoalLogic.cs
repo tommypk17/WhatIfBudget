@@ -21,6 +21,7 @@ namespace WhatIfBudget.Logic
 
         private Dictionary<int, double> GetBalanceOverTime(UserSavingGoal savingGoal)
         {
+            var utilities = new LogicUtilities();
             int iMonth = 0;
             double iBalance = savingGoal.CurrentBalance;
             var balanceDict = new Dictionary<int, double> { { 0, 0.0 } };
@@ -29,8 +30,7 @@ namespace WhatIfBudget.Logic
             while (iBalance < savingGoal.TargetBalance)
             {
                 balanceDict[iMonth] = iBalance;
-                iBalance += savingGoal.AdditionalBudgetAllocation;
-                iBalance = Math.Round(iBalance * (1.0 + monthlyRate), 2);
+                iBalance = utilities.InterestStep(iBalance, monthlyRate, savingGoal.AdditionalBudgetAllocation);
                 iMonth++;
             }
             // Final dictionary entry is full balance

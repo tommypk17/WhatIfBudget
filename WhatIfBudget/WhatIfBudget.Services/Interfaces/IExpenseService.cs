@@ -10,10 +10,9 @@ namespace WhatIfBudget.Services.Interfaces
     public interface IExpenseService
     {
         public IList<Expense> GetAllExpenses();
-
         public Expense? AddNewExpense(Expense newExpense);
         public Expense? UpdateExpense(Expense modifiedExpense);
         public Expense? DeleteExpense(int id);
-
+        public IList<Expense> GetExpensesByBudgetId(int budgetId);
     }
 }

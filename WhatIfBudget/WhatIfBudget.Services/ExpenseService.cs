@@ -68,5 +68,18 @@ namespace WhatIfBudget.Services
                 return null;
             }
         }
+
+        public IList<Expense> GetExpensesByBudgetId(int id)
+        {
+            var expenses = _ctx.BudgetExpenses
+                        .Include(x => x.Expense)
+                        .Where(x => x.BudgetId == id && x.Expense != null)
+                        .Select(x => x.Expense).ToList();
+            if (expenses.Any())
+            {
+                return expenses!;
+            }
+            return new List<Expense>();
+        }
     }
 }

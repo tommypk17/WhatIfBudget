@@ -7,6 +7,7 @@ using WhatIfBudget.Logic.Interfaces;
 using WhatIfBudget.Logic.Models;
 using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
+using WhatIfBudget.Logic;
 using System.Dynamic;
 
 namespace WhatIfBudget.Logic
@@ -36,6 +37,7 @@ namespace WhatIfBudget.Logic
 
         private Dictionary<int, double> CalculateBalanceOverTime(UserInvestmentGoal investmentGoal)
         {
+            var utilities = new LogicUtilities();
             int iMonth = 0;
             double iBalance = investmentGoal.TotalBalance;
             Dictionary<int, double> balanceDict = new Dictionary<int, double>();
@@ -57,7 +59,7 @@ namespace WhatIfBudget.Logic
                 }
                 var iContribution = baseContribution; // + GetCompletedGoalContributions(investmentGoal, iMonth);
                 // new balance = ( previous balance + ( total contributions * months ) ) * ( 1 + interest rate )
-                iBalance = Math.Round((iBalance + iContribution) * (1 + monthlyInterestRate), 2);
+                iBalance = utilities.InterestStep(iBalance, monthlyInterestRate, iContribution);
                 iMonth++;
             }
 
