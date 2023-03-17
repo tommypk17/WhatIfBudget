@@ -25,6 +25,8 @@ import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService } from 'primeng/api';
 import { MortgageEntryFormComponent } from './components/mortgage-entry-form/mortgage-entry-form.component';
+import { MortgageChartComponent } from './components/mortgage-chart/mortgage-chart.component';
+import { ChartModule } from 'primeng/chart';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,7 @@ import { MortgageEntryFormComponent } from './components/mortgage-entry-form/mor
     InvestmentListingComponent,
     InvestmentGoalListingComponent,
     MortgageEntryFormComponent,
+    MortgageChartComponent,
   ],
   imports: [
     CommonModule,
@@ -54,7 +57,8 @@ import { MortgageEntryFormComponent } from './components/mortgage-entry-form/mor
     TabMenuModule,
     TableModule,
     DialogModule,
-    ConfirmPopupModule
+    ConfirmPopupModule,
+    ChartModule
   ],
   exports: [
     GoalNavigationComponent
