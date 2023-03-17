@@ -1,0 +1,38 @@
+<form (ngSubmit)="onSubmit(form)" #form="ngForm">
+  <div class="d-flex flex-column">
+    <div class="d-flex w-100 mb-1">
+      <span class="p-float-label w-100 ml-1">
+        <p-inputNumber id="currentBalance"
+                       [required]="true"
+                       [(ngModel)]="model.currentBalance" name="currentBalance"
+                       #amount="ngModel" class="w-100" styleClass="w-100"
+                       prefix="$">
+        </p-inputNumber>
+        <label for="currentBalance">Current Balance</label>
+      </span>
+      <span class="p-float-label w-100 ml-1">
+        <p-inputNumber id="targetBalance"
+                       [required]="true"
+                       [(ngModel)]="model.targetBalance" name="targetBalance"
+                       #amount="ngModel" class="w-100" styleClass="w-100"
+                       prefix="$">
+        </p-inputNumber>
+        <label for="targetBalance">Target Balance</label>
+      </span>
+    </div>
+    <div class="d-flex w-100 mt-1">
+      <span class="p-float-label w-100 ml-1">
+        <p-inputNumber id="annualReturnRate_Percent"
+                       [required]="true"
+                       [(ngModel)]="model.annualReturnRate_Percent" name="annualReturnRate_Percent"
+                       #amount="ngModel" class="w-100" styleClass="w-100"
+                       suffix="%">
+        </p-inputNumber>
+        <label for="annualReturnRate_Percent">Annual Rate of Return</label>
+      </span>
+    </div>
+  </div>
+  <div class="d-flex flex-end mt-2">
+    <button pButton type="submit" label="Save" [disabled]="!form.form.valid"></button>
+  </div>
+</form>
