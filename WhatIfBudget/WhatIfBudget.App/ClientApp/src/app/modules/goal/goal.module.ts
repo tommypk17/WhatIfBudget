@@ -25,7 +25,6 @@ import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService } from 'primeng/api';
 import { MortgageEntryFormComponent } from './components/mortgage-entry-form/mortgage-entry-form.component';
-//import { MortgageAmortizationListingFormComponent } from './components/mortgage-amortization-listing-form/mortgage-amortization-listing-form.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +39,6 @@ import { MortgageEntryFormComponent } from './components/mortgage-entry-form/mor
     InvestmentListingComponent,
     InvestmentGoalListingComponent,
     MortgageEntryFormComponent,
-    //MortgageAmortizationListingFormComponent,
   ],
   imports: [
     CommonModule,
