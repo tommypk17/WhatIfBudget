@@ -13,6 +13,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
 import { ChartModule } from 'primeng/chart';
 import { InvestmentsChartComponent } from './components/investments-chart/investments-chart.component';
+import { SharedModule } from '../../shared/shared.module';
 
 
 @NgModule({
@@ -20,12 +21,13 @@ import { InvestmentsChartComponent } from './components/investments-chart/invest
     HomeComponent,
     LoginComponent,
     LoginBlockComponent,
-    InvestmentsChartComponent
+    InvestmentsChartComponent,
   ],
   imports: [
     CommonModule,
     HomeRoutingModule,
     FormsModule,
+    SharedModule,
 
     CardModule,
     ButtonModule,

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { SharedService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'app-mortgage-chart',
@@ -11,7 +10,7 @@ export class MortgageChartComponent implements OnInit {
 
   basicData: any;
 
-  constructor(private messageService: MessageService, private sharedService: SharedService) { }
+  constructor(private messageService: MessageService) { }
 
   ngOnInit(): void {
 

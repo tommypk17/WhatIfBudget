@@ -25,9 +25,9 @@ import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService } from 'primeng/api';
 import { MortgageEntryFormComponent } from './components/mortgage-entry-form/mortgage-entry-form.component';
-import { MortgageChartComponent } from './components/mortgage-chart/mortgage-chart.component';
 import { ChartModule } from 'primeng/chart';
 import { SavingEntryFormComponent } from './components/saving-entry-form/saving-entry-form.component';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -42,13 +42,13 @@ import { SavingEntryFormComponent } from './components/saving-entry-form/saving-
     InvestmentListingComponent,
     InvestmentGoalListingComponent,
     MortgageEntryFormComponent,
-    MortgageChartComponent,
     SavingEntryFormComponent,
   ],
   imports: [
     CommonModule,
     GoalRoutingModule,
     FormsModule,
+    SharedModule,
 
     CardModule,
     ButtonModule,

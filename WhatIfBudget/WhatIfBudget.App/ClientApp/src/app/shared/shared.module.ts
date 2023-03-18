@@ -15,12 +15,14 @@ import { BudgetEntryFormComponent } from './budget-entry-form/budget-entry-form.
 import { InputTextModule } from 'primeng/inputtext';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ChartModule } from 'primeng/chart';
+import { MortgageChartComponent } from './mortgage-chart/mortgage-chart.component';
 
 @NgModule({
   declarations: [
     NavigationComponent,
     BudgetListingComponent,
     BudgetEntryFormComponent,
+    MortgageChartComponent,
   ],
   imports: [
     CommonModule,
@@ -35,10 +37,11 @@ import { ChartModule } from 'primeng/chart';
     ListboxModule,
     InputTextModule,
     ProgressSpinnerModule,
-    ChartModule
+    ChartModule,
   ],
   exports: [
-    NavigationComponent
+    NavigationComponent,
+    MortgageChartComponent
   ]
 })
 export class SharedModule { }
