@@ -16,6 +16,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ChartModule } from 'primeng/chart';
 import { MortgageChartComponent } from './mortgage-chart/mortgage-chart.component';
+import { SavingChartComponent } from './saving-chart/saving-chart.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { MortgageChartComponent } from './mortgage-chart/mortgage-chart.componen
     BudgetListingComponent,
     BudgetEntryFormComponent,
     MortgageChartComponent,
+    SavingChartComponent,
   ],
   imports: [
     CommonModule,
@@ -41,7 +43,8 @@ import { MortgageChartComponent } from './mortgage-chart/mortgage-chart.componen
   ],
   exports: [
     NavigationComponent,
-    MortgageChartComponent
+    MortgageChartComponent,
+    SavingChartComponent,
   ]
 })
 export class SharedModule { }

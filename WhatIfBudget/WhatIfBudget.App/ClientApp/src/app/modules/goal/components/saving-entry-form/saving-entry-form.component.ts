@@ -15,7 +15,7 @@ export class SavingEntryFormComponent implements OnInit {
 
   @Input('savingGoal') model: SavingGoal = new SavingGoal();
 
-  constructor(private mortgageService: SavingGoalService, private sharedService: SharedService) { }
+  constructor(private savingGoalService: SavingGoalService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
   }
@@ -24,12 +24,12 @@ export class SavingEntryFormComponent implements OnInit {
     let savingGoal: SavingGoal = event.value as SavingGoal;
     savingGoal.id = this.model.id;
     if (savingGoal.id && savingGoal.id > 0) {
-      this.mortgageService.updateSavingGoal(savingGoal).subscribe((res: SavingGoal) => {
+      this.savingGoalService.updateSavingGoal(savingGoal).subscribe((res: SavingGoal) => {
         this.updated.emit();
         this.model = new SavingGoal();
       });
     } else {
-      this.mortgageService.saveSavingGoal(savingGoal).subscribe((res: SavingGoal) => {
+      this.savingGoalService.saveSavingGoal(savingGoal).subscribe((res: SavingGoal) => {
         this.added.emit();
         this.model = new SavingGoal();
       });
