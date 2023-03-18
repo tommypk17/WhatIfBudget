@@ -148,7 +148,7 @@ namespace WhatIfBudget.Logic.Test
                 { 1, 1542.18 },
                 { 2, 2084.78 },
                 { 3, 2628.06 },
-                { 4, 3000.00 }
+                { 4, 3172.02 }
             };
 
             var actualGoal = savingGoalLogic.GetSavingGoal(1);

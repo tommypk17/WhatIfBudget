@@ -165,7 +165,7 @@ namespace WhatIfBudget.Logic.Test
             {
                 BalanceAtTarget = 86729.87,
                 TotalInterestAccrued = 24329.87,
-                AddedDueToContribution = 43985.92
+                AddedDueToContribution = 43985.91
             };
 
             var actual = investmentGoalLogic.GetInvestmentTotals(1);

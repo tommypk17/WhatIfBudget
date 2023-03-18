@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WhatIfBudget.Logic.Interfaces;
 using WhatIfBudget.Logic.Models;
+using WhatIfBudget.Logic.Utilities;
 using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
 using System.Dynamic;
@@ -20,29 +21,23 @@ namespace WhatIfBudget.Logic
             _savingGoalService = savingGoalService;
         }
 
-        private (Dictionary<int, double>, SavingGoalTotals) CalculateBalanceOverTime(UserSavingGoal savingGoal)
+        private (Dictionary<int, double>, SavingGoalTotals) CalculateSavingsOverTime(UserSavingGoal savingGoal)
         {
-            var utilities = new LogicUtilities();
-            double monthlyRate = savingGoal.AnnualReturnRate_Percent / (12 * 100);
+            var stepper = new BalanceStepUtility(savingGoal.CurrentBalance, savingGoal.AnnualReturnRate_Percent / 12);
 
             // Return Values
             var balanceDict = new Dictionary<int, double> { { 0, 0.0 } };
             var savingGoalTotals = new SavingGoalTotals();
-            double iBalance = savingGoal.CurrentBalance;
-            double iInterest;
-            double totalInterest = 0;
-            int iMonth = 0;
 
-            while (iBalance < savingGoal.TargetBalance)
+            balanceDict[0] = stepper.GetBalance();
+            while (stepper.GetBalance() < savingGoal.TargetBalance)
             {
-                balanceDict[iMonth] = iBalance;
-                (iBalance, iInterest) = utilities.InterestStep(iBalance, monthlyRate, savingGoal.AdditionalBudgetAllocation);
-                savingGoalTotals.TotalInterestAccrued += iInterest;
-                iMonth++;
+                _ = stepper.Step(savingGoal.AdditionalBudgetAllocation);
+                balanceDict[stepper.StepsCompleted()] = stepper.GetBalance();
             }
             // Final dictionary entry is full balance
-            balanceDict[iMonth] = savingGoal.TargetBalance;
-            savingGoalTotals.MonthsToTarget = iMonth;
+            savingGoalTotals.MonthsToTarget = stepper.StepsCompleted();
+            savingGoalTotals.TotalInterestAccrued = stepper.GetAccumulatedInterest();
             return (balanceDict, savingGoalTotals);
         }
 
@@ -60,16 +55,16 @@ namespace WhatIfBudget.Logic
             var dbSavingGoal = _savingGoalService.GetSavingGoal(savingGoalId);
             if (dbSavingGoal is null) { throw new NullReferenceException(); }
             var res = UserSavingGoal.FromSavingGoal(dbSavingGoal);
-            (_, var totals) = CalculateBalanceOverTime(res);
+            (_, var totals) = CalculateSavingsOverTime(res);
             return totals;
         }
 
         public Dictionary<int, double> GetBalanceOverTime(int savingGoalId)
         {
             var dbSavingGoal = _savingGoalService.GetSavingGoal(savingGoalId);
-            if (dbSavingGoal is null) return null;
+            if (dbSavingGoal is null) { throw new NullReferenceException(); }
             var res = UserSavingGoal.FromSavingGoal(dbSavingGoal);
-            (var balanceDict, _) = CalculateBalanceOverTime(res);
+            (var balanceDict, _) = CalculateSavingsOverTime(res);
             return balanceDict;
         }
 
