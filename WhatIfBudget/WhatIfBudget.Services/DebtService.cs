@@ -35,5 +35,18 @@ namespace WhatIfBudget.Services
             }
             return _ctx.Debts.FirstOrDefault(x => x.Id == debt.Id);
         }
+        public Debt? UpdateDebt(Debt debt)
+        {
+            _ctx.Debts.Update(debt);
+            try
+            {
+                _ctx.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                return null;
+            }
+            return _ctx.Debts.FirstOrDefault(x => x.Id == debt.Id);
+        }
     }
 }

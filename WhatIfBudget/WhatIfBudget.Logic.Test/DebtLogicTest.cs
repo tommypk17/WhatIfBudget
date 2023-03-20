@@ -98,5 +98,49 @@ namespace WhatIfBudget.Logic.Test
 
             actual.Should().BeEquivalentTo(expected);
         }
+
+        [TestMethod]
+        public void ModifyUserDebt_ObjectsAreEqual()
+        {
+            var mock = new Mock<IDebtService>();
+            var mockDGDS = new Mock<IDebtGoalDebtService>();
+
+            mock.Setup(x => x.UpdateDebt(It.IsAny<Debt>())).Returns(
+                    new Debt()
+                    {
+                        Id = 1,
+                        Name = "test",
+                        CurrentBalance = 0,
+                        MinimumPayment = 0,
+                        InterestRate = .1f,
+                        UserId = Guid.Empty,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                );
+            var debtLogic = new DebtLogic(mock.Object, mockDGDS.Object);
+
+            var expected = new UserDebt()
+            {
+                Id = 1,
+                Name = "test",
+                CurrentBalance = 0,
+                MinimumPayment = 0,
+                InterestRate = .1f,
+                GoalId = 0
+            };
+
+            var actual = debtLogic.ModifyUserDebt(Guid.Empty, new UserDebt()
+            {
+                Id = 1,
+                Name = "test",
+                CurrentBalance = 0,
+                MinimumPayment = 0,
+                InterestRate = .1f,
+                GoalId = 0
+            });
+
+            actual.Should().BeEquivalentTo(expected);
+        }
     }
 }

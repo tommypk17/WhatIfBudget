@@ -83,6 +83,56 @@ namespace WhatIfBudget.Services.Test
             actual.Should().BeEquivalentTo(expected);
         }
 
+        [TestMethod]
+        public void UpdateDebt_ObjectsAreEqual()
+        {
+            _ctx.Debts.Add(new Debt()
+            {
+                Id = 11,
+                Name = "Test",
+                CurrentBalance = 1,
+                InterestRate = 0,
+                MinimumPayment = 0,
+                UserId = Guid.Empty,
+                CreatedOn = DateTime.MinValue,
+                UpdatedOn = DateTime.MinValue
+            });
+            _ctx.SaveChanges();
+            _ctx.ChangeTracker.Clear();
+
+            var expected = new Debt()
+            {
+                Id = 11,
+                Name = "Test",
+                CurrentBalance = 1,
+                InterestRate = 0,
+                MinimumPayment = 0,
+                UserId = Guid.Empty,
+                CreatedOn = DateTime.MinValue,
+                UpdatedOn = DateTime.MinValue
+            };
+
+            var actual = _debtService.UpdateDebt(new Debt()
+            {
+                Id = 11,
+                Name = "Test",
+                CurrentBalance = 1,
+                InterestRate = 0,
+                MinimumPayment = 0,
+                UserId = Guid.Empty,
+                CreatedOn = DateTime.MinValue,
+                UpdatedOn = DateTime.MinValue
+            });
+            Assert.IsNotNull(actual);
+
+            Assert.AreEqual(actual.Id, expected.Id);
+            Assert.AreEqual(actual.Name, expected.Name);
+            Assert.AreEqual(actual.UserId, expected.UserId);
+            Assert.AreEqual(actual.CurrentBalance, expected.CurrentBalance);
+            Assert.AreEqual(actual.MinimumPayment, expected.MinimumPayment);
+            Assert.AreEqual(actual.InterestRate, expected.InterestRate);
+        }
+
         public void Helper_SeedDB()
         {
             _ctx.Debts.AddRange(Helper_SeedDebts());

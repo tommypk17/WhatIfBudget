@@ -69,5 +69,14 @@ namespace WhatIfBudget.Logic
 
             return UserDebt.FromDebt(dbDebt);
         }
+
+        public UserDebt? ModifyUserDebt(Guid userId, UserDebt debt)
+        {
+            var toUpdate = debt.ToDebt(userId);
+
+            var dbDebt = _debtService.UpdateDebt(toUpdate);
+            if (dbDebt == null) { throw new NullReferenceException(); }
+            return UserDebt.FromDebt(dbDebt);
+        }
     }
 }
