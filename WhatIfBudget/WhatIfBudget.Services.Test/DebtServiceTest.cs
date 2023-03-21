@@ -133,6 +133,21 @@ namespace WhatIfBudget.Services.Test
             Assert.AreEqual(actual.InterestRate, expected.InterestRate);
         }
 
+        [TestMethod]
+        public void DeleteDebt_CollectionsAreEqual()
+        {
+            Helper_SeedDB();
+            var expected = (List<Debt>)Helper_SeedDebts();
+            var toRemove = expected.First();
+            expected.Remove(toRemove);
+
+            _debtService.DeleteDebt(toRemove.Id);
+
+            var actual = _ctx.Debts.ToList();
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
         public void Helper_SeedDB()
         {
             _ctx.Debts.AddRange(Helper_SeedDebts());

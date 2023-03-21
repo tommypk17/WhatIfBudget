@@ -11,6 +11,7 @@ namespace WhatIfBudget.Services.Interfaces
     {
         public IList<DebtGoalDebt> GetAllDebtGoalDebts();
         public DebtGoalDebt? AddNewDebtGoalDebt(DebtGoalDebt newDebtGoalDebt);
+        public DebtGoalDebt? DeleteDebtGoalDebt(int id);
 
     }
 }

@@ -142,5 +142,79 @@ namespace WhatIfBudget.Logic.Test
 
             actual.Should().BeEquivalentTo(expected);
         }
+
+        [TestMethod]
+        public void DeleteUserDebt_CollectionsAreEqual()
+        {
+            var mock = new Mock<IDebtService>();
+            var mockDGDS = new Mock<IDebtGoalDebtService>();
+
+            mock.Setup(x => x.DeleteDebt(It.IsAny<int>())).Returns(
+                    new Debt()
+                    {
+                        Id = 1,
+                        Name = "Test",
+                        CurrentBalance = 1,
+                        MinimumPayment = 1,
+                        UserId = Guid.Empty,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue,
+                        InterestRate = 0
+                    }
+                );
+
+            mock.Setup(x => x.GetAllDebts()).Returns(
+                    new List<Debt>(){
+                        new Debt()
+                        {
+                            Id = 1,
+                            Name = "Test",
+                            CurrentBalance = 1,
+                            MinimumPayment = 1,
+                            UserId = Guid.Empty,
+                            CreatedOn = DateTime.MinValue,
+                            UpdatedOn = DateTime.MinValue,
+                            InterestRate = 0
+                        }
+                    }
+                );
+
+            mockDGDS.Setup(x => x.GetAllDebtGoalDebts()).Returns(
+                new List<DebtGoalDebt>()
+                {
+                    new DebtGoalDebt()
+                    {
+                        Id = 1,
+                        DebtId = 1,
+                        DebtGoalId = 1
+                    }
+                });
+
+            mockDGDS.Setup(x => x.DeleteDebtGoalDebt(It.IsAny<int>())).Returns(
+                    new DebtGoalDebt()
+                    {
+                        Id = 1,
+                        DebtId = 1,
+                        DebtGoalId = 1,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue,
+                    });
+
+
+            var debtLogic = new DebtLogic(mock.Object, mockDGDS.Object);
+
+            var expected = new UserDebt()
+            {
+                Id = 1,
+                Name = "Test",
+                GoalId = 0,
+                CurrentBalance = 1,
+                MinimumPayment = 1,
+            };
+
+            var actual = debtLogic.DeleteDebt(1, 1);
+
+            actual.Should().BeEquivalentTo(expected);
+        }
     }
 }

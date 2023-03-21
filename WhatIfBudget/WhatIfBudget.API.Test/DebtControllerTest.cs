@@ -164,6 +164,52 @@ namespace WhatIfBudget.API.Test
             actual.Should().BeEquivalentTo(expected);
         }
 
+        [TestMethod]
+        public void Delete_UserDebtDeleted()
+        {
+            //mock income logic
+            var mock = new Mock<IDebtLogic>();
+            mock.Setup(x => x.DeleteDebt(It.IsAny<int>(), It.IsAny<int>()))
+                            .Returns(new UserDebt()
+                            {
+                                Id = 1,
+                                Name = "test",
+                                GoalId = 0,
+                                CurrentBalance = 0,
+                                InterestRate= 0,
+                                MinimumPayment = 0
+                            });
+
+            //Setup the http context (for auth)
+            var debtController = new DebtsController(mock.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new UserDebt()
+            {
+                Id = 1,
+                Name = "test",
+                GoalId = 0,
+                CurrentBalance = 0,
+                InterestRate= 0,
+                MinimumPayment = 0
+            };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = debtController.Delete(1, 1);
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
         public Mock<HttpContext> Helper_MockHttpContext()
         {
             //Mock the principal & http context to pass in a fake user
