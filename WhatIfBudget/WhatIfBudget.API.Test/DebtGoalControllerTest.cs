@@ -53,6 +53,48 @@ namespace WhatIfBudget.API.Test
             actual.Should().BeEquivalentTo(expected);
         }
 
+        [TestMethod]
+        public void Put_UserDebtGoalUpdated()
+        {
+            //mock income logic
+            var mock = new Mock<IDebtGoalLogic>();
+            mock.Setup(x => x.ModifyUserDebtGoal(It.IsAny<UserDebtGoal>()))
+                            .Returns(new UserDebtGoal()
+                            {
+                                Id = 2,
+                                AdditionalBudgetAllocation = 500
+                            });
+
+            //Setup the http context (for auth)
+            var debtController = new DebtGoalsController(mock.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new UserDebtGoal()
+            {
+                Id = 2,
+                AdditionalBudgetAllocation = 500
+            };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = debtController.Put(new UserDebtGoal()
+            {
+                Id = 2,
+                AdditionalBudgetAllocation = 50.0
+            });
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
         public Mock<HttpContext> Helper_MockHttpContext()
         {
             //Mock the principal & http context to pass in a fake user

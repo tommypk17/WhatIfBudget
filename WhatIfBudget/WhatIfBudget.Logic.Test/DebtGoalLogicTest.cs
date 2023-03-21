@@ -44,5 +44,38 @@ namespace WhatIfBudget.Logic.Test
 
             actual.Should().BeEquivalentTo(expected);
         }
+
+        [TestMethod]
+        public void ModifyDebtGoal()
+        {
+            var mockIGS = new Mock<IDebtGoalService>();
+            var mockIS = new Mock<IDebtService>();
+
+            mockIGS.Setup(x => x.UpdateDebtGoal(It.IsAny<DebtGoal>())).Returns(
+                    new DebtGoal()
+                    {
+                        Id = 1,
+                        AdditionalBudgetAllocation = 540.0,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                );
+
+            var debtGoalLogic = new DebtGoalLogic(mockIGS.Object, mockIS.Object);
+
+            var expected = new UserDebtGoal()
+            {
+                Id = 1,
+                AdditionalBudgetAllocation = 540.0,
+            };
+
+            var actual = debtGoalLogic.ModifyUserDebtGoal(new UserDebtGoal()
+            {
+                Id = 1,
+                AdditionalBudgetAllocation = 540.0,
+            });
+
+            actual.Should().BeEquivalentTo(expected);
+        }
     }
 }

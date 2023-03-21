@@ -10,5 +10,7 @@ namespace WhatIfBudget.Logic.Interfaces
     public interface IDebtGoalLogic
     {
         public UserDebtGoal? GetDebtGoal(int debtGoalId);
+        public UserDebtGoal? ModifyUserDebtGoal(UserDebtGoal investmentGoal);
+
     }
 }

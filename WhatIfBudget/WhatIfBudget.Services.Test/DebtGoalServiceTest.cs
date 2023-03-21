@@ -48,6 +48,42 @@ namespace WhatIfBudget.Services.Test
             actual.Should().BeEquivalentTo(expected);
         }
 
+        [TestMethod]
+        public void UpdateDebtGoal()
+        {
+            _ctx.DebtGoals.Add(new DebtGoal()
+            {
+                Id = 1,
+                CreatedOn = DateTime.MinValue,
+                UpdatedOn = DateTime.MinValue,
+                AdditionalBudgetAllocation = 250.0,
+            });
+            _ctx.SaveChanges();
+            _ctx.ChangeTracker.Clear();
+
+            var expected = new DebtGoal()
+            {
+                Id = 1,
+                CreatedOn= DateTime.MinValue,
+                UpdatedOn= DateTime.MinValue,
+                AdditionalBudgetAllocation = 500.0,
+            };
+
+            var actual = _debtGoalService.UpdateDebtGoal(new DebtGoal()
+            {
+                Id = 1,
+                CreatedOn= DateTime.MinValue,
+                UpdatedOn= DateTime.MinValue,
+                AdditionalBudgetAllocation = 500.0,
+            });
+            Assert.IsNotNull(actual);
+
+            Assert.AreEqual(actual.Id, expected.Id);
+            Assert.AreEqual(actual.CreatedOn, expected.CreatedOn);
+            Assert.AreEqual(actual.UpdatedOn, expected.UpdatedOn);
+            Assert.AreEqual(actual.AdditionalBudgetAllocation, expected.AdditionalBudgetAllocation);
+        }
+
         public void Helper_SeedDB()
         {
             _ctx.DebtGoals.AddRange(Helper_SeedDebtGoals());

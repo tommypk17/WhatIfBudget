@@ -6,6 +6,7 @@ using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
 using WhatIfBudget.Logic.Models;
 using Microsoft.AspNetCore.Authorization;
+using WhatIfBudget.Logic;
 
 namespace WhatIfBudget.API.Controllers
 {
@@ -25,6 +26,20 @@ namespace WhatIfBudget.API.Controllers
             //pass the ID from the route to the logic function
             var res = _debtGoalLogic.GetDebtGoal(debtGoalId);
             //return a status of 200 with all the current user's income
+            if (res == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, res);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status200OK, res);
+            }
+        }
+
+        [HttpPut]
+        public IActionResult Put(UserDebtGoal apiDebtGoal)
+        {
+            var res = _debtGoalLogic.ModifyUserDebtGoal(apiDebtGoal);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);

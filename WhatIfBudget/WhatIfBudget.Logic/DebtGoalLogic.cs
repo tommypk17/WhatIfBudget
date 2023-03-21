@@ -10,6 +10,7 @@ using WhatIfBudget.Data.Models;
 using WhatIfBudget.Logic;
 using System.Dynamic;
 using System.Globalization;
+using WhatIfBudget.Services;
 
 namespace WhatIfBudget.Logic
 {
@@ -27,6 +28,18 @@ namespace WhatIfBudget.Logic
             var debtGoal = _debtGoalService.GetDebtGoal(debtGoalId);
             if(debtGoal is null) return null;
             return UserDebtGoal.FromDebtGoal(debtGoal);
+        }
+
+        public UserDebtGoal? ModifyUserDebtGoal(UserDebtGoal debtGoal)
+        {
+            var toUpdate = debtGoal.ToDebtGoal();
+
+            var dbDebtGoal = _debtGoalService.UpdateDebtGoal(toUpdate);
+            if (dbDebtGoal == null)
+            {
+                throw new NullReferenceException();
+            }
+            return UserDebtGoal.FromDebtGoal(dbDebtGoal);
         }
     }
 }
