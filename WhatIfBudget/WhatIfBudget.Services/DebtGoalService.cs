@@ -16,6 +16,10 @@ namespace WhatIfBudget.Services
         public DebtGoalService(AppDbContext ctx) {
             _ctx = ctx;
         }
+        public DebtGoal? GetDebtGoal(int id)
+        {
+            return _ctx.DebtGoals.FirstOrDefault(x => x.Id == id);
+        }
         public DebtGoal? AddDebtGoal(DebtGoal debtGoal)
         {
             _ctx.DebtGoals.Add(debtGoal);

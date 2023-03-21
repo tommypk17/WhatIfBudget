@@ -9,6 +9,7 @@ namespace WhatIfBudget.Services.Interfaces
 {
     public interface IDebtGoalService
     {
+        public DebtGoal? GetDebtGoal(int id);
         public DebtGoal? AddDebtGoal(DebtGoal debtGoal);
     }
 }
