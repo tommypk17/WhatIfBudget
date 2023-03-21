@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, finalize, Observable, retry } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { InvestmentGoal } from '../shared/models/investment-goal';
+import { InvestmentGoal, InvestmentTotals } from '../shared/models/investment-goal';
 
 
 @Injectable({
@@ -45,13 +45,13 @@ export class InvestmentGoalService {
     );
   }
 
-  public getBalanceAtTarget(investmentGoalId: number): Observable<number> {
+  public getInvestmentTotals(investmentGoalId: number): Observable<InvestmentTotals> {
     //this.sharedService.queueLoading('saveIncome');
-    return this.http.get<number>(environment.URL + `/api/investmentGoals/${investmentGoalId}/balanceAtTarget`).pipe(
+    return this.http.get<InvestmentTotals>(environment.URL + `/api/investmentGoals/${investmentGoalId}/totals`).pipe(
       retry(3),
       catchError((err, caught) => {
         this.handleError(err);
-        return new Observable<number>((subscriber) => {
+        return new Observable<InvestmentTotals>((subscriber) => {
           subscriber.next(undefined);
         })
       }),

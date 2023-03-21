@@ -3,7 +3,7 @@ import { InvestmentGoalService } from '../../../../services/investment.goal.serv
 import { InvestmentService } from '../../../../services/investment.service';
 import { SharedService } from '../../../../services/shared.service';
 import { Investment } from '../../../../shared/models/investment';
-import { InvestmentGoal } from '../../../../shared/models/investment-goal';
+import { InvestmentGoal, InvestmentTotals } from '../../../../shared/models/investment-goal';
 
 @Component({
   selector: 'app-investment',
@@ -42,8 +42,8 @@ export class InvestmentComponent implements OnInit {
     this.investmentGoalService.getInvestmentGoal(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: InvestmentGoal) => {
       if (res) this.investmentGoal = res;
     });
-    this.investmentGoalService.getBalanceAtTarget(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: number) => {
-      if (res) this.balanceAtTarget = res;
+    this.investmentGoalService.getInvestmentTotals(this.sharedService.budget.investmentGoalId ?? 0).subscribe((res: InvestmentTotals) => {
+      if (res) this.balanceAtTarget = res.balanceAtTarget!;
     });
   }
 }
