@@ -20,7 +20,6 @@ export class LoginGuard implements CanActivate {
         if (res) {
           subscriber.next(true);
         } else {
-          sessionStorage.setItem('afterLogin', state.url);
           this.router.navigate(['/login'], {skipLocationChange: true});
           subscriber.next(false);
         }
