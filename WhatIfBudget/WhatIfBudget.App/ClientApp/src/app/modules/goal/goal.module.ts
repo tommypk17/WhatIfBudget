@@ -29,6 +29,7 @@ import { ChartModule } from 'primeng/chart';
 import { SavingEntryFormComponent } from './components/saving-entry-form/saving-entry-form.component';
 import { SharedModule } from '../../shared/shared.module';
 import { DebtEntryFormComponent } from './components/debt-entry-form/debt-entry-form.component';
+import { DebtListingComponent } from './components/debt-listing/debt-listing.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { DebtEntryFormComponent } from './components/debt-entry-form/debt-entry-
     MortgageEntryFormComponent,
     SavingEntryFormComponent,
     DebtEntryFormComponent,
+    DebtListingComponent,
   ],
   imports: [
     CommonModule,

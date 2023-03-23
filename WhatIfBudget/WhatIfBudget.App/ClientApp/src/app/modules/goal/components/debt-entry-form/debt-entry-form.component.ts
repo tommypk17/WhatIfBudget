@@ -25,12 +25,12 @@ export class DebtEntryFormComponent implements OnInit {
     debt.id = this.model.id;
     debt.goalId = this.sharedService.budget.debtGoalId;
     if (debt.id && debt.id > 0) {
-      this.debtService.updateDebts(debt).subscribe((res: Debt) => {
+      this.debtService.updateDebt(debt).subscribe((res: Debt) => {
         this.updated.emit();
         this.model = new Debt();
       });
     } else {
-      this.debtService.saveDebts(debt).subscribe((res: Debt) => {
+      this.debtService.saveDebt(debt).subscribe((res: Debt) => {
         this.added.emit();
         this.model = new Debt();
       });
