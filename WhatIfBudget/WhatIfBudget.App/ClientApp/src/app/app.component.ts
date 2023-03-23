@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MsalBroadcastService } from '@azure/msal-angular';
-import { EventMessage, EventType, InteractionStatus } from '@azure/msal-browser';
+import { EventMessage, EventType } from '@azure/msal-browser';
 import { filter } from 'rxjs';
 import { SharedService } from './services/shared.service';
 
@@ -16,12 +16,17 @@ export class AppComponent {
   constructor(private sharedService: SharedService, private msalBroadcastService: MsalBroadcastService, private router: Router) {}
 
   ngOnInit(): void {
-    this.msalBroadcastService.inProgress$
+    this.msalBroadcastService.msalSubject$
       .pipe(
-        filter((status: InteractionStatus) => status === InteractionStatus.None)
+        filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS),
       )
-      .subscribe(() => {
+      .subscribe((result: EventMessage) => {
         this.sharedService.loggedInEmit.emit();
+        let redirect = sessionStorage.getItem('afterLogin');
+        if (redirect) {
+          sessionStorage.removeItem('afterLogin');
+          this.router.navigate([redirect]);
+        }
       });
   }
 }
