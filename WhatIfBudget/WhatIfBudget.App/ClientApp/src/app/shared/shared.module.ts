@@ -18,6 +18,7 @@ import { ChartModule } from 'primeng/chart';
 import { MortgageChartComponent } from './mortgage-chart/mortgage-chart.component';
 import { SavingChartComponent } from './saving-chart/saving-chart.component';
 import { InvestmentsChartComponent } from './investments-chart/investments-chart.component';
+import { DebtChartComponent } from './debt-chart/debt-chart.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { InvestmentsChartComponent } from './investments-chart/investments-chart
     MortgageChartComponent,
     SavingChartComponent,
     InvestmentsChartComponent,
+    DebtChartComponent,
   ],
   imports: [
     CommonModule,
@@ -48,6 +50,7 @@ import { InvestmentsChartComponent } from './investments-chart/investments-chart
     MortgageChartComponent,
     SavingChartComponent,
     InvestmentsChartComponent,
+    DebtChartComponent,
   ]
 })
 export class SharedModule { }
