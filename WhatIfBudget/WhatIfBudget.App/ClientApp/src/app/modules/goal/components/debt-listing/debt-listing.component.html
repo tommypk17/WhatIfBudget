@@ -20,7 +20,7 @@
         </td>
         <td>{{debt.name}}</td>
         <td>${{debt.currentBalance | number : '.2-2'}}</td>
-        <td>${{debt.interestRate | number : '.2-2'}}</td>
+        <td>{{debt.interestRate | number : '.2-2'}}%</td>
         <td>${{debt.minimumPayment | number : '.2-2'}}</td>
       </tr>
     </ng-template>
