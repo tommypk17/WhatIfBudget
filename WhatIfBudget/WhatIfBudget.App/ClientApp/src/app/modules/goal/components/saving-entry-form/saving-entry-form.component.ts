@@ -10,7 +10,6 @@ import { SavingGoal } from '../../../../shared/models/saving';
   styleUrls: ['./saving-entry-form.component.scss']
 })
 export class SavingEntryFormComponent implements OnInit {
-  @Output('added') added: EventEmitter<void> = new EventEmitter();
   @Output('updated') updated: EventEmitter<void> = new EventEmitter();
 
   @Input('savingGoal') model: SavingGoal = new SavingGoal();
@@ -18,21 +17,14 @@ export class SavingEntryFormComponent implements OnInit {
   constructor(private savingGoalService: SavingGoalService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
+    this.savingGoalService.getSavingGoal(this.sharedService.budget.savingGoalId!).subscribe((res: SavingGoal) => {
+      this.model = res;
+    })
   }
 
   onSubmit(event: NgForm): void {
-    let savingGoal: SavingGoal = event.value as SavingGoal;
-    savingGoal.id = this.model.id;
-    if (savingGoal.id && savingGoal.id > 0) {
-      this.savingGoalService.updateSavingGoal(savingGoal).subscribe((res: SavingGoal) => {
-        this.updated.emit();
-        this.model = new SavingGoal();
-      });
-    } else {
-      this.savingGoalService.saveSavingGoal(savingGoal).subscribe((res: SavingGoal) => {
-        this.added.emit();
-        this.model = new SavingGoal();
-      });
-    }
+    this.savingGoalService.saveSavingGoal(this.model as SavingGoal).subscribe((res: SavingGoal) => {
+      this.updated.emit();
+    });
   }
 }
