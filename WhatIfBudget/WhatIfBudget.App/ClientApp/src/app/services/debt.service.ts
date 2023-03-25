@@ -1,24 +1,23 @@
-import { KeyValue } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, finalize, Observable, retry } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { SavingGoal } from '../shared/models/saving';
+import { Debt } from '../shared/models/debt';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SavingGoalService {
+export class DebtService {
 
   constructor(private http: HttpClient) { }
 
-  public getSavingGoal(savingGoalId: number): Observable<SavingGoal> {
+  public getDebts(): Observable<Debt[]> {
     //this.sharedService.queueLoading('saveIncome');
-    return this.http.get<SavingGoal>(environment.URL + `/api/savingGoals/${savingGoalId}`).pipe(
+    return this.http.get<Debt[]>(environment.URL + '/api/Debts').pipe(
       retry(3),
       catchError((err, caught) => {
         this.handleError(err);
-        return new Observable<SavingGoal>((subscriber) => {
+        return new Observable<Debt[]>((subscriber) => {
           subscriber.next(undefined);
         })
       }),
@@ -28,13 +27,12 @@ export class SavingGoalService {
     );
   }
 
-  public getBalanceOverTime(savingGoalId: number): Observable<KeyValue<number, number>[]> {
+  public saveDebt(debt: Debt): Observable<Debt> {
     //this.sharedService.queueLoading('saveIncome');
-    return this.http.get<KeyValue<number, number>[]>(environment.URL + `/api/savingGoals/${savingGoalId}/balanceOverTime`).pipe(
-      retry(3),
+    return this.http.post<Debt>(environment.URL + '/api/Debts', debt).pipe(
       catchError((err, caught) => {
         this.handleError(err);
-        return new Observable<KeyValue<number, number>[]>((subscriber) => {
+        return new Observable<Debt>((subscriber) => {
           subscriber.next(undefined);
         })
       }),
@@ -44,13 +42,27 @@ export class SavingGoalService {
     );
   }
 
-  public getBalanceAtTarget(savingGoalId: number): Observable<number> {
-    //this.sharedService.queueLoading('saveIncome');
-    return this.http.get<number>(environment.URL + `/api/savingGoals/${savingGoalId}/balanceAtTarget`).pipe(
-      retry(3),
+  public updateDebt(debt: Debt): Observable<Debt> {
+    //this.sharedService.queueLoading('updateIncome');
+    return this.http.put<Debt>(environment.URL + '/api/Debts', debt).pipe(
       catchError((err, caught) => {
         this.handleError(err);
-        return new Observable<number>((subscriber) => {
+        return new Observable<Debt>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('updateIncome');
+      })
+    );
+  }
+
+  public deleteDebt(debt: Debt): Observable<Debt> {
+    //this.sharedService.queueLoading('saveIncome');
+    return this.http.delete<Debt>(environment.URL + `/api/Debts/${debt.id}/${debt.goalId}`).pipe(
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<Debt>((subscriber) => {
           subscriber.next(undefined);
         })
       }),
@@ -60,12 +72,13 @@ export class SavingGoalService {
     );
   }
 
-  public saveSavingGoal(savingGoal: SavingGoal): Observable<SavingGoal> {
+  public getDebtsByGoalId(debtGoalId: number): Observable<Debt[]> {
     //this.sharedService.queueLoading('saveIncome');
-    return this.http.put<SavingGoal>(environment.URL + '/api/savingGoals', savingGoal).pipe(
+    return this.http.get<Debt[]>(environment.URL + `/api/Debts/goals/${debtGoalId}`).pipe(
+      retry(3),
       catchError((err, caught) => {
         this.handleError(err);
-        return new Observable<SavingGoal>((subscriber) => {
+        return new Observable<Debt[]>((subscriber) => {
           subscriber.next(undefined);
         })
       }),

@@ -36,5 +36,23 @@ namespace WhatIfBudget.Services
             }
             return _ctx.DebtGoalDebts.FirstOrDefault(x => x.Id == debtGoalDebt.Id);
         }
+
+        public DebtGoalDebt? DeleteDebtGoalDebt(int id)
+        {
+            var DebtGoalDebt = _ctx.DebtGoalDebts.FirstOrDefault(x => x.Id == id);
+            if (DebtGoalDebt != null)
+            {
+                _ctx.DebtGoalDebts.Remove(DebtGoalDebt);
+            }
+            try
+            {
+                _ctx.SaveChanges();
+                return DebtGoalDebt;
+            }
+            catch (DbUpdateException)
+            {
+                return null;
+            }
+        }
     }
 }

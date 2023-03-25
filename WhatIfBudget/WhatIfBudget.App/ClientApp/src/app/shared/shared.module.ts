@@ -15,12 +15,20 @@ import { BudgetEntryFormComponent } from './budget-entry-form/budget-entry-form.
 import { InputTextModule } from 'primeng/inputtext';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ChartModule } from 'primeng/chart';
+import { MortgageChartComponent } from './mortgage-chart/mortgage-chart.component';
+import { SavingChartComponent } from './saving-chart/saving-chart.component';
+import { InvestmentsChartComponent } from './investments-chart/investments-chart.component';
+import { DebtChartComponent } from './debt-chart/debt-chart.component';
 
 @NgModule({
   declarations: [
     NavigationComponent,
     BudgetListingComponent,
     BudgetEntryFormComponent,
+    MortgageChartComponent,
+    SavingChartComponent,
+    InvestmentsChartComponent,
+    DebtChartComponent,
   ],
   imports: [
     CommonModule,
@@ -35,10 +43,14 @@ import { ChartModule } from 'primeng/chart';
     ListboxModule,
     InputTextModule,
     ProgressSpinnerModule,
-    ChartModule
+    ChartModule,
   ],
   exports: [
-    NavigationComponent
+    NavigationComponent,
+    MortgageChartComponent,
+    SavingChartComponent,
+    InvestmentsChartComponent,
+    DebtChartComponent,
   ]
 })
 export class SharedModule { }

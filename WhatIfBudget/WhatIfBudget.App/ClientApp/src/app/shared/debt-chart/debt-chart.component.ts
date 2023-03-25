@@ -1,17 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { SharedService } from '../../../../services/shared.service';
 
 @Component({
-  selector: 'app-mortgage-chart',
-  templateUrl: './mortgage-chart.component.html',
-  styleUrls: ['./mortgage-chart.component.scss']
+  selector: 'app-debt-chart',
+  templateUrl: './debt-chart.component.html',
+  styleUrls: ['./debt-chart.component.scss']
 })
-export class MortgageChartComponent implements OnInit {
-
+export class DebtChartComponent implements OnInit {
   basicData: any;
 
-  constructor(private messageService: MessageService, private sharedService: SharedService) { }
+  constructor(private messageService: MessageService) { }
 
   ngOnInit(): void {
 

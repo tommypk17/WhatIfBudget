@@ -25,6 +25,10 @@ body {
   flex-direction: row
 }
 
+.flex-wrap {
+    flex-flow: wrap;
+}
+
 .bg-dark {
   background-color: #424242;
 }
@@ -375,6 +379,10 @@ body {
   width: 50%;
 }
 
+.w-md-50 {
+  width: 25%;
+}
+
 .w-100 {
   width: 100%;
 }
@@ -439,6 +447,12 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #303030;
+}
+
+@media only screen and (max-width: 1447px) {
+  .w-md-50 {
+    width: 50%;
+  }
 }
 
 @media only screen and (max-width: 996px) {

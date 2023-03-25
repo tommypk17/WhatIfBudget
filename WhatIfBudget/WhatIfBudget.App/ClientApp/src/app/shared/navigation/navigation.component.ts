@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, AfterContentInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { BudgetListingComponent } from '../budget-listing/budget-listing.component';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -14,14 +14,18 @@ import { Observable } from 'rxjs';
   providers: [DialogService]
 })
 export class NavigationComponent implements OnInit {
-  $isLoading: Observable<boolean> = this.sharedService.isLoadingEmit.asObservable();
+  isLoading: boolean = false;
   currentBudget: string | undefined;
 
-  constructor(private dialogService: DialogService, private sharedService: SharedService, private authService: AuthService) { }
+  constructor(private cd: ChangeDetectorRef, private dialogService: DialogService, private sharedService: SharedService, private authService: AuthService) { }
 
   navs: MenuItem[] = [];
 
   ngOnInit() {
+    this.sharedService.isLoadingEmit.subscribe((loading) => {
+      this.isLoading = loading;
+      this.cd.detectChanges();
+    });
     if (this.sharedService.loggedIn) {
       this.navs = this.loadBasicNavigation();
     }

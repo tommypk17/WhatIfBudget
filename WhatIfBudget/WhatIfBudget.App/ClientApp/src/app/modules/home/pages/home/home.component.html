@@ -21,14 +21,20 @@
     <div class="d-flex flex-column">
       <div class="d-flex justify-content-between mt-2">
         <p-card class="w-100 mx-2" header="Net Worth Chart"></p-card>
-        <p-card class="w-100 mx-2" header="Short Term Savings Chart"></p-card>
+        <p-card class="w-100 mx-2" header="Short Term Savings Chart">
+          <app-saving-chart></app-saving-chart>
+        </p-card>
         <p-card class="w-100 mx-2" header="Investments">
           <app-investments-chart></app-investments-chart>
         </p-card>
       </div>
       <div class="d-flex justify-content-between mt-2">
-        <p-card class="w-100 mx-2" header="Mortgage Payoff Chart"></p-card>
-        <p-card class="w-100 mx-2" header="Debt Payoff Chart"></p-card>
+        <p-card class="w-100 mx-2" header="Mortgage Payoff Chart">
+          <app-mortgage-chart></app-mortgage-chart>
+        </p-card>
+        <p-card class="w-100 mx-2" header="Debt Payoff Chart">
+          <app-debt-chart></app-debt-chart>
+        </p-card>
       </div>
     </div>
   </div>

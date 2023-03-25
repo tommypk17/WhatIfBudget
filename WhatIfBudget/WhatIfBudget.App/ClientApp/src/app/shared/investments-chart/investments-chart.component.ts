@@ -1,7 +1,7 @@
 import { KeyValue } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { InvestmentGoalService } from '../../../../services/investment.goal.service';
-import { SharedService } from '../../../../services/shared.service';
+import { InvestmentGoalService } from '../../services/investment.goal.service';
+import { SharedService } from '../../services/shared.service';
 
 @Component({
   selector: 'app-investments-chart',
