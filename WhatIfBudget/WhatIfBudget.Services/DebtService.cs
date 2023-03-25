@@ -66,5 +66,18 @@ namespace WhatIfBudget.Services
                 return null;
             }
         }
+
+        public IList<Debt> GetDebtsByDebtGoalId(int id)
+        {
+            var debts = _ctx.DebtGoalDebts
+                        .Include(x => x.Debt)
+                        .Where(x => x.DebtGoalId == id && x.Debt != null)
+                        .Select(x => x.Debt).ToList();
+            if (debts.Any())
+            {
+                return debts!;
+            }
+            return new List<Debt>();
+        }
     }
 }

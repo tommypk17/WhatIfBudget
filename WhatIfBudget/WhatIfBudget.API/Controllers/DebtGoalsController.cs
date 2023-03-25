@@ -50,5 +50,14 @@ namespace WhatIfBudget.API.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpGet("{debtGoalId}/BalanceOverTime")]
+        public IActionResult GetBalanceOverTime(int debtGoalId)
+        {
+            //pass the ID from the route to the logic function
+            var res = _debtGoalLogic.GetBalanceOverTime(debtGoalId);
+            return StatusCode(StatusCodes.Status200OK, res.ToList());
+        }
+
     }
 }
