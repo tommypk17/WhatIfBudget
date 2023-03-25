@@ -40,6 +40,7 @@ builder.Services.AddScoped<IInvestmentGoalLogic, InvestmentGoalLogic>();
 builder.Services.AddScoped<ISavingGoalLogic, SavingGoalLogic>();
 builder.Services.AddScoped<IDebtLogic, DebtLogic>();
 builder.Services.AddScoped<IDebtGoalLogic, DebtGoalLogic>();
+builder.Services.AddScoped<IMortgageGoalLogic, MortgageGoalLogic>();
 
 
 builder.Services.AddControllers();

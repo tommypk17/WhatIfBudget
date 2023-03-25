@@ -11,6 +11,7 @@ using WhatIfBudget.Logic;
 using System.Dynamic;
 using System.Globalization;
 using WhatIfBudget.Services;
+using WhatIfBudget.Logic.Utilities;
 
 namespace WhatIfBudget.Logic
 {
@@ -55,7 +56,6 @@ namespace WhatIfBudget.Logic
         {
             //Dict<int, double> int is month, double is balance left
             //need to use - for balance
-            var utilities = new LogicUtilities();
 
             var debtList = _debtService.GetDebtsByDebtGoalId(debtGoal.Id);
 
@@ -69,10 +69,12 @@ namespace WhatIfBudget.Logic
             {
                 var currentMonth = 1;
                 var currentBalance = debt.CurrentBalance;
-                var interestRate = debt.InterestRate / 1200;
+                var interestRate = debt.InterestRate / 12;
                 var interestAccrued = 0.0;
 
-                var totalMonths = utilities.FinalPayDownMonth(debt.CurrentBalance, interestRate, debtGoal.AdditionalBudgetAllocation + debt.MinimumPayment);
+                var stepper = new BalanceStepUtility(currentBalance, interestRate);
+                stepper.StepToZero(debtGoal.AdditionalBudgetAllocation + debt.MinimumPayment);
+                var totalMonths = stepper.StepsCompleted();
                 var remainder = 0.0;
 
                 while(currentMonth <= totalMonths)
@@ -91,18 +93,17 @@ namespace WhatIfBudget.Logic
                         contribution = currentBalance;
                     }
                     
-                    (currentBalance, interestAccrued) = utilities.InterestStep(currentBalance, interestRate, (-1 * contribution));
+                    _ = stepper.Step(-1 * contribution);
                     debtGoalTotals.TotalInterestAccrued += interestAccrued;
 
                     if (!balanceDict.ContainsKey(currentMonth)) balanceDict.Add(currentMonth, 0);
 
-                    balanceDict[currentMonth] += Math.Round(currentBalance, 2);
+                    balanceDict[currentMonth] += Math.Round(stepper.GetBalance(), 2);
 
                     currentMonth++;
                 }
-                
+                debtGoalTotals.TotalInterestAccrued += stepper.GetAccumulatedInterest();
             }
-
             return (balanceDict, debtGoalTotals);
         }
     }
