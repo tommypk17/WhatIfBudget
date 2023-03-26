@@ -67,17 +67,14 @@ namespace WhatIfBudget.Logic
 
             foreach (var debt in debtList)
             {
-                var currentMonth = 1;
                 var currentBalance = debt.CurrentBalance;
                 var interestRate = debt.InterestRate / 12;
                 var interestAccrued = 0.0;
 
                 var stepper = new BalanceStepUtility(currentBalance, interestRate);
-                stepper.StepToZero(debtGoal.AdditionalBudgetAllocation + debt.MinimumPayment);
-                var totalMonths = stepper.StepsCompleted();
                 var remainder = 0.0;
 
-                while(currentMonth <= totalMonths)
+                while(stepper.Balance > 0)
                 {
                     var contribution = (debtGoal.AdditionalBudgetAllocation + debt.MinimumPayment);
                     //if we carry over any contribution, use it and set remainder back to 0
@@ -96,13 +93,12 @@ namespace WhatIfBudget.Logic
                     _ = stepper.Step(-1 * contribution);
                     debtGoalTotals.TotalInterestAccrued += interestAccrued;
 
-                    if (!balanceDict.ContainsKey(currentMonth)) balanceDict.Add(currentMonth, 0);
+                    if (!balanceDict.ContainsKey(stepper.NumberOfSteps)) balanceDict.Add(stepper.NumberOfSteps, 0);
 
-                    balanceDict[currentMonth] += Math.Round(stepper.GetBalance(), 2);
+                    balanceDict[stepper.NumberOfSteps] += Math.Round(stepper.Balance, 2);
 
-                    currentMonth++;
                 }
-                debtGoalTotals.TotalInterestAccrued += stepper.GetAccumulatedInterest();
+                debtGoalTotals.TotalInterestAccrued += stepper.InterestAccumulated;
             }
             return (balanceDict, debtGoalTotals);
         }

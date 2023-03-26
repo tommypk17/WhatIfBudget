@@ -29,15 +29,15 @@ namespace WhatIfBudget.Logic
             var balanceDict = new Dictionary<int, double> { { 0, 0.0 } };
             var savingGoalTotals = new SavingGoalTotals();
 
-            balanceDict[0] = stepper.GetBalance();
-            while (stepper.GetBalance() < savingGoal.TargetBalance)
+            balanceDict[0] = stepper.Balance;
+            while (stepper.Balance < savingGoal.TargetBalance)
             {
                 _ = stepper.Step(savingGoal.AdditionalBudgetAllocation);
-                balanceDict[stepper.StepsCompleted()] = stepper.GetBalance();
+                balanceDict[stepper.NumberOfSteps] = stepper.Balance;
             }
             // Final dictionary entry is full balance
-            savingGoalTotals.MonthsToTarget = stepper.StepsCompleted();
-            savingGoalTotals.TotalInterestAccrued = stepper.GetAccumulatedInterest();
+            savingGoalTotals.MonthsToTarget = stepper.NumberOfSteps;
+            savingGoalTotals.TotalInterestAccrued = stepper.InterestAccumulated;
             return (balanceDict, savingGoalTotals);
         }
 
