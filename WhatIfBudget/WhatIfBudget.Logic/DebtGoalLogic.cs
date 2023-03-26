@@ -52,6 +52,23 @@ namespace WhatIfBudget.Logic
             return dict;
         }
 
+        private IList<Debt> OrderDebtAvalanche(IList<Debt> debtList)
+        {
+            var orderedList = new Dictionary<Debt, double>();
+            foreach (var debt in debtList)
+            {
+                var stepper = new BalanceStepUtility((double)debt.CurrentBalance, debt.InterestRate / 12);
+                while(stepper.Balance > 0)
+                {
+                    _ = stepper.Step(-1 * debt.MinimumPayment);
+                }
+                var totalMonths = stepper.NumberOfSteps;
+                var totalInterestPaid = debt.CurrentBalance * (debt.InterestRate / 100) * totalMonths;
+                orderedList.Add(debt, totalInterestPaid);
+            }
+            return orderedList.OrderByDescending(x => x.Value).Select(x => x.Key).ToList();
+        }
+
         private (Dictionary<int, double>, DebtGoalTotals) CalculateBalanceOverTime(UserDebtGoal debtGoal)
         {
             //Dict<int, double> int is month, double is balance left
@@ -63,20 +80,28 @@ namespace WhatIfBudget.Logic
             Dictionary<int, double> balanceDict = new Dictionary<int, double>();
             var debtGoalTotals = new DebtGoalTotals();
 
-            debtList = debtList.OrderByDescending(x => x.InterestRate).ToList();
+            var orderedDebtList = OrderDebtAvalanche(debtList);
 
-            foreach (var debt in debtList)
+            var allocationRolloverMonth = 0;
+            var remainder = 0.0;
+            var paidOffDebtsMinimumPayments = 0.0;
+
+            foreach (var debt in orderedDebtList)
             {
                 var currentBalance = debt.CurrentBalance;
                 var interestRate = debt.InterestRate / 12;
                 var interestAccrued = 0.0;
 
                 var stepper = new BalanceStepUtility(currentBalance, interestRate);
-                var remainder = 0.0;
 
                 while(stepper.Balance > 0)
                 {
-                    var contribution = (debtGoal.AdditionalBudgetAllocation + debt.MinimumPayment);
+                    var contribution = debt.MinimumPayment;
+                    if(stepper.NumberOfSteps >= allocationRolloverMonth)
+                    {
+                        contribution += debtGoal.AdditionalBudgetAllocation;
+                        contribution += paidOffDebtsMinimumPayments;
+                    }
                     //if we carry over any contribution, use it and set remainder back to 0
                     if(remainder > 0)
                     {
@@ -84,19 +109,23 @@ namespace WhatIfBudget.Logic
                         remainder = 0.0;
                     }
                     //if we have more to contribute than what is left on the balance, carry over to next debt
-                    if (contribution > currentBalance)
+                    if (contribution > stepper.Balance)
                     {
-                        remainder = contribution - currentBalance;
-                        contribution = currentBalance;
+                        remainder = contribution - stepper.Balance;
+                        contribution = stepper.Balance;
                     }
                     
                     _ = stepper.Step(-1 * contribution);
-                    debtGoalTotals.TotalInterestAccrued += interestAccrued;
 
                     if (!balanceDict.ContainsKey(stepper.NumberOfSteps)) balanceDict.Add(stepper.NumberOfSteps, 0);
 
                     balanceDict[stepper.NumberOfSteps] += Math.Round(stepper.Balance, 2);
 
+                    if(balanceDict[stepper.NumberOfSteps] == 0.0)
+                    {
+                        allocationRolloverMonth = stepper.NumberOfSteps;
+                        paidOffDebtsMinimumPayments += debt.MinimumPayment;
+                    }
                 }
                 debtGoalTotals.TotalInterestAccrued += stepper.InterestAccumulated;
             }
