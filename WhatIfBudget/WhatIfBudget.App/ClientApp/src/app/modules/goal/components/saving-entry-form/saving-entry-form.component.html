@@ -6,6 +6,7 @@
                        [required]="true"
                        [(ngModel)]="model.currentBalance" name="currentBalance"
                        #amount="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
                        prefix="$">
         </p-inputNumber>
         <label for="currentBalance">Current Balance</label>
@@ -14,7 +15,8 @@
         <p-inputNumber id="targetBalance"
                        [required]="true"
                        [(ngModel)]="model.targetBalance" name="targetBalance"
-                       #amount="ngModel" class="w-100" styleClass="w-100"
+                       #targetBalance="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
                        prefix="$">
         </p-inputNumber>
         <label for="targetBalance">Target Balance</label>
@@ -25,7 +27,8 @@
         <p-inputNumber id="annualReturnRate_Percent"
                        [required]="true"
                        [(ngModel)]="model.annualReturnRate_Percent" name="annualReturnRate_Percent"
-                       #amount="ngModel" class="w-100" styleClass="w-100"
+                       #annualReturnRate_Percent="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
                        suffix="%">
         </p-inputNumber>
         <label for="annualReturnRate_Percent">Annual Rate of Return</label>

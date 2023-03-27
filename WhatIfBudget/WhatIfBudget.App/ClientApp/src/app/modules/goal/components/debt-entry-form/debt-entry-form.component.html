@@ -12,7 +12,7 @@
         <p-inputNumber id="currentBalance"
                        [required]="true"
                        [(ngModel)]="model.currentBalance" name="currentBalance"
-                       #amount="ngModel" class="w-100" styleClass="w-100"
+                       #currentBalance="ngModel" class="w-100" styleClass="w-100"
                        [minFractionDigits]="2" [maxFractionDigits]="2"
                        prefix="$">
         </p-inputNumber>
@@ -24,7 +24,7 @@
         <p-inputNumber id="interestRate"
                        [required]="true"
                        [(ngModel)]="model.interestRate" name="interestRate"
-                       #amount="ngModel" class="w-100" styleClass="w-100"
+                       #interestRate="ngModel" class="w-100" styleClass="w-100"
                        [minFractionDigits]="2" [maxFractionDigits]="2"
                        suffix="%">
         </p-inputNumber>
@@ -34,7 +34,7 @@
         <p-inputNumber id="minimumPayment"
                        [required]="true"
                        [(ngModel)]="model.minimumPayment" name="minimumPayment"
-                       #amount="ngModel" class="w-100" styleClass="w-100"
+                       #minimumPayment="ngModel" class="w-100" styleClass="w-100"
                        [minFractionDigits]="2" [maxFractionDigits]="2"
                        prefix="$">
         </p-inputNumber>
