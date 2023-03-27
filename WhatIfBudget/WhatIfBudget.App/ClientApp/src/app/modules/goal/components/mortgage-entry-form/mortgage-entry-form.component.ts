@@ -10,7 +10,6 @@ import { Mortgage } from '../../../../shared/models/mortgage';
   styleUrls: ['./mortgage-entry-form.component.scss']
 })
 export class MortgageEntryFormComponent implements OnInit {
-  @Output('added') added: EventEmitter<void> = new EventEmitter();
   @Output('updated') updated: EventEmitter<void> = new EventEmitter();
 
   @Input('mortgage') model: Mortgage = new Mortgage();
@@ -18,21 +17,14 @@ export class MortgageEntryFormComponent implements OnInit {
   constructor(private mortgageService: MortgageService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
+    this.mortgageService.getMortgageByGoalId(this.sharedService.budget.mortgageGoalId!).subscribe((res: Mortgage) => {
+      this.model = res;
+    })
   }
 
   onSubmit(event: NgForm): void {
-    let mortgage: Mortgage = event.value as Mortgage;
-    mortgage.id = this.model.id;
-    if (mortgage.id && mortgage.id > 0) {
-      this.mortgageService.updateMortgages(mortgage).subscribe((res: Mortgage) => {
-        this.updated.emit();
-        this.model = new Mortgage();
-      });
-    } else {
-      this.mortgageService.saveMortgages(mortgage).subscribe((res: Mortgage) => {
-        this.added.emit();
-        this.model = new Mortgage();
-      });
-    }
+    this.mortgageService.saveMortgages(this.model as Mortgage).subscribe((res: Mortgage) => {
+      this.updated.emit();
+    });
   }
 }
