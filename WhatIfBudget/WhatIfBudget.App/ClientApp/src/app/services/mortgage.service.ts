@@ -30,7 +30,7 @@ export class MortgageService {
 
   public getMortgageTotals(MortgageGoalId: number): Observable<MortgageTotals> {
     //this.sharedService.queueLoading('saveIncome');
-    return this.http.get<MortgageTotals>(environment.URL + `/api/investmentGoals/${MortgageGoalId}/totals`).pipe(
+    return this.http.get<MortgageTotals>(environment.URL + `/api/mortgageGoals/${MortgageGoalId}/totals`).pipe(
       retry(3),
       catchError((err, caught) => {
         this.handleError(err);
