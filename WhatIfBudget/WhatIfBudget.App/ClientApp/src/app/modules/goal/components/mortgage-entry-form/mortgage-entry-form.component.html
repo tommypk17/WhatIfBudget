@@ -6,6 +6,7 @@
                        [required]="true"
                        [(ngModel)]="model.totalBalance" name="totalBalance"
                        #totalBalance="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
                        prefix="$">
         </p-inputNumber>
         <label for="totalBalance">Remaining Balance</label>
@@ -15,6 +16,7 @@
                        [required]="true"
                        [(ngModel)]="model.interestRate_Percent" name="interestRate_Percent"
                        #interestRate_Percent="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
                        suffix="%">
         </p-inputNumber>
         <label for="interestRate_Percent">Annual Interest Rate</label>
@@ -26,6 +28,7 @@
                        [required]="true"
                        [(ngModel)]="model.monthlyPayment" name="monthlyPayment"
                        #monthlyPayment="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
                        prefix="$">
         </p-inputNumber>
         <label for="monthlyPayment">Monthly Payment</label>
@@ -35,6 +38,7 @@
                        [required]="true"
                        [(ngModel)]="model.estimatedCurrentValue" name="estimatedCurrentValue"
                        #estimatedCurrentValue="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
                        prefix="$">
         </p-inputNumber>
         <label for="estimatedCurrentValue">Estimate Property Value</label>
