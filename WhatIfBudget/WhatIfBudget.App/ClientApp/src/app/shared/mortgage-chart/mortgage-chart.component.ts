@@ -1,5 +1,7 @@
+import { KeyValue } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { MortgageService } from '../../services/mortgage.service';
+import { SharedService } from '../../services/shared.service';
 
 @Component({
   selector: 'app-mortgage-chart',
@@ -7,39 +9,53 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./mortgage-chart.component.scss']
 })
 export class MortgageChartComponent implements OnInit {
-
   basicData: any;
 
-  constructor(private messageService: MessageService) { }
+  constructor(private mortgageService: MortgageService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
+    let months: string[] = [];
+    let balances: number[] = [];
+    let principalPaid: number[] = [];
+    let interestPaid: number[] = [];
 
-    this.basicData = {
-      labels: ['0', '1', '2', '3', '4', '5'],
-      datasets: [
-        {
-          label: 'Balance',
-          data: [100, 85, 65, 40, 10, 0],
-          fill: false,
-          borderColor: 'blue',
-          tension: .4
-        },
-        {
-          label: 'Principal Paid',
-          data: [0, 15, 35, 60, 90, 100],
-          fill: false,
-          borderColor: 'red',
-          tension: .4
-        },
-        {
-          label: 'Interest Paid',
-          data: [0, 25, 45, 60, 70, 71],
-          fill: false,
-          borderColor: 'black',
-          tension: .4
-        }
-      ]
-    };
+    this.mortgageService.getMortgageAmortization(this.sharedService.budget.mortgageGoalId!).subscribe((res: KeyValue<number, number[]>[]) => {
+      if (res) {
+        res.forEach((v) => {
+          months.push('Year ' + v.key)
+          balances.push(v.value[0]);
+          principalPaid.push(v.value[1]);
+          interestPaid.push(v.value[2]);
+        });
+
+        this.basicData = {
+          labels: months,
+          datasets: [
+            {
+              label: 'Balance',
+              data: balances,
+              fill: false,
+              borderColor: 'blue',
+              tension: .4
+            },
+            {
+              label: 'Principal Paid',
+              data: principalPaid,
+              fill: false,
+              borderColor: 'red',
+              tension: .4
+            },
+            {
+              label: 'Interest Paid',
+              data: interestPaid,
+              fill: false,
+              borderColor: 'black',
+              tension: .4
+            }
+          ]
+        };
+      }
+    });
 
   }
 }

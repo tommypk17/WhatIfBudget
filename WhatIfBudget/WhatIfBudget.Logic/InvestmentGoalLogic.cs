@@ -53,22 +53,22 @@ namespace WhatIfBudget.Logic
             baseContribution += investmentList.Select(x => x.MonthlyPersonalContribution).Sum();
             baseContribution += investmentList.Select(x => x.MonthlyEmployerContribution).Sum();
 
-            while (investmentStepper.StepsCompleted() < investmentGoal.YearsToTarget * 12)
+            while (investmentStepper.NumberOfSteps < investmentGoal.YearsToTarget * 12)
             {
-                if (investmentStepper.StepsCompleted() % 12 == 0)
+                if (investmentStepper.NumberOfSteps % 12 == 0)
                 {
-                    balanceDict[investmentStepper.StepsCompleted() / 12] = investmentStepper.GetBalance();
+                    balanceDict[investmentStepper.NumberOfSteps / 12] = investmentStepper.Balance;
                 }
                 var iContribution = baseContribution; // + GetCompletedGoalContributions(investmentGoal, iMonth);
                 _ = investmentStepper.Step(iContribution);
                 _ = contributionStepper.Step(investmentGoal.AdditionalBudgetAllocation);
             }
             // Populate the last dict entry
-            balanceDict[investmentStepper.StepsCompleted() / 12] = investmentStepper.GetBalance();
+            balanceDict[investmentStepper.NumberOfSteps / 12] = investmentStepper.Balance;
 
-            investmentGoalTotals.BalanceAtTarget = investmentStepper.GetBalance();
-            investmentGoalTotals.TotalInterestAccrued = investmentStepper.GetAccumulatedInterest();
-            investmentGoalTotals.AddedDueToContribution = Math.Round(investmentGoalTotals.BalanceAtTarget - contributionStepper.GetBalance(),2); // TODO just do contribution stepper getbalance
+            investmentGoalTotals.BalanceAtTarget = investmentStepper.Balance;
+            investmentGoalTotals.TotalInterestAccrued = investmentStepper.InterestAccumulated;
+            investmentGoalTotals.AddedDueToContribution = Math.Round(investmentGoalTotals.BalanceAtTarget - contributionStepper.Balance,2);
             return (balanceDict, investmentGoalTotals);
         }
 

@@ -2,42 +2,46 @@
   <div class="d-flex flex-column">
     <div class="d-flex w-100 mb-1">
       <span class="p-float-label w-100 ml-1">
-        <p-inputNumber id="loanedAmount"
+        <p-inputNumber id="totalBalance"
                        [required]="true"
-                       [(ngModel)]="model.loanedAmount" name="loanedAmount"
-                       #amount="ngModel" class="w-100" styleClass="w-100"
+                       [(ngModel)]="model.totalBalance" name="totalBalance"
+                       #totalBalance="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
                        prefix="$">
         </p-inputNumber>
-        <label for="loanedAmount">Loaned Amount</label>
+        <label for="totalBalance">Remaining Balance</label>
       </span>
       <span class="p-float-label w-100 ml-1">
-        <p-inputNumber id="currentBalance"
+        <p-inputNumber id="interestRate_Percent"
                        [required]="true"
-                       [(ngModel)]="model.currentBalance" name="currentBalance"
-                       #amount="ngModel" class="w-100" styleClass="w-100"
-                       prefix="$">
+                       [(ngModel)]="model.interestRate_Percent" name="interestRate_Percent"
+                       #interestRate_Percent="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
+                       suffix="%">
         </p-inputNumber>
-        <label for="currentBalance">Current Balance</label>
+        <label for="interestRate_Percent">Annual Interest Rate</label>
       </span>
     </div>
     <div class="d-flex w-100 mt-1">
       <span class="p-float-label w-100 ml-1">
-        <p-inputNumber id="annualInterestRate"
+        <p-inputNumber id="monthlyPayment"
                        [required]="true"
-                       [(ngModel)]="model.annualInterestRate" name="annualInterestRate"
-                       #amount="ngModel" class="w-100" styleClass="w-100"
-                       suffix="%">
+                       [(ngModel)]="model.monthlyPayment" name="monthlyPayment"
+                       #monthlyPayment="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
+                       prefix="$">
         </p-inputNumber>
-        <label for="annualInterestRate">Annual Interest Rate</label>
+        <label for="monthlyPayment">Monthly Payment</label>
       </span>
       <span class="p-float-label w-100 ml-1">
-        <p-inputNumber id="loanDuration"
+        <p-inputNumber id="estimatedCurrentValue"
                        [required]="true"
-                       [(ngModel)]="model.loanDuration" name="loanDuration"
-                       #amount="ngModel" class="w-100" styleClass="w-100"
-                       suffix=" years">
+                       [(ngModel)]="model.estimatedCurrentValue" name="estimatedCurrentValue"
+                       #estimatedCurrentValue="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
+                       prefix="$">
         </p-inputNumber>
-        <label for="loanDuration">Loan Duration</label>
+        <label for="estimatedCurrentValue">Estimate Property Value</label>
       </span>
     </div>
   </div>

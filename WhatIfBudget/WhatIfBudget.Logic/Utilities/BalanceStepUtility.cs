@@ -8,58 +8,82 @@ namespace WhatIfBudget.Logic.Utilities
 {
     internal class BalanceStepUtility
     {
-        private double mBalance = 0;
-        private double mInterestRate = 0;
-        private double mInterestAccumulated = 0;
-        private double mCumulativeContribution = 0;
-        private int mNumberOfSteps = 0;
+        private double originalBalance = 0;
+        private double balance = 0;
+        private double interestAccumulated = 0;
+        private double cumulativeContribution = 0;
+
+        public double Balance 
+        {
+            get
+            {
+                return Math.Round(balance, 2);
+            }
+            set
+            {
+                balance = value;
+            }
+        }
+        public double InterestRate { get; set; } = 0;
+        public double InterestAccumulated 
+        { 
+            get
+            {
+                return Math.Round(interestAccumulated, 2);
+            }
+            set
+            {
+                interestAccumulated = value;
+            }
+        }
+        public double CumulativeContribution
+        {
+            get
+            {
+                return Math.Round(cumulativeContribution, 2);
+            }
+            set
+            {
+                cumulativeContribution = value;
+            }
+        }
+        public int NumberOfSteps { get; set; } = 0;
 
         public BalanceStepUtility(double startBalance, double interestRatePercent)
         {
-            mBalance = startBalance;
-            mInterestRate = interestRatePercent / 100;
+            originalBalance = startBalance;
+            Balance = startBalance;
+            InterestRate = interestRatePercent / 100;
         }
         public double Step(double contribution)
         {
-            if (mBalance + contribution <= 0)
+            if (Balance + contribution <= 0)
             {
-                contribution = -1 * mBalance;
+                contribution = -1 * Balance;
             }
-            mBalance += contribution;
-            mCumulativeContribution += Math.Abs(contribution);
-            var interestAccrued = Math.Round(mBalance * mInterestRate, 2);
-            mBalance += interestAccrued;
-            mInterestAccumulated += interestAccrued;
-            mNumberOfSteps++;
+            Balance += contribution;
+            CumulativeContribution += Math.Abs(contribution);
+            var interestAccrued = Math.Round(Balance * InterestRate, 2);
+            Balance += interestAccrued;
+            InterestAccumulated += interestAccrued;
+            NumberOfSteps++;
             return Math.Round(interestAccrued, 2);
         }
         public void StepToZero(double monthlyContribution)
         {
-            if (monthlyContribution <= 0)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-            while (mBalance > 0)
+            while (Balance > 0)
             {
                 Step(monthlyContribution);
             }
-            return;
         }
-        public double GetBalance()
+
+        public void Reset()
         {
-            return Math.Round(mBalance, 2);
-        }
-        public double GetAccumulatedInterest()
-        {
-            return Math.Round(mInterestAccumulated, 2);
-        }
-        public double GetTotalContributed()
-        {
-            return Math.Round(mCumulativeContribution, 2);
-        }
-        public int StepsCompleted()
-        {
-            return mNumberOfSteps;
+            Balance = originalBalance;
+            InterestRate = 0;
+            InterestAccumulated = 0;
+            CumulativeContribution = 0;
+            NumberOfSteps = 0;
         }
     }
 }

@@ -1,8 +1,10 @@
+import { KeyValue } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, finalize, Observable, retry } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Debt } from '../shared/models/debt';
+import { DebtGoal, DebtTotals } from '../shared/models/debt-goal';
 
 @Injectable({
   providedIn: 'root'
@@ -79,6 +81,69 @@ export class DebtService {
       catchError((err, caught) => {
         this.handleError(err);
         return new Observable<Debt[]>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
+  public getDebtGoalsByGoalId(debtGoalId: number): Observable<DebtGoal[]> {
+    //this.sharedService.queueLoading('saveIncome');
+    return this.http.get<DebtGoal[]>(environment.URL + `/api/DebtsGoals/${debtGoalId}`).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<DebtGoal[]>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
+  public updateDebtGoal(debtGoal: DebtGoal): Observable<DebtGoal> {
+    //this.sharedService.queueLoading('updateIncome');
+    return this.http.put<DebtGoal>(environment.URL + '/api/DebtGoals', debtGoal).pipe(
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<DebtGoal>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('updateIncome');
+      })
+    );
+  }
+
+  public getDebtGoalBalanceOverTime(debtGoalId: number): Observable<KeyValue<number, number>[]> {
+    //this.sharedService.queueLoading('saveIncome');
+    return this.http.get<KeyValue<number, number>[]>(environment.URL + `/api/DebtGoals/${debtGoalId}/BalanceOverTime`).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<KeyValue<number, number>[]>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
+  public getDebtTotals(debtGoalId: number): Observable<DebtTotals> {
+    //this.sharedService.queueLoading('saveIncome');
+    return this.http.get<DebtTotals>(environment.URL + `/api/DebtGoals/${debtGoalId}/totals`).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<DebtTotals>((subscriber) => {
           subscriber.next(undefined);
         })
       }),

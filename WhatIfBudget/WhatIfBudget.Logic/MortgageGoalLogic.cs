@@ -46,10 +46,10 @@ namespace WhatIfBudget.Logic
             balanceStepper.StepToZero(-1 * (res.MonthlyPayment + res.AdditionalBudgetAllocation));
             allocationStepper.StepToZero(-1 * res.MonthlyPayment);
 
-            MortgageGoalTotals.MonthsToPayoff = balanceStepper.StepsCompleted();
-            MortgageGoalTotals.TotalInterestAccrued = balanceStepper.GetAccumulatedInterest();
-            MortgageGoalTotals.TotalCostToPayoff = balanceStepper.GetTotalContributed();
-            MortgageGoalTotals.AllocationSavings = Math.Round(allocationStepper.GetTotalContributed() - balanceStepper.GetTotalContributed(), 2);
+            MortgageGoalTotals.MonthsToPayoff = balanceStepper.NumberOfSteps;
+            MortgageGoalTotals.TotalInterestAccrued = balanceStepper.InterestAccumulated;
+            MortgageGoalTotals.TotalCostToPayoff = balanceStepper.CumulativeContribution;
+            MortgageGoalTotals.AllocationSavings = Math.Round(allocationStepper.CumulativeContribution - balanceStepper.CumulativeContribution, 2);
             return MortgageGoalTotals;
         }
 
@@ -63,21 +63,21 @@ namespace WhatIfBudget.Logic
             var valueStepper = new BalanceStepUtility(res.EstimatedCurrentValue, 4.0 / 12);
 
             // Return Values
-            var netDict = new Dictionary<int, double> { { 0, valueStepper.GetBalance() - balanceStepper.GetBalance() } };
+            var netDict = new Dictionary<int, double> { { 0, valueStepper.Balance - balanceStepper.Balance } };
 
-            while (balanceStepper.GetBalance() > 0.0)
+            while (balanceStepper.Balance > 0.0)
             {
                 _ = balanceStepper.Step(-1 * (res.MonthlyPayment + res.AdditionalBudgetAllocation));
                 _ = valueStepper.Step(0.0);
-                if (balanceStepper.StepsCompleted() % 12 == 0)
+                if (balanceStepper.NumberOfSteps % 12 == 0)
                 {
-                    netDict[balanceStepper.StepsCompleted() / 12] = valueStepper.GetBalance() - balanceStepper.GetBalance();
+                    netDict[balanceStepper.NumberOfSteps / 12] = valueStepper.Balance - balanceStepper.Balance;
                 }
             }
             // Final dictionary entry is home value
-            var endYear = Math.Ceiling(balanceStepper.StepsCompleted() / 12.0);
-            netDict[(int)endYear] = valueStepper.GetBalance();
-            Console.WriteLine("Balance steps: {0} Value steps: {1}", balanceStepper.StepsCompleted(), valueStepper.StepsCompleted());
+            var endYear = Math.Ceiling(balanceStepper.NumberOfSteps / 12.0);
+            netDict[(int)endYear] = valueStepper.Balance;
+            Console.WriteLine("Balance steps: {0} Value steps: {1}", balanceStepper.NumberOfSteps, valueStepper.NumberOfSteps);
 
             return netDict;
         }
@@ -93,28 +93,28 @@ namespace WhatIfBudget.Logic
             // Return Values
             var amorDict = new Dictionary<int, List<double>>
             {
-                { 0, new List<double>() {stepper.GetBalance(), 0.0, 0.0 } }
+                { 0, new List<double>() {stepper.Balance, 0.0, 0.0 } }
             };
 
-            while (stepper.GetBalance() > 0.0)
+            while (stepper.Balance > 0.0)
             {
                  _ = stepper.Step(-1 * (res.MonthlyPayment + res.AdditionalBudgetAllocation));
-                if (stepper.StepsCompleted() % 12 == 0)
+                if (stepper.NumberOfSteps % 12 == 0)
                 {
-                    amorDict[stepper.StepsCompleted() / 12] = new List<double>()
+                    amorDict[stepper.NumberOfSteps / 12] = new List<double>()
                     {
-                        stepper.GetBalance(), // Balance
-                        stepper.GetTotalContributed() - stepper.GetAccumulatedInterest(), // Principle paid down so far
-                        stepper.GetAccumulatedInterest() // Interest paid so far
+                        stepper.Balance, // Balance
+                        stepper.CumulativeContribution - stepper.InterestAccumulated, // Principle paid down so far
+                        stepper.InterestAccumulated // Interest paid so far
                     };
                  }
             }
-            var endYear = Math.Ceiling(stepper.StepsCompleted() / 12.0);
+            var endYear = Math.Ceiling(stepper.NumberOfSteps / 12.0);
             amorDict[(int)endYear] = new List<double>()
                     {
-                        stepper.GetBalance(), // Balance
-                        stepper.GetTotalContributed() - stepper.GetAccumulatedInterest(), // Principle paid down so far
-                        stepper.GetAccumulatedInterest() // Interest paid so far
+                        stepper.Balance, // Balance
+                        stepper.CumulativeContribution - stepper.InterestAccumulated, // Principle paid down so far
+                        stepper.InterestAccumulated // Interest paid so far
                     };
 
             return amorDict;
