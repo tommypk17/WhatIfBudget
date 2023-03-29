@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { catchError, finalize, Observable, retry } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Debt } from '../shared/models/debt';
-import { DebtGoal } from '../shared/models/debt-goal';
+import { DebtGoal, DebtTotals } from '../shared/models/debt-goal';
 
 @Injectable({
   providedIn: 'root'
@@ -128,6 +128,22 @@ export class DebtService {
       catchError((err, caught) => {
         this.handleError(err);
         return new Observable<KeyValue<number, number>[]>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
+  public getDebtTotals(debtGoalId: number): Observable<DebtTotals> {
+    //this.sharedService.queueLoading('saveIncome');
+    return this.http.get<DebtTotals>(environment.URL + `/api/DebtGoals/${debtGoalId}/totals`).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<DebtTotals>((subscriber) => {
           subscriber.next(undefined);
         })
       }),
