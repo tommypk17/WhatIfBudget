@@ -5,4 +5,7 @@ export class DebtGoal {
 
 export class DebtTotals {
   monthsToPayoff: number | undefined;
+  totalInterestAccrued: number | undefined;
+  totalCostToPayoff: number | undefined;
+  allocationSavings: number | undefined;
 }
