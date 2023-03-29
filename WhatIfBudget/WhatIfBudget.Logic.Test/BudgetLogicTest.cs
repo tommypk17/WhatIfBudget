@@ -489,6 +489,87 @@ namespace WhatIfBudget.Logic.Test
 
             mockIL.Setup(x => x.GetBudgetMonthlyIncome(It.IsAny<int>())).Returns(3875.50);
             mockEL.Setup(x => x.GetBudgetMonthlyExpense(It.IsAny<int>())).Returns(2416.98);
+            mockBS.Setup(x => x.GetAllBudgets()).Returns(
+                (IList<Budget>)new List<Budget>()
+                {
+                    new Budget()
+                    {
+                        Id = 1,
+                        Name = "test",
+                        UserId = Guid.Empty,
+                        SavingGoalId = 1,
+                        DebtGoalId = 1,
+                        MortgageGoalId = 1,
+                        InvestmentGoalId = 1,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    },
+                    new Budget()
+                    {
+                        Id = 2,
+                        Name = "test2",
+                        UserId = Guid.Empty,
+                        SavingGoalId = 2,
+                        DebtGoalId = 2,
+                        MortgageGoalId = 2,
+                        InvestmentGoalId = 2,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    },
+                    new Budget()
+                    {
+                        Id = 3,
+                        Name = "test3",
+                        UserId = Guid.Empty,
+                        SavingGoalId = 3,
+                        DebtGoalId = 3,
+                        MortgageGoalId = 3,
+                        InvestmentGoalId = 3,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                });
+
+            mockSGS.Setup(x => x.GetSavingGoal(It.IsAny<int>())).Returns(
+                new SavingGoal()
+                {
+                    Id = 1,
+                    CurrentBalance = 500,
+                    TargetBalance = 5000,
+                    AnnualReturnRate_Percent = 2,
+                    AdditionalBudgetAllocation = 100,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                });
+            mockDGS.Setup(x => x.GetDebtGoal(It.IsAny<int>())).Returns(
+                new DebtGoal()
+                {
+                    Id = 1,
+                    AdditionalBudgetAllocation = 70,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                });
+            mockMGS.Setup(x => x.GetMortgageGoal(It.IsAny<int>())).Returns(
+                new MortgageGoal()
+                {
+                    Id = 1,
+                    TotalBalance = 200000,
+                    InterestRate_Percent = 5,
+                    MonthlyPayment = 1645.00,
+                    AdditionalBudgetAllocation = 85,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                });
+            mockIGS.Setup(x => x.GetInvestmentGoal(It.IsAny<int>())).Returns(
+                new InvestmentGoal()
+                {
+                    Id = 1,
+                    AnnualReturnRate_Percent = 10,
+                    YearsToTarget = 42,
+                    AdditionalBudgetAllocation = 125,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                });
 
             //==================================================================================
             var budgetLogic = new BudgetLogic(mockBS.Object, mockIS.Object,
@@ -499,12 +580,11 @@ namespace WhatIfBudget.Logic.Test
                                       mockSGS.Object, mockIL.Object,
                                               mockEL.Object
                                       );
-            var expected = 55.13;
+            var expected = 1078.52;
 
             var actual = budgetLogic.GetAvailableMonthlyNet(1);
 
             actual.Should().Be(expected);
-
         }
     }
 }

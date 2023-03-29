@@ -91,7 +91,7 @@ namespace WhatIfBudget.Logic
             var dbDebtGoal = _debtGoalService.GetDebtGoal(dbBudget.DebtGoalId);
             monthlyNet -= dbDebtGoal.AdditionalBudgetAllocation;
 
-            var dbMortgageGoal = dbBudget.MortgageGoal;
+            var dbMortgageGoal = _mortgageGoalService.GetMortgageGoal(dbBudget.MortgageGoalId);
             monthlyNet -= dbMortgageGoal.AdditionalBudgetAllocation;
 
             var dbInvestmentGoal = _investmentGoalService.GetInvestmentGoal(dbBudget.InvestmentGoalId);
