@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MsalBroadcastService } from '@azure/msal-angular';
-import { EventMessage, EventType } from '@azure/msal-browser';
+import { EventMessage, EventType, InteractionStatus } from '@azure/msal-browser';
 import { filter } from 'rxjs';
 import { SharedService } from './services/shared.service';
 
@@ -12,6 +12,7 @@ import { SharedService } from './services/shared.service';
 })
 export class AppComponent {
   title = 'WhatIfBudget';
+  loginComplete: boolean = false;
 
   constructor(private sharedService: SharedService, private msalBroadcastService: MsalBroadcastService, private router: Router) {}
 
@@ -27,6 +28,14 @@ export class AppComponent {
           sessionStorage.removeItem('afterLogin');
           this.router.navigate([redirect]);
         }
+      });
+
+    this.msalBroadcastService.inProgress$
+      .pipe(
+        filter((status: InteractionStatus) => status === InteractionStatus.None)
+      )
+      .subscribe(() => {
+        this.loginComplete = true;
       });
   }
 }
