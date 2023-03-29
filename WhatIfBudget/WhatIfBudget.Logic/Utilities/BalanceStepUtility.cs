@@ -35,6 +35,10 @@ namespace WhatIfBudget.Logic.Utilities
         }
         public void StepToZero(double monthlyContribution)
         {
+            if (monthlyContribution <= 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
             while (mBalance > 0)
             {
                 Step(monthlyContribution);

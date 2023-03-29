@@ -24,6 +24,9 @@ namespace WhatIfBudget.Logic
         private readonly ISavingGoalService _savingGoalService;
         private readonly IDebtGoalService _debtGoalService;
         private readonly IMortgageGoalService _mortgageGoalService;
+
+        private readonly IIncomeLogic _incomeLogic;
+        private readonly IExpenseLogic _expenseLogic;
         
         public BudgetLogic(IBudgetService budgetService,
                            IIncomeService incomeService,
@@ -35,7 +38,9 @@ namespace WhatIfBudget.Logic
                            IInvestmentGoalInvestmentService investmentGoalInvestmentService,
                            IMortgageGoalService mortgageGoalService,
                            IDebtGoalService debtGoalService,
-                           ISavingGoalService savingGoalService) { 
+                           ISavingGoalService savingGoalService,
+                           IIncomeLogic incomeLogic,
+                           IExpenseLogic expenseLogic) { 
             _budgetService = budgetService;
             _incomeService = incomeService;
             _expenseService = expenseService;
@@ -47,6 +52,8 @@ namespace WhatIfBudget.Logic
             _savingGoalService = savingGoalService;
             _debtGoalService = debtGoalService;
             _mortgageGoalService = mortgageGoalService;
+            _incomeLogic = incomeLogic;
+            _expenseLogic = expenseLogic;
         }
 
         public IList<UserBudget> GetUserBudgets(Guid userId)
@@ -67,20 +74,31 @@ namespace WhatIfBudget.Logic
             else { return dbBudget; }
         }
 
-        public double GetSumOfGoalAllocations(int budgetId)
+        public double GetAvailableMonthlyNet(int budgetId)
         {
+            // Get net of user-entered incomes and expenses
+            var monthlyNet = _incomeLogic.GetBudgetMonthlyIncome(budgetId);
+            monthlyNet -= _expenseLogic.GetBudgetMonthlyExpense(budgetId);
+
             var dbBudget = _budgetService.GetAllBudgets().Where(x => x.Id == budgetId).FirstOrDefault();
             if (dbBudget == null) { throw new NullReferenceException(); }
 
-            // TODO: complete this as other goal services are fleshed out.
+            // Subtract existing goal allocations
+            var dbSavingGoal = _savingGoalService.GetSavingGoal(dbBudget.SavingGoalId);
+            if (dbSavingGoal == null) { throw new NullReferenceException(); }
+            monthlyNet -= dbSavingGoal.AdditionalBudgetAllocation;
+
+            var dbDebtGoal = _debtGoalService.GetDebtGoal(dbBudget.DebtGoalId);
+            monthlyNet -= dbDebtGoal.AdditionalBudgetAllocation;
+
+            var dbMortgageGoal = dbBudget.MortgageGoal;
+            monthlyNet -= dbMortgageGoal.AdditionalBudgetAllocation;
 
             var dbInvestmentGoal = _investmentGoalService.GetInvestmentGoal(dbBudget.InvestmentGoalId);
             if (dbInvestmentGoal == null) { throw new NullReferenceException(); }
+            monthlyNet -= dbInvestmentGoal.AdditionalBudgetAllocation;
 
-            var dbSavingGoal = _savingGoalService.GetSavingGoal(dbBudget.SavingGoalId);
-            if (dbSavingGoal == null) { throw new NullReferenceException(); }
-
-            return dbInvestmentGoal.AdditionalBudgetAllocation + dbSavingGoal.AdditionalBudgetAllocation;
+            return monthlyNet;
         }
 
         public UserBudget? CreateUserBudget(Guid userId, UserBudget budget)

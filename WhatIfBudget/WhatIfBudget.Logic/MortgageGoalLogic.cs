@@ -43,17 +43,9 @@ namespace WhatIfBudget.Logic
             var MortgageGoalTotals = new MortgageGoalTotals();
 
             // Allocation stepper will always equal or lag balance stepper
-            while (allocationStepper.GetBalance() > 0.0)
-            {
-                if (balanceStepper.GetBalance() > 0.0)
-                {
-                    _ = balanceStepper.Step(-1 * (res.MonthlyPayment + res.AdditionalBudgetAllocation));
-                }
-                if (allocationStepper.GetBalance() > 0.0)
-                {
-                    _ = allocationStepper.Step(-1 * res.MonthlyPayment);
-                }
-            }
+            balanceStepper.StepToZero(-1 * (res.MonthlyPayment + res.AdditionalBudgetAllocation));
+            allocationStepper.StepToZero(-1 * res.MonthlyPayment);
+
             MortgageGoalTotals.MonthsToPayoff = balanceStepper.StepsCompleted();
             MortgageGoalTotals.TotalInterestAccrued = balanceStepper.GetAccumulatedInterest();
             MortgageGoalTotals.TotalCostToPayoff = balanceStepper.GetTotalContributed();

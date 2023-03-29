@@ -68,7 +68,7 @@ namespace WhatIfBudget.Logic
 
             investmentGoalTotals.BalanceAtTarget = investmentStepper.GetBalance();
             investmentGoalTotals.TotalInterestAccrued = investmentStepper.GetAccumulatedInterest();
-            investmentGoalTotals.AddedDueToContribution = Math.Round(investmentGoalTotals.BalanceAtTarget - contributionStepper.GetBalance(),2);
+            investmentGoalTotals.AddedDueToContribution = Math.Round(investmentGoalTotals.BalanceAtTarget - contributionStepper.GetBalance(),2); // TODO just do contribution stepper getbalance
             return (balanceDict, investmentGoalTotals);
         }
 
