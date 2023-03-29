@@ -12,6 +12,7 @@ namespace WhatIfBudget.Logic.Interfaces
         public UserDebtGoal? GetDebtGoal(int debtGoalId);
         public UserDebtGoal? ModifyUserDebtGoal(UserDebtGoal investmentGoal);
         public Dictionary<int, double> GetBalanceOverTime(int debtGoalId);
+        public DebtGoalTotals GetDebtTotals(int debtGoalId);
 
     }
 }

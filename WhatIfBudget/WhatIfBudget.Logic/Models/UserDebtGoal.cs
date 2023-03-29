@@ -31,6 +31,9 @@ namespace WhatIfBudget.Logic.Models
     public class DebtGoalTotals
     {
         public double TotalInterestAccrued { get; set; } = 0;
-        public double AddedDueToContribution { get; set; } = 0;
+        public double AllocationSavings { get; set; } = 0;
+        public int MonthsToPayoff { get; set; } = 0;
+        public double TotalCostToPayoff { get; set; } = 0;
+
     }
 }

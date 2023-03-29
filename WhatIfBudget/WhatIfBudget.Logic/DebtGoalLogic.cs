@@ -85,6 +85,8 @@ namespace WhatIfBudget.Logic
             var allocationRolloverMonth = 0;
             var remainder = 0.0;
             var paidOffDebtsMinimumPayments = 0.0;
+            var totalMonths = 0;
+            var totalCost = 0.0;
 
             foreach (var debt in orderedDebtList)
             {
@@ -92,12 +94,13 @@ namespace WhatIfBudget.Logic
                 var interestRate = debt.InterestRate / 12;
                 var interestAccrued = 0.0;
 
-                var stepper = new BalanceStepUtility(currentBalance, interestRate);
+                var balanceStepper = new BalanceStepUtility(currentBalance, interestRate);
+                var allocationStepper = new BalanceStepUtility(currentBalance, interestRate);
 
-                while(stepper.Balance > 0)
+                while(balanceStepper.Balance > 0)
                 {
                     var contribution = debt.MinimumPayment;
-                    if(stepper.NumberOfSteps >= allocationRolloverMonth)
+                    if(balanceStepper.NumberOfSteps >= allocationRolloverMonth)
                     {
                         contribution += debtGoal.AdditionalBudgetAllocation;
                         contribution += paidOffDebtsMinimumPayments;
@@ -109,27 +112,44 @@ namespace WhatIfBudget.Logic
                         remainder = 0.0;
                     }
                     //if we have more to contribute than what is left on the balance, carry over to next debt
-                    if (contribution > stepper.Balance)
+                    if (contribution > balanceStepper.Balance)
                     {
-                        remainder = contribution - stepper.Balance;
-                        contribution = stepper.Balance;
+                        remainder = contribution - balanceStepper.Balance;
+                        contribution = balanceStepper.Balance;
                     }
                     
-                    _ = stepper.Step(-1 * contribution);
+                    _ = balanceStepper.Step(-1 * contribution);
+                    _ = allocationStepper.Step(-1 * (contribution - debtGoal.AdditionalBudgetAllocation));
 
-                    if (!balanceDict.ContainsKey(stepper.NumberOfSteps)) balanceDict.Add(stepper.NumberOfSteps, 0);
+                    if (!balanceDict.ContainsKey(balanceStepper.NumberOfSteps)) balanceDict.Add(balanceStepper.NumberOfSteps, 0);
 
-                    balanceDict[stepper.NumberOfSteps] += Math.Round(stepper.Balance, 2);
+                    balanceDict[balanceStepper.NumberOfSteps] += Math.Round(balanceStepper.Balance, 2);
+                    
+                    totalCost += contribution;
 
-                    if(balanceDict[stepper.NumberOfSteps] == 0.0)
+                    if (balanceDict[balanceStepper.NumberOfSteps] == 0.0)
                     {
-                        allocationRolloverMonth = stepper.NumberOfSteps;
+                        allocationRolloverMonth = balanceStepper.NumberOfSteps;
                         paidOffDebtsMinimumPayments += debt.MinimumPayment;
                     }
                 }
-                debtGoalTotals.TotalInterestAccrued += stepper.InterestAccumulated;
+                debtGoalTotals.TotalInterestAccrued += balanceStepper.InterestAccumulated;
+                if(totalMonths < balanceStepper.NumberOfSteps) totalMonths = balanceStepper.NumberOfSteps;
+
+                debtGoalTotals.AllocationSavings += Math.Round(allocationStepper.CumulativeContribution - balanceStepper.CumulativeContribution, 2);
             }
+            debtGoalTotals.MonthsToPayoff = totalMonths;
+            debtGoalTotals.TotalCostToPayoff = totalCost;
             return (balanceDict, debtGoalTotals);
+        }
+
+        public DebtGoalTotals GetDebtTotals(int debtGoalId)
+        {
+            var dbDebtGoal = _debtGoalService.GetDebtGoal(debtGoalId);
+            if (dbDebtGoal is null) { throw new NullReferenceException(); }
+            UserDebtGoal debtGoal = UserDebtGoal.FromDebtGoal(dbDebtGoal);
+            (_, var totals) = CalculateBalanceOverTime(debtGoal);
+            return totals;
         }
     }
 }
