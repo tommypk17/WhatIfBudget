@@ -24,6 +24,17 @@ export class DebtComponent implements OnInit {
     this.debtService.getDebtsByGoalId(this.sharedService.budget.debtGoalId ?? 0).subscribe((res: Debt[]) => {
       if (res) this.debts = res;
     });
+    this.updateDebtTotals();
+  }
+
+  updateDebts(): void {
+    this.debtService.getDebtsByGoalId(this.sharedService.budget.debtGoalId ?? 0).subscribe((res: Debt[]) => {
+      if (res) this.debts = res;
+    });
+    this.updateDebtTotals();
+  }
+
+  updateDebtTotals(): void {
     this.debtService.getDebtTotals(this.sharedService.budget.debtGoalId!).subscribe((res: DebtTotals) => {
       let totalMonths = res.monthsToPayoff ?? 0;
       this.totalDebtCost = res.totalCostToPayoff ?? 0;
@@ -39,11 +50,5 @@ export class DebtComponent implements OnInit {
         this.totalDebtMonths = months;
       }
     })
-  }
-
-  updateDebts(): void {
-    this.debtService.getDebtsByGoalId(this.sharedService.budget.debtGoalId ?? 0).subscribe((res: Debt[]) => {
-      if (res) this.debts = res;
-    });
   }
 }

@@ -18,6 +18,14 @@ export class MortgageComponent implements OnInit {
   constructor(private mortgageService: MortgageService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
+    this.updateMortgageTotals();
+  }
+
+  updateMortgage(): void {
+    this.updateMortgageTotals();
+  }
+
+  updateMortgageTotals(): void {
     this.mortgageService.getMortgageTotals(this.sharedService.budget.mortgageGoalId!).subscribe((res: MortgageTotals) => {
       this.totalMortgageCost = res.totalCostToPayoff ?? 0;
       this.totalMortgageInterestCost = res.totalInterestAccrued ?? 0;
@@ -29,7 +37,7 @@ export class MortgageComponent implements OnInit {
       if (years) {
         this.totalMortgageYears = years;
       }
-      if(months) {
+      if (months) {
         this.totalMortgageMonths = months;
       }
     })
