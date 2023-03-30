@@ -14,7 +14,7 @@ export class GoalNavigationComponent implements OnInit {
 
   ngOnInit() {
     this.items = [
-      { label: 'Summary', icon: 'pi pi-fw pi-home', routerLink: ['','goals', 'summary'] },
+      { label: 'Summary', icon: 'pi pi-fw pi-chart-line', routerLink: ['','goals', 'summary'] },
       { label: 'Savings', icon: 'pi pi-fw pi-calendar', routerLink: ['', 'goals', 'savings'] },
       { label: 'Debts', icon: 'pi pi-fw pi-pencil', routerLink: '/goals/debts' },
       { label: 'Mortgages', icon: 'pi pi-fw pi-file', routerLink: '/goals/mortgages' },
