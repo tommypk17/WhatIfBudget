@@ -57,6 +57,46 @@ namespace WhatIfBudget.API.Test
         }
 
         [TestMethod]
+        public void Get_ExpensesByBudgetId()
+        {
+            //mock income logic
+            var mockExpenseLogic = new Mock<IExpenseLogic>();
+            mockExpenseLogic.Setup(x => x.GetBudgetExpenses(It.IsAny<int>())).Returns(new List<UserExpense>()
+                {
+                    new UserExpense() { Id = 1, Amount = 100, Frequency = 0, Priority = EPriority.Want },
+                    new UserExpense() { Id = 2, Amount = 100, Frequency = 0, Priority = EPriority.Want },
+                    new UserExpense() { Id = 3, Amount = 100, Frequency = 0, Priority = EPriority.Need },
+                }
+            );
+
+            //Setup the http context (for auth)
+            var expenseController = new ExpensesController(mockExpenseLogic.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new List<UserExpense>()
+                    {
+                    new UserExpense() { Id = 1, Amount = 100, Frequency = 0, Priority = EPriority.Want },
+                    new UserExpense() { Id = 2, Amount = 100, Frequency = 0, Priority = EPriority.Want },
+                    new UserExpense() { Id = 3, Amount = 100, Frequency = 0, Priority = EPriority.Need },
+                    };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = expenseController.Get(1);
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
         public void Get_BudgetMonthlyExpense()
         {
             //mock expense logic

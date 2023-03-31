@@ -1,6 +1,5 @@
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using WhatIfBudget.Common.Enumerations;
 using WhatIfBudget.Data.DAL;
 using WhatIfBudget.Data.Models;

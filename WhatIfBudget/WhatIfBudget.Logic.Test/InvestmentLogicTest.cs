@@ -99,6 +99,67 @@ namespace WhatIfBudget.Logic.Test
         }
 
         [TestMethod]
+        public void GetInvestmentsByGoalId_CollectionAreEqual()
+        {
+            var mockIS = new Mock<IInvestmentService>();
+            var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
+
+            mockIS.Setup(x => x.GetInvestmentsByInvestmentGoalId(It.IsAny<int>())).Returns(
+                (IList<Investment>)new List<Investment>()
+                {
+                    new Investment()
+                    {
+                        Id = 1,
+                        Name = "test",
+                        CurrentBalance = 0,
+                        MonthlyEmployerContribution = 0,
+                        MonthlyPersonalContribution = 0,
+                        UserId = Guid.Empty,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    },
+                    new Investment()
+                    {
+                        Id = 2,
+                        Name = "test2",
+                        CurrentBalance = 0,
+                        MonthlyEmployerContribution = 0,
+                        MonthlyPersonalContribution = 0,
+                        UserId = Guid.Empty,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                });
+
+
+            var investmentLogic = new InvestmentLogic(mockIS.Object, mockIGIS.Object);
+
+            var expected = new List<UserInvestment>()
+            {
+                new UserInvestment() {
+                    Id = 1,
+                    Name = "test",
+                    GoalId = 1,
+                    CurrentBalance = 0,
+                    MonthlyPersonalContribution = 0,
+                    MonthlyEmployerContribution = 0
+                },
+                new UserInvestment() {
+                    Id = 2,
+                    Name = "test2",
+                    GoalId = 1,
+                    CurrentBalance = 0,
+                    MonthlyPersonalContribution = 0,
+                    MonthlyEmployerContribution = 0
+                }
+            };
+
+            var actual = investmentLogic.GetUserInvestmentsByGoalId(1);
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
         public void AddUserInvestment_CollectionAreEqual()
         {
             var mock = new Mock<IInvestmentService>();

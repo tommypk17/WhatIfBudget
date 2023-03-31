@@ -29,17 +29,14 @@ namespace WhatIfBudget.Logic
                                     .ToList();
         }
 
-        public IList<UserInvestment> GetUserInvestmentsByGoalId(Guid userId, int goalId)
+        public IList<UserInvestment> GetUserInvestmentsByGoalId( int goalId)
         {
-            var investmentGoalInvestments = _igiService.GetAllInvestmentGoalInvestments()
-                                                                        .Where(x => x.InvestmentGoalId == goalId)
-                                                                        .Select(x => x.InvestmentId).ToList();
-            if (investmentGoalInvestments.Any())
+            var investments = _investmentService.GetInvestmentsByInvestmentGoalId(goalId)
+                                .Select(x => UserInvestment.FromInvestment(x, goalId))
+                                .ToList();
+            if (investments.Any())
             {
-                return _investmentService.GetAllInvestments()
-                                        .Where(x => investmentGoalInvestments.Contains(x.Id))
-                                        .Select(x => UserInvestment.FromInvestment(x, goalId))
-                                        .ToList();
+                return investments;
             }
             else
             {
