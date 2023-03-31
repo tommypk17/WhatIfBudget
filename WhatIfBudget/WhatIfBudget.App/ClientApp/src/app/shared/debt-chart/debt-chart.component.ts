@@ -19,10 +19,24 @@ export class DebtChartComponent implements OnInit {
 
     this.debtService.getDebtGoalBalanceOverTime(this.sharedService.budget.debtGoalId!).subscribe((res: KeyValue<number, number>[]) => {
       if (res) {
-        res.forEach((v) => {
-          months.push('Year ' + v.key)
-          balances.push(v.value);
-        });
+        if (res.length > 12) {
+          res.forEach((v, i) => {
+            if (v.key % 12 == 0) {
+              months.push('Year ' + v.key / 12)
+              balances.push(v.value);
+            } else {
+              if (i == res.length - 1) {
+                months.push('Year ' + (v.key / 12).toFixed(2))
+                balances.push(v.value);
+              }
+            }
+          });
+        } else {
+          res.forEach((v) => {
+            months.push('Month ' + v.key)
+            balances.push(v.value);
+          });
+        }
 
         this.basicData = {
           labels: months,

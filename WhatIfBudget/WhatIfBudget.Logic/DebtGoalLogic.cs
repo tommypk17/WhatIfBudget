@@ -88,6 +88,8 @@ namespace WhatIfBudget.Logic
             var totalMonths = 0;
             var totalCost = 0.0;
 
+            balanceDict.Add(0, 0.0);
+
             foreach (var debt in orderedDebtList)
             {
                 var currentBalance = debt.CurrentBalance;
@@ -97,7 +99,8 @@ namespace WhatIfBudget.Logic
                 var balanceStepper = new BalanceStepUtility(currentBalance, interestRate);
                 var allocationStepper = new BalanceStepUtility(currentBalance, interestRate);
 
-                while(balanceStepper.Balance > 0)
+                balanceDict[0] += debt.CurrentBalance;
+                while (balanceStepper.Balance > 0)
                 {
                     var contribution = debt.MinimumPayment;
                     if(balanceStepper.NumberOfSteps >= allocationRolloverMonth)
