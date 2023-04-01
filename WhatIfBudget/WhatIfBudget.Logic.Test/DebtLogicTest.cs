@@ -216,5 +216,135 @@ namespace WhatIfBudget.Logic.Test
 
             actual.Should().BeEquivalentTo(expected);
         }
+        [TestMethod]
+        public void Get_DebtTotals()
+        {
+            var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+
+            mockDGS.Setup(x => x.GetDebtGoal(It.IsAny<int>())).Returns(
+                new DebtGoal()
+                {
+                    Id = 1,
+                    AdditionalBudgetAllocation = 540.0,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                }
+                );
+            mockDS.Setup(x => x.GetDebtsByDebtGoalId(It.IsAny<int>())).Returns(
+                (IList<Debt>)new List<Debt>()
+                {
+                    new Debt()
+                    {
+                        Id = 1,
+                        Name = "test",
+                        CurrentBalance = 10000.0,
+                        InterestRate = 1.0f,
+                        MinimumPayment = 15.0,
+                        UserId = Guid.Empty,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    },
+                    new Debt()
+                    {
+                        Id = 2,
+                        Name = "test2",
+                        CurrentBalance = 1000.0,
+                        InterestRate = 1.5f,
+                        MinimumPayment = 10.0,
+                        UserId = Guid.Empty,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                });
+
+            var debtGoalLogic = new DebtGoalLogic(mockDGS.Object, mockDS.Object);
+
+            var expected = new DebtGoalTotals()
+            {
+                AllocationSavings = 563.64,
+                TotalCostToPayoff = 11081.82,
+                MonthsToPayoff = 20,
+                TotalInterestAccrued = 81.82
+            };
+
+            var actual = debtGoalLogic.GetDebtTotals(1);
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void DebtBalanceOverTime()
+        {
+            var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+
+            mockDGS.Setup(x => x.GetDebtGoal(It.IsAny<int>())).Returns(
+                new DebtGoal()
+                {
+                    Id = 1,
+                    AdditionalBudgetAllocation = 540.0,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                }
+                );
+            mockDS.Setup(x => x.GetDebtsByDebtGoalId(It.IsAny<int>())).Returns(
+                (IList<Debt>)new List<Debt>()
+                {
+                    new Debt()
+                    {
+                        Id = 1,
+                        Name = "test",
+                        CurrentBalance = 10000.0,
+                        InterestRate = 1.0f,
+                        MinimumPayment = 15.0,
+                        UserId = Guid.Empty,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    },
+                    new Debt()
+                    {
+                        Id = 2,
+                        Name = "test2",
+                        CurrentBalance = 1000.0,
+                        InterestRate = 1.5f,
+                        MinimumPayment = 10.0,
+                        UserId = Guid.Empty,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                });
+
+            var debtGoalLogic = new DebtGoalLogic(mockDGS.Object, mockDS.Object);
+
+            var expected = new Dictionary<int, double>
+            {
+                { 0, 11000.00 },
+                { 1, 9970.09 },
+                { 2, 9413.13 },
+                { 3, 8855.71 },
+                { 4, 8297.82 },
+                { 5, 7739.46 },
+                { 6, 7180.64 },
+                { 7, 6621.35 },
+                { 8, 6061.58 },
+                { 9, 5501.34 },
+                { 10, 4940.63 },
+                { 11, 4379.45 },
+                { 12, 3817.80 },
+                { 13, 3255.67 },
+                { 14, 2693.07 },
+                { 15, 2130.00 },
+                { 16, 1566.46 },
+                { 17, 1002.45 },
+                { 18, 437.96 },
+                { 19, 346.82 },
+                { 20, 0.0 },
+            };
+
+            var actual = debtGoalLogic.GetBalanceOverTime(1);
+
+            actual.Should().BeEquivalentTo(expected);
+        }
     }
 }

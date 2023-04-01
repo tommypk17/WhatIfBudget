@@ -127,7 +127,8 @@ namespace WhatIfBudget.Logic
                     if (!balanceDict.ContainsKey(balanceStepper.NumberOfSteps)) balanceDict.Add(balanceStepper.NumberOfSteps, 0);
 
                     balanceDict[balanceStepper.NumberOfSteps] += Math.Round(balanceStepper.Balance, 2);
-                    
+                    balanceDict[balanceStepper.NumberOfSteps] = Math.Round(balanceDict[balanceStepper.NumberOfSteps], 2);
+
                     totalCost += contribution;
 
                     if (balanceDict[balanceStepper.NumberOfSteps] == 0.0)
@@ -139,10 +140,12 @@ namespace WhatIfBudget.Logic
                 debtGoalTotals.TotalInterestAccrued += balanceStepper.InterestAccumulated;
                 if(totalMonths < balanceStepper.NumberOfSteps) totalMonths = balanceStepper.NumberOfSteps;
 
-                debtGoalTotals.AllocationSavings += Math.Round(allocationStepper.CumulativeContribution - balanceStepper.CumulativeContribution, 2);
+                debtGoalTotals.AllocationSavings += balanceStepper.CumulativeContribution - allocationStepper.CumulativeContribution;
             }
             debtGoalTotals.MonthsToPayoff = totalMonths;
-            debtGoalTotals.TotalCostToPayoff = totalCost;
+            debtGoalTotals.TotalInterestAccrued = Math.Round(debtGoalTotals.TotalInterestAccrued, 2);
+            debtGoalTotals.TotalCostToPayoff = Math.Round(totalCost, 2);
+            debtGoalTotals.AllocationSavings = Math.Round(debtGoalTotals.AllocationSavings, 2);
             return (balanceDict, debtGoalTotals);
         }
 
