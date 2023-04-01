@@ -155,20 +155,18 @@ namespace WhatIfBudget.Logic
 
         public UserExpense? DeleteBudgetExpense(int expenseId, int budgetId)
         {
-            // De-associate expense element from current budget
-            var idToDelete = _budgetExpenseService.GetAllBudgetExpenses()
-                .Where(x => x.ExpenseId == expenseId && x.BudgetId == budgetId)
-                .Select(x => x.Id)
-                .FirstOrDefault();
-            var dbBudgetExpense = _budgetExpenseService.DeleteBudgetExpense(idToDelete);
-            if (dbBudgetExpense == null)
-            {
-                throw new NullReferenceException();
-            }
+            // Get all instances of this expense being used
+            var beList = _budgetExpenseService.GetAllBudgetExpenses()
+                .Where(x => x.ExpenseId == expenseId)
+                .ToList();
+            // Remove this budget expense from the database
+            var thisBE = beList.Where(x => x.BudgetId == budgetId).FirstOrDefault();
+            if (thisBE == null) { throw new NullReferenceException() ; }
+            var dbBudgetExpense = _budgetExpenseService.DeleteBudgetExpense(thisBE.Id);
+            if (dbBudgetExpense == null) { throw new NullReferenceException(); }
             // Delete expense element if it is not associated with any other budget Id
-            if (!_budgetExpenseService.GetAllBudgetExpenses()
-                    .Where(x => x.ExpenseId == expenseId)
-                    .Any())
+            beList.Remove(thisBE);
+            if (!beList.Where(x => x.ExpenseId == expenseId).Any())
             {
                 var dbDeleteExpense = _expenseService.DeleteExpense(dbBudgetExpense.ExpenseId);
                 if (dbDeleteExpense == null)
