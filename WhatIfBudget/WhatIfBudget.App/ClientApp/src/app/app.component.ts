@@ -35,7 +35,9 @@ export class AppComponent {
         filter((status: InteractionStatus) => status === InteractionStatus.None)
       )
       .subscribe(() => {
-        this.loginComplete = true;
+        if (this.sharedService.loggedIn) {
+          this.loginComplete = true;
+        }
       });
   }
 }
