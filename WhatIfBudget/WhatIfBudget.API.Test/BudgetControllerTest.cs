@@ -144,6 +144,34 @@ namespace WhatIfBudget.API.Test
         }
 
         [TestMethod]
+        public void Get_AvailableMonthlyNet()
+        {
+            //mock budget logic
+            var mockBL = new Mock<IBudgetLogic>();
+            mockBL.Setup(x => x.GetAvailableMonthlyNet(It.IsAny<int>())).Returns(1234.56);
+
+            //Setup the http context (for auth)
+            var budgetController = new BudgetsController(mockBL.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = 1234.56;
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = budgetController.GetAvailableMonthlyNet(2);
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+        [TestMethod]
         public void Post_UserBudgetCreated()
         {
             //mock investment logic

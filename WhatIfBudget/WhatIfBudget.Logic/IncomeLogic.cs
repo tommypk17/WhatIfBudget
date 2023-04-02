@@ -34,24 +34,14 @@ namespace WhatIfBudget.Logic
 
         public IList<UserIncome> GetBudgetIncomes(int budgetId)
         {
-            var budgetIncomeIdList = _budgetIncomeService.GetAllBudgetIncomes()
-                .Where(x => x.BudgetId == budgetId)
-                .Select(x => x.IncomeId)
+            return _incomeService.GetIncomesByBudgetId(budgetId)
+                .Select(x => UserIncome.FromIncome(x, budgetId))
                 .ToList();
-
-            return _incomeService.GetAllIncomes().Where(x => budgetIncomeIdList.Contains(x.Id))
-                                                .Select(x => UserIncome.FromIncome(x, budgetId))
-                                                .ToList();
         }
 
         public double GetBudgetMonthlyIncome(int budgetId)
         {
-            var incomeIdList = _budgetIncomeService.GetAllBudgetIncomes()
-                .Where(x => x.BudgetId == budgetId)
-                .Select(x => x.IncomeId)
-                .ToList();
-            var incomeList = _incomeService.GetAllIncomes()
-                .Where(x => incomeIdList.Contains(x.Id))
+            var incomeList = _incomeService.GetIncomesByBudgetId(budgetId)
                 .Select(x => UserIncome.FromIncome(x, budgetId))
                 .ToList();
 

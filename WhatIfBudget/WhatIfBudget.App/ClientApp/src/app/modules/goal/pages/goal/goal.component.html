@@ -1,16 +1,38 @@
 <app-goal-navigation></app-goal-navigation>
-<div class="d-flex justify-content-between">
-  <div class="flex-column w-100 m-2">
-    <p-card styleClass="m-2" class="mb-2" header="Short Term Savings Allocation"></p-card>
-    <p-card styleClass="m-2" class="mb-2" header="Debt Payoff Allocation"></p-card>
-    <p-card styleClass="m-2" class="mb-2" header="Mortgage Payoff Allocation"></p-card>
-    <p-card styleClass="m-2" class="mb-2" header="Investments Allocation"></p-card>
-    <p-card styleClass="m-2" class="mb-2" header="Do You Have Enough"></p-card>
-  </div>
-  <div class="flex-column w-100 m-2">
-    <p-card styleClass="m-2" class="mb-2" header="Short Term Savings Result"></p-card>
-    <p-card styleClass="m-2" class="mb-2" header="Debt Payoff Result"></p-card>
-    <p-card styleClass="m-2" class="mb-2" header="Mortgage Payoff Result"></p-card>
-    <p-card styleClass="m-2" class="mb-2" header="Investments Result"></p-card>
-  </div>
+<div class="d-flex justify-content-between flex-wrap">
+
+  <p-card styleClass="m-2" class="w-md-50" header="Short Term Savings">
+    <app-saving-chart></app-saving-chart>
+    <div class="mt-4">
+      <h3>Budget Allocation</h3>
+      <p-slider></p-slider>
+    </div>
+  </p-card>
+  <p-card styleClass="m-2" class="w-md-50" header="Investments">
+    <app-investments-chart></app-investments-chart>
+    <div class="mt-4">
+      <h3>Budget Allocation</h3>
+      <p-slider></p-slider>
+    </div>
+  </p-card>
+
+  <p-card styleClass="m-2" class="w-md-50" header="Debt Payoff">
+    <app-debt-chart></app-debt-chart>
+    <div class="mt-4">
+      <h3>Budget Allocation</h3>
+      <p-slider></p-slider>
+    </div>
+  </p-card>
+
+  <p-card styleClass="m-2" class="w-md-50" header="Mortgage Payoff">
+    <app-mortgage-chart></app-mortgage-chart>
+    <div class="mt-4">
+      <h3>Budget Allocation</h3>
+      <p-slider></p-slider>
+    </div>
+  </p-card>
+
+</div>
+<div class="d-flex w-100">
+  <p-card styleClass="m-2" class="mb-2 w-100" header="Do You Have Enough?"></p-card>
 </div>

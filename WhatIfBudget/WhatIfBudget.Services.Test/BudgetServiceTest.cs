@@ -143,6 +143,28 @@ namespace WhatIfBudget.Services.Test
             actual.Should().BeEquivalentTo(expected);
         }
 
+        [TestMethod]
+        public void GetBudget_IsEqual()
+        {
+            Helper_SeedDB();
+            var expected = Helper_SeedBudgets().Where(x => x.Id == 2).First();
+
+            var actual = _budgetService.GetBudget(expected.Id);
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void Exists_IsEqual()
+        {
+            Helper_SeedDB();
+            var expected = true;
+
+            var actual = _budgetService.Exists(5);
+
+            actual.Should().Be(expected);
+        }
+
         public void Helper_SeedDB()
         {
             _ctx.Budgets.AddRange(Helper_SeedBudgets());

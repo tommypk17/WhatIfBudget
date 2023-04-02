@@ -1,0 +1,51 @@
+<form (ngSubmit)="onSubmit(form)" #form="ngForm">
+  <div class="d-flex flex-column">
+    <div class="d-flex w-100 mb-1">
+      <span class="p-float-label w-100 ml-1">
+        <p-inputNumber id="totalBalance"
+                       [required]="true"
+                       [(ngModel)]="model.totalBalance" name="totalBalance"
+                       #totalBalance="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
+                       prefix="$">
+        </p-inputNumber>
+        <label for="totalBalance">Remaining Balance</label>
+      </span>
+      <span class="p-float-label w-100 ml-1">
+        <p-inputNumber id="interestRate_Percent"
+                       [required]="true"
+                       [(ngModel)]="model.interestRate_Percent" name="interestRate_Percent"
+                       #interestRate_Percent="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
+                       suffix="%">
+        </p-inputNumber>
+        <label for="interestRate_Percent">Annual Interest Rate</label>
+      </span>
+    </div>
+    <div class="d-flex w-100 mt-1">
+      <span class="p-float-label w-100 ml-1">
+        <p-inputNumber id="monthlyPayment"
+                       [required]="true"
+                       [(ngModel)]="model.monthlyPayment" name="monthlyPayment"
+                       #monthlyPayment="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
+                       prefix="$">
+        </p-inputNumber>
+        <label for="monthlyPayment">Monthly Payment</label>
+      </span>
+      <span class="p-float-label w-100 ml-1">
+        <p-inputNumber id="estimatedCurrentValue"
+                       [required]="true"
+                       [(ngModel)]="model.estimatedCurrentValue" name="estimatedCurrentValue"
+                       #estimatedCurrentValue="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
+                       prefix="$">
+        </p-inputNumber>
+        <label for="estimatedCurrentValue">Estimate Property Value</label>
+      </span>
+    </div>
+  </div>
+  <div class="d-flex flex-end mt-2">
+    <button pButton type="submit" label="Save" [disabled]="!form.form.valid"></button>
+  </div>
+</form>

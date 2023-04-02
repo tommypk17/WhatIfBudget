@@ -37,7 +37,7 @@ namespace WhatIfBudget.API.Controllers
             //grab the user from the passed auth token
             var currentUser = AuthUser.Current(User);
             //pass the ID from the auth token to the logic function
-            var res = _investmentLogic.GetUserInvestmentsByGoalId(currentUser.Id, goalId);
+            var res = _investmentLogic.GetUserInvestmentsByGoalId(goalId);
             //return a status of 200 with all the current user's budget
             return StatusCode(StatusCodes.Status200OK, res);
         }

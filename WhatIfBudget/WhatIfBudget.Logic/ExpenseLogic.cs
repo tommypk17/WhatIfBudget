@@ -35,24 +35,14 @@ namespace WhatIfBudget.Logic
 
         public IList<UserExpense> GetBudgetExpenses(int budgetId)
         {
-            var budgetExpenseIdList = _budgetExpenseService.GetAllBudgetExpenses()
-                .Where(x => x.BudgetId == budgetId)
-                .Select(x => x.ExpenseId)
+            return _expenseService.GetExpensesByBudgetId(budgetId)
+                .Select(x => UserExpense.FromExpense(x, budgetId))
                 .ToList();
-
-            return _expenseService.GetAllExpenses().Where(x => budgetExpenseIdList.Contains(x.Id))
-                                                   .Select(x => UserExpense.FromExpense(x, budgetId))
-                                                   .ToList();
         }
 
         public double GetBudgetMonthlyExpense(int budgetId)
         {
-            var expenseIdList = _budgetExpenseService.GetAllBudgetExpenses()
-                .Where(x => x.BudgetId == budgetId)
-                .Select(x => x.ExpenseId)
-                .ToList();
-            var expenseList = _expenseService.GetAllExpenses()
-                .Where(x => expenseIdList.Contains(x.Id))
+            var expenseList = _expenseService.GetExpensesByBudgetId(budgetId)
                 .Select(x => UserExpense.FromExpense(x, budgetId))
                 .ToList();
 
@@ -74,12 +64,8 @@ namespace WhatIfBudget.Logic
 
         public double GetBudgetMonthlyNeed(int budgetId)
         {
-            var expenseIdList = _budgetExpenseService.GetAllBudgetExpenses()
-                .Where(x => x.BudgetId == budgetId)
-                .Select(x => x.ExpenseId)
-                .ToList();
-            var needList = _expenseService.GetAllExpenses()
-                .Where(x => expenseIdList.Contains(x.Id) && x.Priority == EPriority.Need)
+            var needList = _expenseService.GetExpensesByBudgetId(budgetId)
+                .Where(x => x.Priority == EPriority.Need)
                 .Select(x => UserExpense.FromExpense(x, budgetId))
                 .ToList();
 
@@ -101,12 +87,8 @@ namespace WhatIfBudget.Logic
 
         public double GetBudgetMonthlyWant(int budgetId)
         {
-            var expenseIdList = _budgetExpenseService.GetAllBudgetExpenses()
-                .Where(x => x.BudgetId == budgetId)
-                .Select(x => x.ExpenseId)
-                .ToList();
-            var wantList = _expenseService.GetAllExpenses()
-                .Where(x => expenseIdList.Contains(x.Id) && x.Priority == EPriority.Want)
+            var wantList = _expenseService.GetExpensesByBudgetId(budgetId)
+                .Where(x => x.Priority == EPriority.Want)
                 .Select(x => UserExpense.FromExpense(x, budgetId))
                 .ToList();
 

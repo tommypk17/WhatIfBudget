@@ -5,3 +5,9 @@ export class InvestmentGoal {
   annualReturnRate_Percent: number | undefined;
   totalBalance: number | undefined
 }
+
+export class InvestmentTotals {
+  addedDueToContribution: number | undefined;
+  balanceAtTarget: number | undefined;
+  totalInterestAccrued: number | undefined;
+}

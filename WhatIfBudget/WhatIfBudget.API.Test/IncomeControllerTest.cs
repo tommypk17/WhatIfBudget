@@ -5,6 +5,7 @@ using Moq;
 using Newtonsoft.Json.Linq;
 using System.Security.Claims;
 using WhatIfBudget.API.Controllers;
+using WhatIfBudget.Common.Enumerations;
 using WhatIfBudget.Data.Models;
 using WhatIfBudget.Logic;
 using WhatIfBudget.Logic.Interfaces;
@@ -17,6 +18,46 @@ namespace WhatIfBudget.API.Test
     {
         [TestMethod]
         public void Get_UserHasIncomes()
+        {
+            //mock income logic
+            var mockIncomeLogic = new Mock<IIncomeLogic>();
+            mockIncomeLogic.Setup(x => x.GetUserIncomes(Guid.Empty)).Returns(new List<UserIncome>()
+                {
+                    new UserIncome() { Id = 1, Amount = 100, Frequency = EFrequency.None },
+                    new UserIncome() { Id = 2, Amount = 100, Frequency = EFrequency.Weekly },
+                    new UserIncome() { Id = 3, Amount = 100, Frequency = EFrequency.Monthly },
+                }
+            );
+
+            //Setup the http context (for auth)
+            var incomeController = new IncomesController(mockIncomeLogic.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new List<UserIncome>()
+                    {
+                        new UserIncome() { Id = 1, Amount = 100, Frequency = EFrequency.None },
+                        new UserIncome() { Id = 2, Amount = 100, Frequency = EFrequency.Weekly },
+                        new UserIncome() { Id = 3, Amount = 100, Frequency = EFrequency.Monthly },
+                    };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = incomeController.Get();
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void Get_IncomesByBudgetId()
         {
             //mock income logic
             var mockIncomeLogic = new Mock<IIncomeLogic>();

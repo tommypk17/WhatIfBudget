@@ -4,7 +4,7 @@
   </ng-template>
   <ng-template pTemplate="end">
     <div class="d-flex align-items-center">
-      <ng-container *ngIf="$isLoading | async as loading">
+      <ng-container *ngIf="isLoading">
         <p-progressSpinner strokeWidth="2" [style]="{width: '25px', height: '25px'}"></p-progressSpinner>
       </ng-container>
       <p *ngIf="currentBudget" class="mx-2 my-0">{{currentBudget}} Budget</p>

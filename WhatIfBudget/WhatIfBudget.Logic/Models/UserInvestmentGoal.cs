@@ -7,10 +7,10 @@ namespace WhatIfBudget.Logic.Models
     public class UserInvestmentGoal
     {
         public int Id { get; set; }
-        public double TotalBalance { get; set; } = 0;
         public double AnnualReturnRate_Percent { get; set; } = 0;
         public UInt16 YearsToTarget { get; set; } = 0;
-        public double additionalBudgetAllocation { get; set; } = 0;
+        public double AdditionalBudgetAllocation { get; set; } = 0;
+        public bool RolloverCompletedGoals { get; set; } = false;
 
         public InvestmentGoal ToInvestmentGoal()
         {
@@ -19,7 +19,7 @@ namespace WhatIfBudget.Logic.Models
                 Id = Id,
                 AnnualReturnRate_Percent = AnnualReturnRate_Percent,
                 YearsToTarget = YearsToTarget,
-                AdditionalBudgetAllocation = additionalBudgetAllocation
+                AdditionalBudgetAllocation = AdditionalBudgetAllocation
             };
         }
 
@@ -30,8 +30,15 @@ namespace WhatIfBudget.Logic.Models
                 Id = investmentGoal.Id,
                 AnnualReturnRate_Percent = investmentGoal.AnnualReturnRate_Percent,
                 YearsToTarget = investmentGoal.YearsToTarget,
-                additionalBudgetAllocation = investmentGoal.AdditionalBudgetAllocation
+                AdditionalBudgetAllocation = investmentGoal.AdditionalBudgetAllocation
             };
         }
+    }
+
+    public class InvestmentGoalTotals
+    {
+        public double BalanceAtTarget { get; set; } = 0;
+        public double TotalInterestAccrued { get; set; } = 0;
+        public double AddedDueToContribution { get; set; } = 0;
     }
 }

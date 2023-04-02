@@ -23,10 +23,9 @@ namespace WhatIfBudget.API.Test
             mockIGL.Setup(x => x.GetInvestmentGoal(It.IsAny<int>())).Returns(
                 new UserInvestmentGoal() {
                     Id = 4,
-                    TotalBalance = 1000,
                     AnnualReturnRate_Percent = 5,
                     YearsToTarget = 20,
-                    additionalBudgetAllocation = 500
+                    AdditionalBudgetAllocation = 500
                 }
             );
 
@@ -42,10 +41,9 @@ namespace WhatIfBudget.API.Test
             var expectedValue = new UserInvestmentGoal()
                 {
                     Id = 4,
-                    TotalBalance = 1000,
                     AnnualReturnRate_Percent = 5,
                     YearsToTarget = 20,
-                    additionalBudgetAllocation = 500
+                    AdditionalBudgetAllocation = 500
                 };
 
             var expected = new ObjectResult(expectedValue)
@@ -67,10 +65,9 @@ namespace WhatIfBudget.API.Test
             mock.Setup(x => x.ModifyUserInvestmentGoal(It.IsAny<UserInvestmentGoal>()))
                             .Returns(new UserInvestmentGoal() {
                                 Id = 2,
-                                TotalBalance = 1000,
                                 AnnualReturnRate_Percent = 5,
                                 YearsToTarget = 20,
-                                additionalBudgetAllocation = 500
+                                AdditionalBudgetAllocation = 500
                             });
 
             //Setup the http context (for auth)
@@ -84,10 +81,9 @@ namespace WhatIfBudget.API.Test
 
             var expectedValue = new UserInvestmentGoal() {
                 Id = 2,
-                TotalBalance = 1000,
                 AnnualReturnRate_Percent = 5,
                 YearsToTarget = 20,
-                additionalBudgetAllocation = 500
+                AdditionalBudgetAllocation = 500
             };
 
             var expected = new ObjectResult(expectedValue)
@@ -97,10 +93,9 @@ namespace WhatIfBudget.API.Test
 
             var actual = investmentController.Put(new UserInvestmentGoal() {
                 Id = 2,
-                TotalBalance = 1000.0,
                 AnnualReturnRate_Percent = 5.0,
                 YearsToTarget = 5,
-                additionalBudgetAllocation = 50.0
+                AdditionalBudgetAllocation = 50.0
             });
 
 
@@ -149,6 +144,45 @@ namespace WhatIfBudget.API.Test
 
             var actual = investmentController.GetBalanceOverTime(1);
 
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void Get_InvestmentTotals()
+        {
+            //mock income logic
+            var mockIGL = new Mock<IInvestmentGoalLogic>();
+            mockIGL.Setup(x => x.GetInvestmentTotals(It.IsAny<int>())).Returns
+                (new InvestmentGoalTotals()
+                {
+                    BalanceAtTarget = 1000000,
+                    TotalInterestAccrued = 500000,
+                    AddedDueToContribution = 450000
+                });
+
+            //Setup the http context (for auth)
+            var investmentController = new InvestmentGoalsController(mockIGL.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new InvestmentGoalTotals()
+            {
+                BalanceAtTarget = 1000000,
+                TotalInterestAccrued = 500000,
+                AddedDueToContribution = 450000
+            };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = investmentController.GetInvestmentTotals(1);
 
             actual.Should().BeEquivalentTo(expected);
         }

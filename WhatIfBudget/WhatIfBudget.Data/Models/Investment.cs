@@ -13,5 +13,6 @@ namespace WhatIfBudget.Data.Models
         public double CurrentBalance { get; set; } = 0;
         public double MonthlyPersonalContribution { get; set; } = 0;
         public double MonthlyEmployerContribution { get; set; } = 0;
+        public virtual ICollection<InvestmentGoalInvestment>? InvestmentGoalInvestments { get; set; }
     }
 }

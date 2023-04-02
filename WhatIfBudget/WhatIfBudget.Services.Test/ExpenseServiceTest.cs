@@ -17,11 +17,15 @@ namespace WhatIfBudget.Services.Test
         public void TestCleanUp()
         {
             var allExpenses = _ctx.Expenses.ToList();
+            var allBudgetExpenses = _ctx.BudgetExpenses.ToList();
+            var allBudgets = _ctx.Budgets.ToList();
             _ctx.Expenses.RemoveRange(allExpenses);
+            _ctx.BudgetExpenses.RemoveRange(allBudgetExpenses);
+            _ctx.Budgets.RemoveRange(allBudgets);
             _ctx.SaveChanges();
         }
 
-            public ExpenseServiceTest()
+        public ExpenseServiceTest()
         {
             DbContextOptions<AppDbContext> options;
             var builder = new DbContextOptionsBuilder<AppDbContext>();
@@ -35,7 +39,6 @@ namespace WhatIfBudget.Services.Test
         [TestMethod]
         public void GetAllExpense_CollectionAreEqual()
         {
-            Helper_SeedDB();
             var expected = (List<Expense>)Helper_SeedExpenses();
 
             var actual = (List<Expense>)_expenseService.GetAllExpenses();
@@ -119,7 +122,6 @@ namespace WhatIfBudget.Services.Test
         [TestMethod]
         public void DeleteExpense_CollectionAreEqual()
         {
-            Helper_SeedDB();
             var expected = (List<Expense>)Helper_SeedExpenses();
             var toRemove = expected.First();
             expected.Remove(toRemove);
@@ -131,10 +133,19 @@ namespace WhatIfBudget.Services.Test
             actual.Should().BeEquivalentTo(expected);
         }
 
-        public void Helper_SeedDB()
+        [TestMethod]
+        public void GetExpensesByBudgetId_CollectionAreEqual()
         {
-            _ctx.Expenses.AddRange(Helper_SeedExpenses());
-            _ctx.SaveChanges();
+            Helper_SeedExpenses();
+            Helper_SeedBudgetExpenses();
+            Helper_SeedBudgets();
+
+            var expected = _ctx.Expenses.Include(x => x.BudgetExpenses).ToList();
+            expected = expected.Where(x => x.Id <= 5).ToList();
+
+            var actual = _expenseService.GetExpensesByBudgetId(1);
+
+            actual.Should().BeEquivalentTo(expected);
         }
 
         public IList<Expense> Helper_SeedExpenses()
@@ -144,8 +155,36 @@ namespace WhatIfBudget.Services.Test
             {
                 expenses.Add(new Expense() { Id = i, Amount = i * 102, Frequency = EFrequency.None, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue });
             }
+            _ctx.Expenses.AddRange(expenses);
+            _ctx.SaveChanges();
 
             return expenses;
+        }
+
+        public IList<BudgetExpense> Helper_SeedBudgetExpenses()
+        {
+            var budgetExpenses = new List<BudgetExpense>();
+            for (var i = 1; i <= 5; i++)
+            {
+                budgetExpenses.Add(new BudgetExpense() { Id = i, BudgetId = 1, ExpenseId = i,CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue });
+            }
+            _ctx.BudgetExpenses.AddRange(budgetExpenses);
+            _ctx.SaveChanges();
+
+            return budgetExpenses;
+        }
+
+        public IList<Budget> Helper_SeedBudgets()
+        {
+            var budgets = new List<Budget>();
+            for (var i = 1; i <= 1; i++)
+            {
+                budgets.Add(new Budget() { Id = i, Name = "test", DebtGoalId = 1, InvestmentGoalId = 1, MortgageGoalId = 1, SavingGoalId = 1, UserId = Guid.Empty, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue });
+            }
+            _ctx.Budgets.AddRange(budgets);
+            _ctx.SaveChanges();
+
+            return budgets;
         }
     }
 }

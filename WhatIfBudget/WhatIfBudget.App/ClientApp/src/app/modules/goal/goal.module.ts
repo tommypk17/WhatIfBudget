@@ -24,6 +24,12 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService } from 'primeng/api';
+import { MortgageEntryFormComponent } from './components/mortgage-entry-form/mortgage-entry-form.component';
+import { ChartModule } from 'primeng/chart';
+import { SavingEntryFormComponent } from './components/saving-entry-form/saving-entry-form.component';
+import { SharedModule } from '../../shared/shared.module';
+import { DebtEntryFormComponent } from './components/debt-entry-form/debt-entry-form.component';
+import { DebtListingComponent } from './components/debt-listing/debt-listing.component';
 
 @NgModule({
   declarations: [
@@ -37,11 +43,16 @@ import { ConfirmationService } from 'primeng/api';
     InvestmentGoalEntryFormComponent,
     InvestmentListingComponent,
     InvestmentGoalListingComponent,
+    MortgageEntryFormComponent,
+    SavingEntryFormComponent,
+    DebtEntryFormComponent,
+    DebtListingComponent,
   ],
   imports: [
     CommonModule,
     GoalRoutingModule,
     FormsModule,
+    SharedModule,
 
     CardModule,
     ButtonModule,
@@ -52,7 +63,8 @@ import { ConfirmationService } from 'primeng/api';
     TabMenuModule,
     TableModule,
     DialogModule,
-    ConfirmPopupModule
+    ConfirmPopupModule,
+    ChartModule
   ],
   exports: [
     GoalNavigationComponent

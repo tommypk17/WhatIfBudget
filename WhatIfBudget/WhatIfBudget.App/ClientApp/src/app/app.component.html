@@ -1,5 +1,5 @@
 <app-navigation class="header"></app-navigation>
-<div class="body">
+<div class="body" *ngIf="loginComplete">
   <router-outlet></router-outlet>
 </div>
 <p-toast position="bottom-center"></p-toast> 

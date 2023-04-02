@@ -9,6 +9,9 @@ namespace WhatIfBudget.Services.Interfaces
 {
     public interface ISavingGoalService
     {
+        public SavingGoal? GetSavingGoal(int id);
         public SavingGoal? AddSavingGoal(SavingGoal savingGoal);
+        public SavingGoal? ModifySavingGoal(SavingGoal savingGoal);
+        public SavingGoal? DeleteSavingGoal(int id);
     }
 }

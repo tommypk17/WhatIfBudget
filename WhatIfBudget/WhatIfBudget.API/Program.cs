@@ -25,7 +25,9 @@ builder.Services.AddScoped<IBudgetIncomeService, BudgetIncomeService>();
 builder.Services.AddScoped<IBudgetExpenseService, BudgetExpenseService>();
 builder.Services.AddScoped<IInvestmentGoalService, InvestmentGoalService>();
 builder.Services.AddScoped<IMortgageGoalService, MortgageGoalService>();
+builder.Services.AddScoped<IDebtService, DebtService>();
 builder.Services.AddScoped<IDebtGoalService, DebtGoalService>();
+builder.Services.AddScoped<IDebtGoalDebtService, DebtGoalDebtService>();
 builder.Services.AddScoped<ISavingGoalService, SavingGoalService>();
 builder.Services.AddScoped<IInvestmentGoalInvestmentService, InvestmentGoalInvestmentService>();
 
@@ -35,6 +37,11 @@ builder.Services.AddScoped<IIncomeLogic, IncomeLogic>();
 builder.Services.AddScoped<IBudgetLogic, BudgetLogic>();
 builder.Services.AddScoped<IInvestmentLogic, InvestmentLogic>();
 builder.Services.AddScoped<IInvestmentGoalLogic, InvestmentGoalLogic>();
+builder.Services.AddScoped<ISavingGoalLogic, SavingGoalLogic>();
+builder.Services.AddScoped<IDebtLogic, DebtLogic>();
+builder.Services.AddScoped<IDebtGoalLogic, DebtGoalLogic>();
+builder.Services.AddScoped<IMortgageGoalLogic, MortgageGoalLogic>();
+
 
 builder.Services.AddControllers();
 

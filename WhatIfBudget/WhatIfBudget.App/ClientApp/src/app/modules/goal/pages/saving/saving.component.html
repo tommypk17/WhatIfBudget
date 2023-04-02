@@ -1,2 +1,10 @@
 <app-goal-navigation></app-goal-navigation>
-<p-card styleClass="m-2" class="mb-2" header="Short Term Savings"></p-card>
+<div class="d-flex justify-content-between">
+  <div class="d-flex w-100 flex-column m-2">
+    <p-card header="Short Term Savings Goal">
+      <div class="mb-1">
+        <app-saving-entry-form (updated)="savingGoalUpdated()" [savingGoal]="savingGoal"></app-saving-entry-form>
+      </div>
+    </p-card>
+  </div>
+</div>

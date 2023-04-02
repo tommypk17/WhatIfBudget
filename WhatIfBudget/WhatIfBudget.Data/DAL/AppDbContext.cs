@@ -28,6 +28,8 @@ namespace WhatIfBudget.Data.DAL
         public DbSet<BudgetIncome> BudgetIncomes { get; set; }
         public DbSet<BudgetExpense> BudgetExpenses { get; set; }
         public DbSet<InvestmentGoalInvestment> InvestmentGoalInvestments { get; set; }
+        public DbSet<DebtGoalDebt> DebtGoalDebts { get; set; }
+        public DbSet<Debt> Debts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

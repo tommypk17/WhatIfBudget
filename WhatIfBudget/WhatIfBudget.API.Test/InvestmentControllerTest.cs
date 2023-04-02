@@ -98,6 +98,72 @@ namespace WhatIfBudget.API.Test
         }
 
         [TestMethod]
+        public void Get_InvestmentsByGoalId()
+        {
+            //mock investment logic
+            var mockInvestmentLogic = new Mock<IInvestmentLogic>();
+            mockInvestmentLogic.Setup(x => x.GetUserInvestmentsByGoalId(2)).Returns(new List<UserInvestment>()
+                {
+                    new UserInvestment() {
+                                Id = 1,
+                                Name = "test1",
+                                GoalId = 2,
+                                CurrentBalance = 0,
+                                MonthlyPersonalContribution = 0,
+                                MonthlyEmployerContribution = 0
+                    },
+                    new UserInvestment() {
+                                Id = 2,
+                                Name = "test3",
+                                GoalId = 2,
+                                CurrentBalance = 0,
+                                MonthlyPersonalContribution = 0,
+                                MonthlyEmployerContribution = 0
+                    }
+                }
+            );
+
+            //Setup the http context (for auth)
+            var investmentController = new InvestmentsController(mockInvestmentLogic.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new List<UserInvestment>()
+                    {
+                        new UserInvestment() {
+                                Id = 1,
+                                Name = "test1",
+                                GoalId = 2,
+                                CurrentBalance = 0,
+                                MonthlyPersonalContribution = 0,
+                                MonthlyEmployerContribution = 0
+                    },
+                    new UserInvestment() {
+                                Id = 2,
+                                Name = "test3",
+                                GoalId = 2,
+                                CurrentBalance = 0,
+                                MonthlyPersonalContribution = 0,
+                                MonthlyEmployerContribution = 0
+                    }
+                    };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = investmentController.GetInvestmentsByGoalId(2);
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
         public void Post_UserInvestmentCreated()
         {
             //mock investment logic

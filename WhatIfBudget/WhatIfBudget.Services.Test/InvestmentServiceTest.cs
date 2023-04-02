@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using WhatIfBudget.Common.Enumerations;
 using WhatIfBudget.Data.DAL;
 using WhatIfBudget.Data.Models;
@@ -17,7 +18,11 @@ namespace WhatIfBudget.Services.Test
         public void TestCleanUp()
         {
             var allInvestments = _ctx.Investments.ToList();
+            var allInvestmentGoalInvestments = _ctx.InvestmentGoalInvestments.ToList();
+            var allInvestmentGoals = _ctx.InvestmentGoals.ToList();
             _ctx.Investments.RemoveRange(allInvestments);
+            _ctx.InvestmentGoalInvestments.RemoveRange(allInvestmentGoalInvestments);
+            _ctx.InvestmentGoals.RemoveRange(allInvestmentGoals);
             _ctx.SaveChanges();
         }
 
@@ -142,6 +147,22 @@ namespace WhatIfBudget.Services.Test
 
             actual.Should().BeEquivalentTo(expected);
         }
+
+        [TestMethod]
+        public void GetInvestmentsByInvestmentGoalId_CollectionAreEqual()
+        {
+            Helper_SeedInvestments();
+            Helper_SeedInvestmentGoalInvestments();
+            Helper_SeedInvestmentGoals();
+
+            var expected = _ctx.Investments.Include(x => x.InvestmentGoalInvestments).ToList();
+            expected = expected.Where(x => x.Id <= 5).ToList();
+
+            var actual = _investmentService.GetInvestmentsByInvestmentGoalId(1);
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
         public void Helper_SeedDB()
         {
             _ctx.Investments.AddRange(Helper_SeedInvestments());
@@ -168,6 +189,31 @@ namespace WhatIfBudget.Services.Test
             }
 
             return investments;
+        }
+        public IList<InvestmentGoalInvestment> Helper_SeedInvestmentGoalInvestments()
+        {
+            var investmentGoalInvestments = new List<InvestmentGoalInvestment>();
+            for (var i = 1; i <= 5; i++)
+            {
+                investmentGoalInvestments.Add(new InvestmentGoalInvestment() { Id = i, InvestmentGoalId = 1, InvestmentId = i, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue });
+            }
+            _ctx.InvestmentGoalInvestments.AddRange(investmentGoalInvestments);
+            _ctx.SaveChanges();
+
+            return investmentGoalInvestments;
+        }
+
+        public IList<InvestmentGoal> Helper_SeedInvestmentGoals()
+        {
+            var investmentGoals = new List<InvestmentGoal>();
+            for (var i = 1; i <= 1; i++)
+            {
+                investmentGoals.Add(new InvestmentGoal() { Id = i, AnnualReturnRate_Percent = 10 + i/10, YearsToTarget = (UInt16)(20 + i*5), AdditionalBudgetAllocation = 50 + 25*i, CreatedOn = DateTime.MinValue, UpdatedOn = DateTime.MinValue });
+            }
+            _ctx.InvestmentGoals.AddRange(investmentGoals);
+            _ctx.SaveChanges();
+
+            return investmentGoals;
         }
     }
 }

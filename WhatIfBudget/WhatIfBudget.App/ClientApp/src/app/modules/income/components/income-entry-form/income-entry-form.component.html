@@ -12,6 +12,7 @@
                        [required]="true"
                        [(ngModel)]="model.amount" name="amount"
                        #amount="ngModel" class="w-100" styleClass="w-100"
+                       [minFractionDigits]="2" [maxFractionDigits]="2"
                        prefix="$">
         </p-inputNumber>
         <label for="amount">Amount</label>
