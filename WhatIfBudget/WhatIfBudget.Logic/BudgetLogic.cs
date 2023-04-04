@@ -224,7 +224,7 @@ namespace WhatIfBudget.Logic
             return UserBudget.FromBudget(dbBudget);
         }
 
-        public UserBudgetAllocations? GetBudgetAllocations(int budgetId)
+        public UserBudgetAllocations? GetUserBudgetAllocations(int budgetId)
         {
             var budget = _budgetService.GetBudget(budgetId);
             if(budget == null) { throw new NullReferenceException(); }
@@ -243,6 +243,42 @@ namespace WhatIfBudget.Logic
             if (investmentGoal is not null) allocations.InvestmentGoal = investmentGoal.AdditionalBudgetAllocation;
 
             return allocations;
+        }
+
+        public UserBudgetAllocations? UpdateUserBudgetAllocations(int budgetId, UserBudgetAllocations budgetAllocations)
+        {
+            var budget = _budgetService.GetBudget(budgetId);
+            if (budget == null) { throw new NullReferenceException(); }
+
+            var debtGoal = _debtGoalService.GetDebtGoal(budget.DebtGoalId);
+            if (debtGoal is not null)
+            {
+                debtGoal.AdditionalBudgetAllocation = budgetAllocations.DebtGoal;
+                _debtGoalService.UpdateDebtGoal(debtGoal);
+            }
+
+            var mortgageGoal = _mortgageGoalService.GetMortgageGoal(budget.MortgageGoalId);
+            if (mortgageGoal is not null)
+            {
+                mortgageGoal.AdditionalBudgetAllocation = budgetAllocations.MortgageGoal;
+                _mortgageGoalService.ModifyMortgageGoal(mortgageGoal);
+            }
+
+            var savingGoal = _savingGoalService.GetSavingGoal(budget.SavingGoalId);
+            if (savingGoal is not null)
+            {
+                savingGoal.AdditionalBudgetAllocation = budgetAllocations.SavingGoal;
+                _savingGoalService.ModifySavingGoal(savingGoal);
+            }
+
+            var investmentGoal = _investmentGoalService.GetInvestmentGoal(budget.InvestmentGoalId);
+            if (investmentGoal is not null)
+            {
+                investmentGoal.AdditionalBudgetAllocation = budgetAllocations.InvestmentGoal;
+                _investmentGoalService.UpdateInvestmentGoal(investmentGoal);
+            }
+
+            return GetUserBudgetAllocations(budgetId);
         }
 
         public double GetBudgetAvailableFreeCash(int budgetId)

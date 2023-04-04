@@ -330,7 +330,7 @@ namespace WhatIfBudget.API.Test
         {
             //mock budget logic
             var mockBL = new Mock<IBudgetLogic>();
-            mockBL.Setup(x => x.GetBudgetAllocations(It.IsAny<int>())).Returns(new UserBudgetAllocations
+            mockBL.Setup(x => x.GetUserBudgetAllocations(It.IsAny<int>())).Returns(new UserBudgetAllocations
             {
                 DebtGoal = 100,
                 InvestmentGoal = 145,
@@ -361,6 +361,47 @@ namespace WhatIfBudget.API.Test
             };
 
             var actual = budgetController.GetAdditionalContributions(It.IsAny<int>());
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void Put_UserBudgetAdditionalContributions()
+        {
+            //mock budget logic
+            var mockBL = new Mock<IBudgetLogic>();
+            mockBL.Setup(x => x.UpdateUserBudgetAllocations(It.IsAny<int>(), It.IsAny<UserBudgetAllocations>())).Returns(new UserBudgetAllocations
+            {
+                DebtGoal = 100,
+                InvestmentGoal = 145,
+                SavingGoal = 110,
+                MortgageGoal = 50
+            });
+
+            //Setup the http context (for auth)
+            var budgetController = new BudgetsController(mockBL.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new UserBudgetAllocations
+            {
+                DebtGoal = 100,
+                InvestmentGoal = 145,
+                SavingGoal = 110,
+                MortgageGoal = 50
+            };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = budgetController.UpdateAdditionalContributions(It.IsAny<int>(), It.IsAny<UserBudgetAllocations>());
 
 
             actual.Should().BeEquivalentTo(expected);

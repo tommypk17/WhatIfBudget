@@ -51,7 +51,21 @@ namespace WhatIfBudget.API.Controllers
         [HttpGet("{budgetId}/additionalContributions")]
         public IActionResult GetAdditionalContributions([FromRoute] int budgetId)
         {
-            var res = _budgetLogic.GetBudgetAllocations(budgetId);
+            var res = _budgetLogic.GetUserBudgetAllocations(budgetId);
+            if (res == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, res);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status200OK, res);
+            }
+        }
+
+        [HttpPut("{budgetId}/additionalContributions")]
+        public IActionResult UpdateAdditionalContributions([FromRoute] int budgetId, [FromBody] UserBudgetAllocations budgetAllocations)
+        {
+            var res = _budgetLogic.UpdateUserBudgetAllocations(budgetId, budgetAllocations);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);
