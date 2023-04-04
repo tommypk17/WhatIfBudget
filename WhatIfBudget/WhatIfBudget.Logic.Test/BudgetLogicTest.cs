@@ -586,5 +586,83 @@ namespace WhatIfBudget.Logic.Test
 
             actual.Should().Be(expected);
         }
+
+        [TestMethod]
+        public void GetBudgetGetBudgetAllocations_CollectionsAreEqual()
+        {
+            var mockBS = new Mock<IBudgetService>();
+            var mockIS = new Mock<IIncomeService>();
+            var mockES = new Mock<IExpenseService>();
+            var mockBIS = new Mock<IBudgetIncomeService>();
+            var mockBES = new Mock<IBudgetExpenseService>();
+            var mockIGS = new Mock<IInvestmentGoalService>();
+            var mockInvS = new Mock<IInvestmentService>();
+            var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
+            var mockSGS = new Mock<ISavingGoalService>();
+            var mockDGS = new Mock<IDebtGoalService>();
+            var mockMGS = new Mock<IMortgageGoalService>();
+            var mockIL = new Mock<IIncomeLogic>();
+            var mockEL = new Mock<IExpenseLogic>();
+
+            mockBS.Setup(x => x.GetBudget(It.IsAny<int>())).Returns(
+                new Budget()
+                    {
+                        Id = 1,
+                        Name = "test",
+                        UserId = Guid.Empty,
+                        SavingGoalId = 1,
+                        DebtGoalId = 1,
+                        MortgageGoalId = 1,
+                        InvestmentGoalId = 1,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                });
+            mockDGS.Setup(x => x.GetDebtGoal(It.IsAny<int>())).Returns(
+                new DebtGoal()
+                {
+                    AdditionalBudgetAllocation = 100
+                });
+
+            mockMGS.Setup(x => x.GetMortgageGoal(It.IsAny<int>())).Returns(
+                new MortgageGoal()
+                {
+                    AdditionalBudgetAllocation = 50
+                });
+
+            mockSGS.Setup(x => x.GetSavingGoal(It.IsAny<int>())).Returns(
+                new SavingGoal()
+                {
+                    AdditionalBudgetAllocation = 110
+
+                });
+
+            mockIGS.Setup(x => x.GetInvestmentGoal(It.IsAny<int>())).Returns(
+                new InvestmentGoal()
+                {
+                    AdditionalBudgetAllocation = 145
+
+                });
+
+            var budgetLogic = new BudgetLogic(mockBS.Object, mockIS.Object,
+                                              mockES.Object, mockBIS.Object,
+                                              mockBES.Object, mockIGS.Object,
+                                              mockInvS.Object, mockIGIS.Object,
+                                              mockMGS.Object, mockDGS.Object,
+                                              mockSGS.Object, mockIL.Object,
+                                              mockEL.Object
+                                              );
+
+            var expected = new UserBudgetAllocations()
+            {
+                    DebtGoal = 100,
+                    InvestmentGoal = 145,
+                    SavingGoal = 110,
+                    MortgageGoal = 50
+            };
+
+            var actual = budgetLogic.GetBudgetAllocations(It.IsAny<int>());
+
+            actual.Should().BeEquivalentTo(expected);
+        }
     }
 }

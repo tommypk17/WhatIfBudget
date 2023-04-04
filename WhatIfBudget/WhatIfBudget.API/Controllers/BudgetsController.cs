@@ -48,7 +48,6 @@ namespace WhatIfBudget.API.Controllers
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
-        [AllowAnonymous]
         [HttpGet("{budgetId}/additionalContributions")]
         public IActionResult GetAdditionalContributions([FromRoute] int budgetId)
         {

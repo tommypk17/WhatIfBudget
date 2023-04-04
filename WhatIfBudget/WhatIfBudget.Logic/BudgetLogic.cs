@@ -240,7 +240,7 @@ namespace WhatIfBudget.Logic
             if (savingGoal is not null) allocations.SavingGoal = savingGoal.AdditionalBudgetAllocation;
             
             var investmentGoal = _investmentGoalService.GetInvestmentGoal(budget.InvestmentGoalId);
-            if (investmentGoal is not null) allocations.InvestmentGaol = investmentGoal.AdditionalBudgetAllocation;
+            if (investmentGoal is not null) allocations.InvestmentGoal = investmentGoal.AdditionalBudgetAllocation;
 
             return allocations;
         }
