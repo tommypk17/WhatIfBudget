@@ -39,4 +39,12 @@ namespace WhatIfBudget.Logic.Models
             };
         }
     }
+
+    public class UserBudgetAllocations
+    {
+        public double DebtGoal { get; set; } = 0;
+        public double MortgageGoal { get; set; } = 0;
+        public double SavingGoal { get; set; } = 0;
+        public double InvestmentGaol { get; set; } = 0;
+    }
 }

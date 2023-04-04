@@ -223,5 +223,26 @@ namespace WhatIfBudget.Logic
             if (dbBudget == null) { throw new NullReferenceException(); }
             return UserBudget.FromBudget(dbBudget);
         }
+
+        public UserBudgetAllocations? GetBudgetAllocations(int budgetId)
+        {
+            var budget = _budgetService.GetBudget(budgetId);
+            if(budget == null) { throw new NullReferenceException(); }
+
+            var allocations = new UserBudgetAllocations();
+            var debtGoal = _debtGoalService.GetDebtGoal(budget.DebtGoalId);
+            if (debtGoal is not null) allocations.DebtGoal = debtGoal.AdditionalBudgetAllocation;
+            
+            var mortgageGoal = _mortgageGoalService.GetMortgageGoal(budget.MortgageGoalId);
+            if (mortgageGoal is not null) allocations.MortgageGoal = mortgageGoal.AdditionalBudgetAllocation;
+            
+            var savingGoal = _savingGoalService.GetSavingGoal(budget.SavingGoalId);
+            if (savingGoal is not null) allocations.SavingGoal = savingGoal.AdditionalBudgetAllocation;
+            
+            var investmentGoal = _investmentGoalService.GetInvestmentGoal(budget.InvestmentGoalId);
+            if (investmentGoal is not null) allocations.InvestmentGaol = investmentGoal.AdditionalBudgetAllocation;
+
+            return allocations;
+        }
     }
 }
