@@ -664,5 +664,69 @@ namespace WhatIfBudget.Logic.Test
 
             actual.Should().BeEquivalentTo(expected);
         }
+
+        [TestMethod]
+        public void GetBudgetAvailableFreeCash_AmountsAreEqual()
+        {
+            var mockBS = new Mock<IBudgetService>();
+            var mockIS = new Mock<IIncomeService>();
+            var mockES = new Mock<IExpenseService>();
+            var mockBIS = new Mock<IBudgetIncomeService>();
+            var mockBES = new Mock<IBudgetExpenseService>();
+            var mockIGS = new Mock<IInvestmentGoalService>();
+            var mockInvS = new Mock<IInvestmentService>();
+            var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
+            var mockSGS = new Mock<ISavingGoalService>();
+            var mockDGS = new Mock<IDebtGoalService>();
+            var mockMGS = new Mock<IMortgageGoalService>();
+            var mockIL = new Mock<IIncomeLogic>();
+            var mockEL = new Mock<IExpenseLogic>();
+
+            mockBS.Setup(x => x.GetBudget(It.IsAny<int>())).Returns(
+                new Budget()
+                {
+                    Id = 1,
+                    Name = "test",
+                    UserId = Guid.Empty,
+                    SavingGoalId = 1,
+                    DebtGoalId = 1,
+                    MortgageGoalId = 1,
+                    InvestmentGoalId = 1,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                });
+            mockES.Setup(x => x.GetExpensesByBudgetId(It.IsAny<int>())).Returns(
+                new List<Expense>()
+                {
+                    new Expense()
+                    {
+                        Amount = 50
+                    }
+                });
+
+            mockIS.Setup(x => x.GetIncomesByBudgetId(It.IsAny<int>())).Returns(
+                new List<Income>()
+                {
+                    new Income()
+                    {
+                        Amount = 100
+                    }
+                });
+
+            var budgetLogic = new BudgetLogic(mockBS.Object, mockIS.Object,
+                                              mockES.Object, mockBIS.Object,
+                                              mockBES.Object, mockIGS.Object,
+                                              mockInvS.Object, mockIGIS.Object,
+                                              mockMGS.Object, mockDGS.Object,
+                                              mockSGS.Object, mockIL.Object,
+                                              mockEL.Object
+                                              );
+
+            var expected = 50.0;
+
+            var actual = budgetLogic.GetBudgetAvailableFreeCash(It.IsAny<int>());
+
+            actual.Should().Be(expected);
+        }
     }
 }

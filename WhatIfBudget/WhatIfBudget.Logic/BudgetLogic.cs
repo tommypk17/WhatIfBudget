@@ -244,5 +244,16 @@ namespace WhatIfBudget.Logic
 
             return allocations;
         }
+
+        public double GetBudgetAvailableFreeCash(int budgetId)
+        {
+            var res = 0.0;
+            var expenses = _expenseService.GetExpensesByBudgetId(budgetId);
+            var incomes = _incomeService.GetIncomesByBudgetId(budgetId);
+
+            res = incomes.Select(x => x.Amount).Sum() - expenses.Select(x => x.Amount).Sum();
+
+            return res;
+        }
     }
 }

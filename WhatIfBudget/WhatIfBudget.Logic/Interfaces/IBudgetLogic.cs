@@ -22,6 +22,7 @@ namespace WhatIfBudget.Logic.Interfaces
 
         public UserBudget? DeleteUserBudget(UserBudget budget);
         public UserBudgetAllocations? GetBudgetAllocations(int budgetId);
+        public double GetBudgetAvailableFreeCash(int budgetId);
 
     }
 }

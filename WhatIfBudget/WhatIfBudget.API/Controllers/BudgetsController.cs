@@ -62,6 +62,13 @@ namespace WhatIfBudget.API.Controllers
             }
         }
 
+        [HttpGet("{budgetId}/availableFreeCash")]
+        public IActionResult GetAvailableFreeCash([FromRoute] int budgetId)
+        {
+            var res = _budgetLogic.GetBudgetAvailableFreeCash(budgetId);
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
         [HttpPost]
         public IActionResult Post(UserBudget apiBudget)
         {
