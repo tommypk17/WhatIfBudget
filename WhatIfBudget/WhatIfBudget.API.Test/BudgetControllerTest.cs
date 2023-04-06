@@ -171,6 +171,36 @@ namespace WhatIfBudget.API.Test
 
             actual.Should().BeEquivalentTo(expected);
         }
+
+        [TestMethod]
+        public void Get_CurrentNetWorth()
+        {
+            //mock budget logic
+            var mockBL = new Mock<IBudgetLogic>();
+            mockBL.Setup(x => x.GetCurrentNetWorth(It.IsAny<int>())).Returns(123456.78);
+
+            //Setup the http context (for auth)
+            var budgetController = new BudgetsController(mockBL.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = 123456.78;
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = budgetController.GetCurrentNetWorth(2);
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
         [TestMethod]
         public void Post_UserBudgetCreated()
         {

@@ -23,6 +23,8 @@ namespace WhatIfBudget.Logic
         private readonly IInvestmentGoalInvestmentService _igiService;
         private readonly ISavingGoalService _savingGoalService;
         private readonly IDebtGoalService _debtGoalService;
+        private readonly IDebtService _debtService;
+        private readonly IDebtGoalDebtService _dgdService;
         private readonly IMortgageGoalService _mortgageGoalService;
 
         private readonly IIncomeLogic _incomeLogic;
@@ -38,6 +40,8 @@ namespace WhatIfBudget.Logic
                            IInvestmentGoalInvestmentService investmentGoalInvestmentService,
                            IMortgageGoalService mortgageGoalService,
                            IDebtGoalService debtGoalService,
+                           IDebtService debtService,
+                           IDebtGoalDebtService debtGoalDebtService,
                            ISavingGoalService savingGoalService,
                            IIncomeLogic incomeLogic,
                            IExpenseLogic expenseLogic) { 
@@ -51,6 +55,8 @@ namespace WhatIfBudget.Logic
             _igiService = investmentGoalInvestmentService;
             _savingGoalService = savingGoalService;
             _debtGoalService = debtGoalService;
+            _debtService = debtService;
+            _dgdService = debtGoalDebtService;
             _mortgageGoalService = mortgageGoalService;
             _incomeLogic = incomeLogic;
             _expenseLogic = expenseLogic;
@@ -66,12 +72,9 @@ namespace WhatIfBudget.Logic
 
         public UserBudget? GetBudget(int budgetId)
         {
-            var dbBudget = _budgetService.GetAllBudgets()
-                                                .Where(x => x.Id == budgetId)
-                                                .Select(x => UserBudget.FromBudget(x))
-                                                .FirstOrDefault();
+            var dbBudget = _budgetService.GetBudget(budgetId);
             if (dbBudget == null) { throw new NullReferenceException(); }
-            else { return dbBudget; }
+            else { return UserBudget.FromBudget(dbBudget); }
         }
 
         public double GetAvailableMonthlyNet(int budgetId)
@@ -99,6 +102,37 @@ namespace WhatIfBudget.Logic
             monthlyNet -= dbInvestmentGoal.AdditionalBudgetAllocation;
 
             return monthlyNet;
+        }
+
+        public double GetCurrentNetWorth(int budgetId)
+        {
+            var dbBudget = _budgetService.GetBudget(budgetId);
+            if (dbBudget == null) { throw new NullReferenceException(); }
+
+            double netWorth = 0.0;
+
+            var dbSG = _savingGoalService.GetSavingGoal(dbBudget.SavingGoalId);
+            if (dbSG == null) { throw new NullReferenceException(); }
+            netWorth += dbSG.CurrentBalance;
+
+            var dbDebts = _debtService.GetDebtsByDebtGoalId(dbBudget.DebtGoalId);
+            foreach( var dbDebt in dbDebts )
+            {
+                netWorth -= dbDebt.CurrentBalance;
+            }
+
+            var dbMG = _mortgageGoalService.GetMortgageGoal(dbBudget.MortgageGoalId);
+            if (dbMG == null) { throw new NullReferenceException(); }
+            netWorth += dbMG.EstimatedCurrentValue;
+            netWorth -= dbMG.TotalBalance;
+
+            var dbInvestments = _investmentService.GetInvestmentsByInvestmentGoalId(dbBudget.InvestmentGoalId);
+            foreach( var investment in dbInvestments )
+            {
+                netWorth += investment.CurrentBalance;
+            }
+
+            return netWorth;
         }
 
         public UserBudget? CreateUserBudget(Guid userId, UserBudget budget)
@@ -152,7 +186,22 @@ namespace WhatIfBudget.Logic
         public UserBudget? DeleteUserBudget(UserBudget budget)
         {
             // Delete associated debts
-            // TODO
+            var allDGD_List = _dgdService.GetAllDebtGoalDebts()
+                .ToList();
+            var budgetDGD_List = allDGD_List.Where(x => x.DebtGoalId == budget.DebtGoalId).ToList();
+            foreach (var dgd in budgetDGD_List)
+            {
+                var dbDGD = _dgdService.DeleteDebtGoalDebt(dgd.Id);
+                if (dbDGD == null) { throw new NullReferenceException(); }
+                allDGD_List.Remove(dgd);
+                // Delete debt element if it has no remaining associations
+                if (!allDGD_List.Where(x => x.DebtId == dgd.DebtGoalId)
+                                .Any())
+                {
+                    var dbDebt = _debtService.DeleteDebt(dgd.DebtId);
+                    if (dbDebt == null) { throw new NullReferenceException(); }
+                }
+            }
 
             // Delete associated investments
             var allIGI_List = _igiService.GetAllInvestmentGoalInvestments()
@@ -178,10 +227,13 @@ namespace WhatIfBudget.Logic
 
             var dbSG = _savingGoalService.DeleteSavingGoal(budget.SavingGoalId);
             if (dbSG == null) { throw new NullReferenceException(); }
-            /*
+
             var dbDG = _debtGoalService.DeleteDebtGoal(budget.DebtGoalId);
-            var dbMG = _mortgageGoalService.DeleteMortageGoal(budget.MortageGoalId);
-            */
+            if (dbSG == null) { throw new NullReferenceException(); }
+
+            var dbMG = _mortgageGoalService.DeleteMortgageGoal(budget.MortgageGoalId);
+            if (dbSG == null) { throw new NullReferenceException(); }
+
 
             // Delete associated incomes
             var allBI_List = _budgetIncomeService.GetAllBudgetIncomes()

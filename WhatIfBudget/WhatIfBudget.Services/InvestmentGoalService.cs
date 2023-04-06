@@ -20,7 +20,7 @@ namespace WhatIfBudget.Services
 
         public InvestmentGoal? GetInvestmentGoal(int id)
         {
-            return _ctx.InvestmentGoals.FirstOrDefault(x => x.Id == id);
+            return _ctx.InvestmentGoals.Include(x => x.Budget).FirstOrDefault(x => x.Id == id);
         }
 
         public InvestmentGoal? AddInvestmentGoal(InvestmentGoal investmentGoal)

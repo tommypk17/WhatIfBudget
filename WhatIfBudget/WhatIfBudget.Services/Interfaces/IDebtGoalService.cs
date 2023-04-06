@@ -12,6 +12,7 @@ namespace WhatIfBudget.Services.Interfaces
         public DebtGoal? GetDebtGoal(int id);
         public DebtGoal? AddDebtGoal(DebtGoal debtGoal);
         public DebtGoal? UpdateDebtGoal(DebtGoal modifiedDebtGoal);
+        public DebtGoal? DeleteDebtGoal(int id);
 
     }
 }

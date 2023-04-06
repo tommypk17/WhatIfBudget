@@ -30,6 +30,8 @@ namespace WhatIfBudget.Logic.Test
             var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
             var mockSGS = new Mock<ISavingGoalService>();
             var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+            var mockDGDS = new Mock<IDebtGoalDebtService>();
             var mockMGS = new Mock<IMortgageGoalService>();
             var mockIL = new Mock<IIncomeLogic>();
             var mockEL = new Mock<IExpenseLogic>();
@@ -80,6 +82,7 @@ namespace WhatIfBudget.Logic.Test
                                               mockBES.Object, mockIGS.Object,
                                               mockInvS.Object, mockIGIS.Object,
                                               mockMGS.Object, mockDGS.Object,
+                                              mockDS.Object, mockDGDS.Object,
                                               mockSGS.Object, mockIL.Object,
                                               mockEL.Object
                                               );
@@ -133,6 +136,8 @@ namespace WhatIfBudget.Logic.Test
             var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
             var mockSGS = new Mock<ISavingGoalService>();
             var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+            var mockDGDS = new Mock<IDebtGoalDebtService>();
             var mockMGS = new Mock<IMortgageGoalService>();
             var mockIL = new Mock<IIncomeLogic>();
             var mockEL = new Mock<IExpenseLogic>();
@@ -183,6 +188,7 @@ namespace WhatIfBudget.Logic.Test
                                       mockBES.Object, mockIGS.Object,
                                       mockInvS.Object, mockIGIS.Object,
                                       mockMGS.Object, mockDGS.Object,
+                                      mockDS.Object, mockDGDS.Object,
                                       mockSGS.Object, mockIL.Object,
                                               mockEL.Object
                                       );
@@ -215,6 +221,8 @@ namespace WhatIfBudget.Logic.Test
             var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
             var mockSGS = new Mock<ISavingGoalService>();
             var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+            var mockDGDS = new Mock<IDebtGoalDebtService>();
             var mockMGS = new Mock<IMortgageGoalService>();
             var mockIL = new Mock<IIncomeLogic>();
             var mockEL = new Mock<IExpenseLogic>();
@@ -277,6 +285,7 @@ namespace WhatIfBudget.Logic.Test
                                       mockBES.Object, mockIGS.Object,
                                       mockInvS.Object, mockIGIS.Object,
                                       mockMGS.Object, mockDGS.Object,
+                                      mockDS.Object, mockDGDS.Object,
                                       mockSGS.Object, mockIL.Object,
                                               mockEL.Object
                                       );
@@ -313,6 +322,8 @@ namespace WhatIfBudget.Logic.Test
             var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
             var mockSGS = new Mock<ISavingGoalService>();
             var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+            var mockDGDS = new Mock<IDebtGoalDebtService>();
             var mockMGS = new Mock<IMortgageGoalService>();
             var mockIL = new Mock<IIncomeLogic>();
             var mockEL = new Mock<IExpenseLogic>();
@@ -336,6 +347,7 @@ namespace WhatIfBudget.Logic.Test
                                       mockBES.Object, mockIGS.Object,
                                       mockInvS.Object, mockIGIS.Object,
                                       mockMGS.Object, mockDGS.Object,
+                                      mockDS.Object, mockDGDS.Object,
                                       mockSGS.Object, mockIL.Object,
                                               mockEL.Object
                                       );
@@ -375,6 +387,8 @@ namespace WhatIfBudget.Logic.Test
             var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
             var mockSGS = new Mock<ISavingGoalService>();
             var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+            var mockDGDS = new Mock<IDebtGoalDebtService>();
             var mockMGS = new Mock<IMortgageGoalService>();
             var mockIL = new Mock<IIncomeLogic>();
             var mockEL = new Mock<IExpenseLogic>();
@@ -442,6 +456,7 @@ namespace WhatIfBudget.Logic.Test
                                       mockBES.Object, mockIGS.Object,
                                       mockInvS.Object, mockIGIS.Object,
                                       mockMGS.Object, mockDGS.Object,
+                                      mockDS.Object, mockDGDS.Object,
                                       mockSGS.Object, mockIL.Object,
                                               mockEL.Object
                                       );
@@ -482,6 +497,8 @@ namespace WhatIfBudget.Logic.Test
             var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
             var mockSGS = new Mock<ISavingGoalService>();
             var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+            var mockDGDS = new Mock<IDebtGoalDebtService>();
             var mockMGS = new Mock<IMortgageGoalService>();
             var mockIL = new Mock<IIncomeLogic>();
             var mockEL = new Mock<IExpenseLogic>();
@@ -577,12 +594,134 @@ namespace WhatIfBudget.Logic.Test
                                       mockBES.Object, mockIGS.Object,
                                       mockInvS.Object, mockIGIS.Object,
                                       mockMGS.Object, mockDGS.Object,
+                                      mockDS.Object, mockDGDS.Object,
                                       mockSGS.Object, mockIL.Object,
                                               mockEL.Object
                                       );
             var expected = 1078.52;
 
             var actual = budgetLogic.GetAvailableMonthlyNet(1);
+
+            actual.Should().Be(expected);
+        }
+
+        [TestMethod]
+        public void GET_CurrentNetWorth()
+        {
+            var mockBS = new Mock<IBudgetService>();
+            var mockIS = new Mock<IIncomeService>();
+            var mockES = new Mock<IExpenseService>();
+            var mockBIS = new Mock<IBudgetIncomeService>();
+            var mockBES = new Mock<IBudgetExpenseService>();
+            var mockIGS = new Mock<IInvestmentGoalService>();
+            var mockInvS = new Mock<IInvestmentService>();
+            var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
+            var mockSGS = new Mock<ISavingGoalService>();
+            var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+            var mockDGDS = new Mock<IDebtGoalDebtService>();
+            var mockMGS = new Mock<IMortgageGoalService>();
+            var mockIL = new Mock<IIncomeLogic>();
+            var mockEL = new Mock<IExpenseLogic>();
+
+
+            mockBS.Setup(x => x.GetBudget(It.IsAny<int>())).Returns(
+                    new Budget()
+                    {
+                        Id = 1,
+                        Name = "test",
+                        UserId = Guid.Empty,
+                        SavingGoalId = 1,
+                        DebtGoalId = 1,
+                        MortgageGoalId = 1,
+                        InvestmentGoalId = 1,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    });
+
+            mockSGS.Setup(x => x.GetSavingGoal(It.IsAny<int>())).Returns(
+                new SavingGoal()
+                {
+                    Id = 1,
+                    CurrentBalance = 500,
+                    TargetBalance = 5000,
+                    AnnualReturnRate_Percent = 2,
+                    AdditionalBudgetAllocation = 100,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                });
+            mockDS.Setup(x => x.GetDebtsByDebtGoalId(It.IsAny<int>())).Returns(
+                new List<Debt>()
+                {
+                    new Debt{
+                        Id = 1,
+                        Name = "debt1",
+                        CurrentBalance = 500,
+                        InterestRate = 5,
+                        MinimumPayment = 100,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    },
+                    new Debt{
+                        Id = 1,
+                        Name = "debt2",
+                        CurrentBalance = 5000,
+                        InterestRate = 4,
+                        MinimumPayment = 100,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    }
+                });
+            mockMGS.Setup(x => x.GetMortgageGoal(It.IsAny<int>())).Returns(
+                new MortgageGoal()
+                {
+                    Id = 1,
+                    TotalBalance = 200000,
+                    InterestRate_Percent = 5,
+                    MonthlyPayment = 1645.00,
+                    EstimatedCurrentValue = 250000,
+                    AdditionalBudgetAllocation = 85,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                });
+            mockInvS.Setup(x => x.GetInvestmentsByInvestmentGoalId(It.IsAny<int>())).Returns(
+                new List<Investment>()
+                {
+                    new Investment()
+                    {
+                    Id = 1,
+                    Name = "investment1",
+                    CurrentBalance = 1000,
+                    MonthlyPersonalContribution = 42,
+                    MonthlyEmployerContribution = 125,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                    },
+                    new Investment()
+                    {
+                    Id = 1,
+                    Name = "investment2",
+                    CurrentBalance = 10000,
+                    MonthlyPersonalContribution = 42,
+                    MonthlyEmployerContribution = 125,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                    }
+                });
+
+            //==================================================================================
+            var budgetLogic = new BudgetLogic(mockBS.Object, mockIS.Object,
+                                      mockES.Object, mockBIS.Object,
+                                      mockBES.Object, mockIGS.Object,
+                                      mockInvS.Object, mockIGIS.Object,
+                                      mockMGS.Object, mockDGS.Object,
+                                      mockDS.Object, mockDGDS.Object,
+                                      mockSGS.Object, mockIL.Object,
+                                              mockEL.Object
+                                      );
+            var expected = 56000.0;
+
+            var actual = budgetLogic.GetCurrentNetWorth(1);
 
             actual.Should().Be(expected);
         }

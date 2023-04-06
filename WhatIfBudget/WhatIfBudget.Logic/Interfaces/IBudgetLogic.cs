@@ -16,6 +16,8 @@ namespace WhatIfBudget.Logic.Interfaces
 
         public double GetAvailableMonthlyNet(int budgetId);
 
+        public double GetCurrentNetWorth(int budgetId);
+
         public UserBudget? CreateUserBudget(Guid userId, UserBudget budget);
 
         public UserBudget? ModifyUserBudget(Guid userId, UserBudget budget);
