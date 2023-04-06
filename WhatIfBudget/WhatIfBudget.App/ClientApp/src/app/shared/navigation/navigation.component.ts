@@ -77,7 +77,9 @@ export class NavigationComponent implements OnInit {
       header: 'Saved Budgets',
     });
     ref.onClose.subscribe((res: Budget) => {
-      location.reload();
+      if (res) {
+        location.reload();
+      }
     });
   }
 
