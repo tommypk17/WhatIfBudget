@@ -126,7 +126,7 @@ namespace WhatIfBudget.Logic.Test
         }
 
         [TestMethod]
-        public void GetBudget()
+        public void GetBudgetById()
         {
             var mockBS = new Mock<IBudgetService>();
             var mockIS = new Mock<IIncomeService>();
@@ -144,9 +144,7 @@ namespace WhatIfBudget.Logic.Test
             var mockIL = new Mock<IIncomeLogic>();
             var mockEL = new Mock<IExpenseLogic>();
 
-            mockBS.Setup(x => x.GetAllBudgets()).Returns(
-                (IList<Budget>)new List<Budget>()
-                {
+            mockBS.Setup(x => x.GetBudget(It.IsAny<int>())).Returns(
                         new Budget()
                         {
                             Id = 1,
@@ -158,42 +156,17 @@ namespace WhatIfBudget.Logic.Test
                             InvestmentGoalId = 1,
                             CreatedOn = DateTime.MinValue,
                             UpdatedOn = DateTime.MinValue
-                        },
-                        new Budget()
-                        {
-                            Id = 2,
-                            Name = "test2",
-                            UserId = Guid.Empty,
-                            SavingGoalId = 2,
-                            DebtGoalId = 2,
-                            MortgageGoalId = 2,
-                            InvestmentGoalId = 2,
-                            CreatedOn = DateTime.MinValue,
-                            UpdatedOn = DateTime.MinValue
-                        },
-                        new Budget()
-                        {
-                            Id = 3,
-                            Name = "test3",
-                            UserId = Guid.Empty,
-                            SavingGoalId = 3,
-                            DebtGoalId = 3,
-                            MortgageGoalId = 3,
-                            InvestmentGoalId = 3,
-                            CreatedOn = DateTime.MinValue,
-                            UpdatedOn = DateTime.MinValue
-                        }
-                });
+                        });
 
             var budgetLogic = new BudgetLogic(mockBS.Object, mockIS.Object,
-                                      mockES.Object, mockBIS.Object,
-                                      mockBES.Object, mockIGS.Object,
-                                      mockInvS.Object, mockIGIS.Object,
-                                      mockMGS.Object, mockDGS.Object,
-                                      mockDS.Object, mockDGDS.Object,
-                                      mockSGS.Object, mockIL.Object,
+                                              mockES.Object, mockBIS.Object,
+                                              mockBES.Object, mockIGS.Object,
+                                              mockInvS.Object, mockIGIS.Object,
+                                              mockMGS.Object, mockDGS.Object,
+                                              mockDS.Object, mockDGDS.Object,
+                                              mockSGS.Object, mockIL.Object,
                                               mockEL.Object
-                                      );
+                                              );
             var expected = new UserBudget()
             {
                 Id = 1,
@@ -283,14 +256,14 @@ namespace WhatIfBudget.Logic.Test
                 });
 
             var budgetLogic = new BudgetLogic(mockBS.Object, mockIS.Object,
-                                      mockES.Object, mockBIS.Object,
-                                      mockBES.Object, mockIGS.Object,
-                                      mockInvS.Object, mockIGIS.Object,
-                                      mockMGS.Object, mockDGS.Object,
-                                      mockDS.Object, mockDGDS.Object,
-                                      mockSGS.Object, mockIL.Object,
+                                              mockES.Object, mockBIS.Object,
+                                              mockBES.Object, mockIGS.Object,
+                                              mockInvS.Object, mockIGIS.Object,
+                                              mockMGS.Object, mockDGS.Object,
+                                              mockDS.Object, mockDGDS.Object,
+                                              mockSGS.Object, mockIL.Object,
                                               mockEL.Object
-                                      );
+                                              );
 
             var expected = new UserBudget()
             {
@@ -345,14 +318,14 @@ namespace WhatIfBudget.Logic.Test
                 });
 
             var budgetLogic = new BudgetLogic(mockBS.Object, mockIS.Object,
-                                      mockES.Object, mockBIS.Object,
-                                      mockBES.Object, mockIGS.Object,
-                                      mockInvS.Object, mockIGIS.Object,
-                                      mockMGS.Object, mockDGS.Object,
-                                      mockDS.Object, mockDGDS.Object,
-                                      mockSGS.Object, mockIL.Object,
+                                              mockES.Object, mockBIS.Object,
+                                              mockBES.Object, mockIGS.Object,
+                                              mockInvS.Object, mockIGIS.Object,
+                                              mockMGS.Object, mockDGS.Object,
+                                              mockDS.Object, mockDGDS.Object,
+                                              mockSGS.Object, mockIL.Object,
                                               mockEL.Object
-                                      );
+                                              );
             var expected = new UserBudget()
             {
                 Id = 1,
@@ -430,14 +403,32 @@ namespace WhatIfBudget.Logic.Test
                     new InvestmentGoalInvestment() { Id = 3, InvestmentGoalId = 2, InvestmentId = 3 },
                     new InvestmentGoalInvestment() { Id = 4, InvestmentGoalId = 2, InvestmentId = 2 }
             });
+
+            mockDGDS.Setup(x => x.GetAllDebtGoalDebts()).Returns(
+                (IList<DebtGoalDebt>)new List<DebtGoalDebt>()
+                {
+                    new DebtGoalDebt() { Id = 1, DebtGoalId = 1, DebtId = 1 },
+                    new DebtGoalDebt() { Id = 2, DebtGoalId = 1, DebtId = 2 },
+                    new DebtGoalDebt() { Id = 3, DebtGoalId = 2, DebtId = 3 },
+                    new DebtGoalDebt() { Id = 4, DebtGoalId = 2, DebtId = 2 }
+                });
+
             mockIGIS.Setup(x => x.DeleteInvestmentGoalInvestment(It.IsAny<int>())).Returns(
                 new InvestmentGoalInvestment());
+            mockDGDS.Setup(x => x.DeleteDebtGoalDebt(It.IsAny<int>())).Returns(
+                new DebtGoalDebt());
             mockInvS.Setup(x => x.DeleteInvestment(It.IsAny<int>())).Returns(
                 new Investment());
+            mockDS.Setup(x => x.DeleteDebt(It.IsAny<int>())).Returns(
+                new Debt());
             mockIGS.Setup(x => x.DeleteInvestmentGoal(It.IsAny<int>())).Returns(
                 new InvestmentGoal());
+            mockDGS.Setup(x => x.DeleteDebtGoal(It.IsAny<int>())).Returns(
+                new DebtGoal());
             mockSGS.Setup(x => x.DeleteSavingGoal(It.IsAny<int>())).Returns(
                 new SavingGoal());
+            mockMGS.Setup(x => x.DeleteMortgageGoal(It.IsAny<int>())).Returns(
+                new MortgageGoal());
 
             mockBIS.Setup(x => x.GetAllBudgetIncomes()).Returns(
                 (IList<BudgetIncome>)new List<BudgetIncome>()
@@ -467,14 +458,14 @@ namespace WhatIfBudget.Logic.Test
 
             //==================================================================================
             var budgetLogic = new BudgetLogic(mockBS.Object, mockIS.Object,
-                                      mockES.Object, mockBIS.Object,
-                                      mockBES.Object, mockIGS.Object,
-                                      mockInvS.Object, mockIGIS.Object,
-                                      mockMGS.Object, mockDGS.Object,
-                                      mockDS.Object, mockDGDS.Object,
-                                      mockSGS.Object, mockIL.Object,
+                                              mockES.Object, mockBIS.Object,
+                                              mockBES.Object, mockIGS.Object,
+                                              mockInvS.Object, mockIGIS.Object,
+                                              mockMGS.Object, mockDGS.Object,
+                                              mockDS.Object, mockDGDS.Object,
+                                              mockSGS.Object, mockIL.Object,
                                               mockEL.Object
-                                      );
+                                              );
             var expected = new UserBudget()
             {
                 Id = 1,
@@ -597,14 +588,14 @@ namespace WhatIfBudget.Logic.Test
 
             //==================================================================================
             var budgetLogic = new BudgetLogic(mockBS.Object, mockIS.Object,
-                                      mockES.Object, mockBIS.Object,
-                                      mockBES.Object, mockIGS.Object,
-                                      mockInvS.Object, mockIGIS.Object,
-                                      mockMGS.Object, mockDGS.Object,
-                                      mockDS.Object, mockDGDS.Object,
-                                      mockSGS.Object, mockIL.Object,
+                                              mockES.Object, mockBIS.Object,
+                                              mockBES.Object, mockIGS.Object,
+                                              mockInvS.Object, mockIGIS.Object,
+                                              mockMGS.Object, mockDGS.Object,
+                                              mockDS.Object, mockDGDS.Object,
+                                              mockSGS.Object, mockIL.Object,
                                               mockEL.Object
-                                      );
+                                              );
             var expected = 1078.52;
 
             var actual = budgetLogic.GetAvailableMonthlyNet(1);
@@ -625,6 +616,8 @@ namespace WhatIfBudget.Logic.Test
             var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
             var mockSGS = new Mock<ISavingGoalService>();
             var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+            var mockDGDS = new Mock<IDebtGoalDebtService>();
             var mockMGS = new Mock<IMortgageGoalService>();
             var mockIL = new Mock<IIncomeLogic>();
             var mockEL = new Mock<IExpenseLogic>();
@@ -673,6 +666,7 @@ namespace WhatIfBudget.Logic.Test
                                               mockBES.Object, mockIGS.Object,
                                               mockInvS.Object, mockIGIS.Object,
                                               mockMGS.Object, mockDGS.Object,
+                                              mockDS.Object, mockDGDS.Object,
                                               mockSGS.Object, mockIL.Object,
                                               mockEL.Object
                                               );
@@ -703,6 +697,8 @@ namespace WhatIfBudget.Logic.Test
             var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
             var mockSGS = new Mock<ISavingGoalService>();
             var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+            var mockDGDS = new Mock<IDebtGoalDebtService>();
             var mockMGS = new Mock<IMortgageGoalService>();
             var mockIL = new Mock<IIncomeLogic>();
             var mockEL = new Mock<IExpenseLogic>();
@@ -773,6 +769,7 @@ namespace WhatIfBudget.Logic.Test
                                               mockBES.Object, mockIGS.Object,
                                               mockInvS.Object, mockIGIS.Object,
                                               mockMGS.Object, mockDGS.Object,
+                                              mockDS.Object, mockDGDS.Object,
                                               mockSGS.Object, mockIL.Object,
                                               mockEL.Object
                                               );
@@ -803,6 +800,8 @@ namespace WhatIfBudget.Logic.Test
             var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
             var mockSGS = new Mock<ISavingGoalService>();
             var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+            var mockDGDS = new Mock<IDebtGoalDebtService>();
             var mockMGS = new Mock<IMortgageGoalService>();
             var mockIL = new Mock<IIncomeLogic>();
             var mockEL = new Mock<IExpenseLogic>();
@@ -843,6 +842,7 @@ namespace WhatIfBudget.Logic.Test
                                               mockBES.Object, mockIGS.Object,
                                               mockInvS.Object, mockIGIS.Object,
                                               mockMGS.Object, mockDGS.Object,
+                                              mockDS.Object, mockDGDS.Object,
                                               mockSGS.Object, mockIL.Object,
                                               mockEL.Object
                                               );
@@ -960,14 +960,14 @@ namespace WhatIfBudget.Logic.Test
 
             //==================================================================================
             var budgetLogic = new BudgetLogic(mockBS.Object, mockIS.Object,
-                                      mockES.Object, mockBIS.Object,
-                                      mockBES.Object, mockIGS.Object,
-                                      mockInvS.Object, mockIGIS.Object,
-                                      mockMGS.Object, mockDGS.Object,
-                                      mockDS.Object, mockDGDS.Object,
-                                      mockSGS.Object, mockIL.Object,
+                                              mockES.Object, mockBIS.Object,
+                                              mockBES.Object, mockIGS.Object,
+                                              mockInvS.Object, mockIGIS.Object,
+                                              mockMGS.Object, mockDGS.Object,
+                                              mockDS.Object, mockDGDS.Object,
+                                              mockSGS.Object, mockIL.Object,
                                               mockEL.Object
-                                      );
+                                              );
             var expected = 56000.0;
 
             var actual = budgetLogic.GetCurrentNetWorth(1);

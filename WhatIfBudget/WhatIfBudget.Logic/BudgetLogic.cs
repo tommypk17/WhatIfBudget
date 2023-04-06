@@ -8,6 +8,7 @@ using WhatIfBudget.Logic.Models;
 using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
 using WhatIfBudget.Services;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 
 namespace WhatIfBudget.Logic
 {
@@ -185,6 +186,8 @@ namespace WhatIfBudget.Logic
 
         public UserBudget? DeleteUserBudget(int budgetId)
         {
+            var budget = _budgetService.GetBudget(budgetId);
+            if (budget == null) { return null; }
             // Delete associated debts
             var allDGD_List = _dgdService.GetAllDebtGoalDebts()
                 .ToList();
