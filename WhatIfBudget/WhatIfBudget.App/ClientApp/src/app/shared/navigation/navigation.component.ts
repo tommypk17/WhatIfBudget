@@ -6,6 +6,8 @@ import { BudgetEntryFormComponent } from '../budget-entry-form/budget-entry-form
 import { SharedService } from '../../services/shared.service';
 import { AuthService } from '../../services/auth.service';
 import { Observable } from 'rxjs';
+import { Budget } from '../models/budget';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navigation',
@@ -17,7 +19,7 @@ export class NavigationComponent implements OnInit {
   isLoading: boolean = false;
   currentBudget: string | undefined;
 
-  constructor(private cd: ChangeDetectorRef, private dialogService: DialogService, private sharedService: SharedService, private authService: AuthService) { }
+  constructor(private cd: ChangeDetectorRef, private dialogService: DialogService, private sharedService: SharedService, private authService: AuthService, private router: Router) { }
 
   navs: MenuItem[] = [];
 
@@ -74,11 +76,15 @@ export class NavigationComponent implements OnInit {
     const ref = this.dialogService.open(BudgetListingComponent, {
       header: 'Saved Budgets',
     });
+    ref.onClose.subscribe((res: Budget) => {
+      location.reload();
+    });
   }
 
   budgetCreate() {
     const ref = this.dialogService.open(BudgetEntryFormComponent, {
       header: 'New Budget',
+      data: {budget: new Budget()}
     });
   }
 

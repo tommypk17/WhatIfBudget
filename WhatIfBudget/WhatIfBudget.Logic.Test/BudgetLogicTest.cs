@@ -379,6 +379,19 @@ namespace WhatIfBudget.Logic.Test
             var mockIL = new Mock<IIncomeLogic>();
             var mockEL = new Mock<IExpenseLogic>();
 
+            mockBS.Setup(x => x.GetBudget(It.IsAny<int>())).Returns(new Budget()
+            {
+                Id = 1,
+                Name = "DeleteTest",
+                UserId = Guid.Empty,
+                SavingGoalId = 1,
+                DebtGoalId = 1,
+                MortgageGoalId = 1,
+                InvestmentGoalId = 1,
+                CreatedOn = DateTime.MinValue,
+                UpdatedOn = DateTime.MinValue
+            });
+
             mockBS.Setup(x => x.DeleteBudget(It.IsAny<int>())).Returns(
                 new Budget()
                 {
@@ -455,15 +468,7 @@ namespace WhatIfBudget.Logic.Test
                 InvestmentGoalId = 1,
             };
 
-            var actual = budgetLogic.DeleteUserBudget(new UserBudget()
-            {
-                Id = 1,
-                Name = "DeleteTest",
-                SavingGoalId = 1,
-                DebtGoalId = 1,
-                MortgageGoalId = 1,
-                InvestmentGoalId = 1,
-            });
+            var actual = budgetLogic.DeleteUserBudget(It.IsAny<int>());
 
             actual.Should().BeEquivalentTo(expected);
 

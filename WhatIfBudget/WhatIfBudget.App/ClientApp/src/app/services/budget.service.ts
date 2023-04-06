@@ -117,6 +117,21 @@ export class BudgetService {
     );
   }
 
+
+  public deleteBudget(budget: Budget): Observable<Budget> {
+    let budgetId: number = budget.id!;
+    return this.http.delete<Budget>(environment.URL + `/api/budgets/${budgetId}`).pipe(
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<Budget>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+      })
+    );
+  }
+
   private handleError(err: any): void {
     console.log('Error: ' + err)
     //this.sharedService.clearLoading();

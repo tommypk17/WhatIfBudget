@@ -117,13 +117,13 @@ namespace WhatIfBudget.API.Controllers
             }
         }
 
-        [HttpDelete]
-        public IActionResult Delete(UserBudget apiBudget)
+        [HttpDelete("{budgetId}")]
+        public IActionResult Delete(int budgetId)
         {
             //grab the user from the passed auth token
             var currentUser = AuthUser.Current(User);
 
-            var res = _budgetLogic.DeleteUserBudget(apiBudget);
+            var res = _budgetLogic.DeleteUserBudget(budgetId);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);
