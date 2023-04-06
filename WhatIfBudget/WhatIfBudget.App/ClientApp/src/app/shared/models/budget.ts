@@ -6,3 +6,10 @@ export class Budget {
   mortgageGoalId: number | undefined;
   investmentGoalId: number | undefined;
 }
+
+export class AdditionalContributions {
+  debtGoal: number | undefined;
+  mortgageGoal: number | undefined;
+  savingGoal: number | undefined;
+  investmentGoal: number | undefined;
+}
