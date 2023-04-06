@@ -277,7 +277,7 @@ namespace WhatIfBudget.API.Test
         {
             //mock budget logic
             var mockBL = new Mock<IBudgetLogic>();
-            mockBL.Setup(x => x.DeleteUserBudget(It.IsAny<UserBudget>()))
+            mockBL.Setup(x => x.DeleteUserBudget(It.IsAny<int>()))
                             .Returns(new UserBudget() {
                                 Id = 1,
                                 Name = "test",
@@ -311,15 +311,7 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = budgetController.Delete(new UserBudget
-            {
-                Id = 1,
-                Name = "test",
-                SavingGoalId = 1,
-                DebtGoalId = 1,
-                MortgageGoalId = 1,
-                InvestmentGoalId = 1
-            });
+            var actual = budgetController.Delete(It.IsAny<int>());
 
 
             actual.Should().BeEquivalentTo(expected);

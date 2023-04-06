@@ -149,11 +149,11 @@ namespace WhatIfBudget.Logic
             return UserBudget.FromBudget(dbBudget);
         }
 
-        public UserBudget? DeleteUserBudget(UserBudget budget)
+        public UserBudget? DeleteUserBudget(int budgetId)
         {
             // Delete associated debts
             // TODO
-
+            var budget = _budgetService.GetBudget(budgetId);
             // Delete associated investments
             var allIGI_List = _igiService.GetAllInvestmentGoalInvestments()
                 .ToList();
