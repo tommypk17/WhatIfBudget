@@ -307,7 +307,7 @@ namespace WhatIfBudget.API.Test
         {
             //mock budget logic
             var mockBL = new Mock<IBudgetLogic>();
-            mockBL.Setup(x => x.DeleteUserBudget(It.IsAny<UserBudget>()))
+            mockBL.Setup(x => x.DeleteUserBudget(It.IsAny<int>()))
                             .Returns(new UserBudget() {
                                 Id = 1,
                                 Name = "test",
@@ -341,19 +341,123 @@ namespace WhatIfBudget.API.Test
                 StatusCode = 200,
             };
 
-            var actual = budgetController.Delete(new UserBudget
-            {
-                Id = 1,
-                Name = "test",
-                SavingGoalId = 1,
-                DebtGoalId = 1,
-                MortgageGoalId = 1,
-                InvestmentGoalId = 1
-            });
+            var actual = budgetController.Delete(It.IsAny<int>());
 
 
             actual.Should().BeEquivalentTo(expected);
         }
+
+        [TestMethod]
+        public void Get_UserBudgetAdditionalContributions()
+        {
+            //mock budget logic
+            var mockBL = new Mock<IBudgetLogic>();
+            mockBL.Setup(x => x.GetUserBudgetAllocations(It.IsAny<int>())).Returns(new UserBudgetAllocations
+            {
+                DebtGoal = 100,
+                InvestmentGoal = 145,
+                SavingGoal = 110,
+                MortgageGoal = 50
+            });
+
+            //Setup the http context (for auth)
+            var budgetController = new BudgetsController(mockBL.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new UserBudgetAllocations
+            {
+                DebtGoal = 100,
+                InvestmentGoal = 145,
+                SavingGoal = 110,
+                MortgageGoal = 50
+            };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = budgetController.GetAdditionalContributions(It.IsAny<int>());
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void Put_UserBudgetAdditionalContributions()
+        {
+            //mock budget logic
+            var mockBL = new Mock<IBudgetLogic>();
+            mockBL.Setup(x => x.UpdateUserBudgetAllocations(It.IsAny<int>(), It.IsAny<UserBudgetAllocations>())).Returns(new UserBudgetAllocations
+            {
+                DebtGoal = 100,
+                InvestmentGoal = 145,
+                SavingGoal = 110,
+                MortgageGoal = 50
+            });
+
+            //Setup the http context (for auth)
+            var budgetController = new BudgetsController(mockBL.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new UserBudgetAllocations
+            {
+                DebtGoal = 100,
+                InvestmentGoal = 145,
+                SavingGoal = 110,
+                MortgageGoal = 50
+            };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = budgetController.UpdateAdditionalContributions(It.IsAny<int>(), It.IsAny<UserBudgetAllocations>());
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void Get_UserBudgetAvailableFreeCash()
+        {
+            //mock budget logic
+            var mockBL = new Mock<IBudgetLogic>();
+            mockBL.Setup(x => x.GetBudgetAvailableFreeCash(It.IsAny<int>())).Returns(50.0);
+
+            //Setup the http context (for auth)
+            var budgetController = new BudgetsController(mockBL.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = 50.0;
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = budgetController.GetAvailableFreeCash(It.IsAny<int>());
+
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
 
         public Mock<HttpContext> Helper_MockHttpContext()
         {

@@ -48,12 +48,47 @@ namespace WhatIfBudget.API.Controllers
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
+        [HttpGet("{budgetId}/additionalContributions")]
+        public IActionResult GetAdditionalContributions([FromRoute] int budgetId)
+        {
+            var res = _budgetLogic.GetUserBudgetAllocations(budgetId);
+            if (res == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, res);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status200OK, res);
+            }
+        }
+
+        [HttpPut("{budgetId}/additionalContributions")]
+        public IActionResult UpdateAdditionalContributions([FromRoute] int budgetId, [FromBody] UserBudgetAllocations budgetAllocations)
+        {
+            var res = _budgetLogic.UpdateUserBudgetAllocations(budgetId, budgetAllocations);
+            if (res == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, res);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status200OK, res);
+            }
+        }
+
         [HttpGet("{budgetId}/currentNetWorth")]
         public IActionResult GetCurrentNetWorth([FromRoute] int budgetId)
         {
             //pass the budget ID from the route to the logic function
             var res = _budgetLogic.GetCurrentNetWorth(budgetId);
             //return a status of 200 with all the current user's budget
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
+        [HttpGet("{budgetId}/availableFreeCash")]
+        public IActionResult GetAvailableFreeCash([FromRoute] int budgetId)
+        {
+            var res = _budgetLogic.GetBudgetAvailableFreeCash(budgetId);
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
@@ -91,13 +126,13 @@ namespace WhatIfBudget.API.Controllers
             }
         }
 
-        [HttpDelete]
-        public IActionResult Delete(UserBudget apiBudget)
+        [HttpDelete("{budgetId}")]
+        public IActionResult Delete(int budgetId)
         {
             //grab the user from the passed auth token
             var currentUser = AuthUser.Current(User);
 
-            var res = _budgetLogic.DeleteUserBudget(apiBudget);
+            var res = _budgetLogic.DeleteUserBudget(budgetId);
             if (res == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, res);

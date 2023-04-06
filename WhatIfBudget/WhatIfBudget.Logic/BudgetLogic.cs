@@ -183,7 +183,7 @@ namespace WhatIfBudget.Logic
             return UserBudget.FromBudget(dbBudget);
         }
 
-        public UserBudget? DeleteUserBudget(UserBudget budget)
+        public UserBudget? DeleteUserBudget(int budgetId)
         {
             // Delete associated debts
             var allDGD_List = _dgdService.GetAllDebtGoalDebts()
@@ -274,6 +274,74 @@ namespace WhatIfBudget.Logic
             var dbBudget = _budgetService.DeleteBudget(budget.Id);
             if (dbBudget == null) { throw new NullReferenceException(); }
             return UserBudget.FromBudget(dbBudget);
+        }
+
+        public UserBudgetAllocations? GetUserBudgetAllocations(int budgetId)
+        {
+            var budget = _budgetService.GetBudget(budgetId);
+            if(budget == null) { throw new NullReferenceException(); }
+
+            var allocations = new UserBudgetAllocations();
+            var debtGoal = _debtGoalService.GetDebtGoal(budget.DebtGoalId);
+            if (debtGoal is not null) allocations.DebtGoal = debtGoal.AdditionalBudgetAllocation;
+            
+            var mortgageGoal = _mortgageGoalService.GetMortgageGoal(budget.MortgageGoalId);
+            if (mortgageGoal is not null) allocations.MortgageGoal = mortgageGoal.AdditionalBudgetAllocation;
+            
+            var savingGoal = _savingGoalService.GetSavingGoal(budget.SavingGoalId);
+            if (savingGoal is not null) allocations.SavingGoal = savingGoal.AdditionalBudgetAllocation;
+            
+            var investmentGoal = _investmentGoalService.GetInvestmentGoal(budget.InvestmentGoalId);
+            if (investmentGoal is not null) allocations.InvestmentGoal = investmentGoal.AdditionalBudgetAllocation;
+
+            return allocations;
+        }
+
+        public UserBudgetAllocations? UpdateUserBudgetAllocations(int budgetId, UserBudgetAllocations budgetAllocations)
+        {
+            var budget = _budgetService.GetBudget(budgetId);
+            if (budget == null) { throw new NullReferenceException(); }
+
+            var debtGoal = _debtGoalService.GetDebtGoal(budget.DebtGoalId);
+            if (debtGoal is not null)
+            {
+                debtGoal.AdditionalBudgetAllocation = budgetAllocations.DebtGoal;
+                _debtGoalService.UpdateDebtGoal(debtGoal);
+            }
+
+            var mortgageGoal = _mortgageGoalService.GetMortgageGoal(budget.MortgageGoalId);
+            if (mortgageGoal is not null)
+            {
+                mortgageGoal.AdditionalBudgetAllocation = budgetAllocations.MortgageGoal;
+                _mortgageGoalService.ModifyMortgageGoal(mortgageGoal);
+            }
+
+            var savingGoal = _savingGoalService.GetSavingGoal(budget.SavingGoalId);
+            if (savingGoal is not null)
+            {
+                savingGoal.AdditionalBudgetAllocation = budgetAllocations.SavingGoal;
+                _savingGoalService.ModifySavingGoal(savingGoal);
+            }
+
+            var investmentGoal = _investmentGoalService.GetInvestmentGoal(budget.InvestmentGoalId);
+            if (investmentGoal is not null)
+            {
+                investmentGoal.AdditionalBudgetAllocation = budgetAllocations.InvestmentGoal;
+                _investmentGoalService.UpdateInvestmentGoal(investmentGoal);
+            }
+
+            return GetUserBudgetAllocations(budgetId);
+        }
+
+        public double GetBudgetAvailableFreeCash(int budgetId)
+        {
+            var res = 0.0;
+            var expenses = _expenseService.GetExpensesByBudgetId(budgetId);
+            var incomes = _incomeService.GetIncomesByBudgetId(budgetId);
+
+            res = incomes.Select(x => x.Amount).Sum() - expenses.Select(x => x.Amount).Sum();
+
+            return res;
         }
     }
 }

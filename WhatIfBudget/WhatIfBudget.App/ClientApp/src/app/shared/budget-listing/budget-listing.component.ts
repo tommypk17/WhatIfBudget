@@ -44,4 +44,14 @@ export class BudgetListingComponent implements OnInit {
       });
     });
   }
+
+  deleteBudget(budget: Budget | undefined): void {
+    this.budgetService.deleteBudget(budget!).subscribe((res: Budget) => {
+      if (res) {
+        this.budgetService.getBudgets().subscribe((res: Budget[]) => {
+          this._budgets = res;
+        });
+      }
+    });
+  }
 }
