@@ -187,7 +187,11 @@ namespace WhatIfBudget.Logic
         public UserBudget? DeleteUserBudget(int budgetId)
         {
             var budget = _budgetService.GetBudget(budgetId);
-            if (budget == null) { return null; }
+            if (budget == null) { throw new NullReferenceException(); }
+
+            var dbBudget = _budgetService.DeleteBudget(budget.Id);
+            if (dbBudget == null) { throw new NullReferenceException(); }
+
             // Delete associated debts
             var allDGD_List = _dgdService.GetAllDebtGoalDebts()
                 .ToList();
@@ -274,8 +278,6 @@ namespace WhatIfBudget.Logic
                 }
             }
 
-            var dbBudget = _budgetService.DeleteBudget(budget.Id);
-            if (dbBudget == null) { throw new NullReferenceException(); }
             return UserBudget.FromBudget(dbBudget);
         }
 
