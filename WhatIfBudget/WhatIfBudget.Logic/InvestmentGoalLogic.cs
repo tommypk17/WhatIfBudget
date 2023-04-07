@@ -18,26 +18,76 @@ namespace WhatIfBudget.Logic
     {
         private readonly IInvestmentGoalService _investmentGoalService;
         private readonly IInvestmentService _investmentService;
-        public InvestmentGoalLogic(IInvestmentGoalService investmentGoalService, IInvestmentService investmentService) { 
+        private readonly ISavingGoalService _savingGoalService;
+        private readonly IDebtGoalService _debtGoalService;
+        private readonly IDebtService _debtService;
+        private readonly IMortgageGoalService _mortgageGoalService;
+        private readonly ISavingGoalLogic _savingGoalLogic;
+        private readonly IDebtGoalLogic _debtGoalLogic;
+        private readonly IMortgageGoalLogic _mortgageGoalLogic;
+        public InvestmentGoalLogic(IInvestmentGoalService investmentGoalService,
+                                   IInvestmentService investmentService,
+                                   ISavingGoalService savingGoalService,
+                                   IDebtGoalService debtGoalService,
+                                   IDebtService debtService,
+                                   IMortgageGoalService mortgageGoalService,
+                                   ISavingGoalLogic savingGoalLogic,
+                                   IDebtGoalLogic debtGoalLogic,
+                                   IMortgageGoalLogic mortgageGoalLogic) { 
             _investmentGoalService = investmentGoalService;
             _investmentService = investmentService;
+            _savingGoalService = savingGoalService;
+            _debtGoalService = debtGoalService;
+            _debtService = debtService;
+            _mortgageGoalService = mortgageGoalService;
+            _savingGoalLogic = savingGoalLogic;
+            _debtGoalLogic = debtGoalLogic;
+            _mortgageGoalLogic = mortgageGoalLogic;
         }
 
-        private double GetCompletedGoalContributions(UserInvestmentGoal investmentGoal, int futureMonth)
+        private Dictionary<int, double> GetCompletedGoalContributions(InvestmentGoal investmentGoal)
         {
-            var total = 0.0;
-            // Rollover contributions from other goals
-            /*
-             * 1. Get all other goals from parent budget
-             * 2. If saving goal is complete at <futureMonth> add the allocation to total
-             * 3. If debt goal is complete at <futureMonth> add the allocation and minimum payments to total
-             * 4. If mortgage goal is complete at <futureMonth> add the allocation and minimum payment to total
-             */
+            var rolloverDict = new Dictionary<int, double>();
+            var budget = investmentGoal.Budget;
+            if (budget is null) { throw new NullReferenceException(); }
+            var dbSG = _savingGoalService.GetSavingGoal(budget.SavingGoalId);
+            if (dbSG is null) { throw new NullReferenceException(); }
+            var dbDG = _debtGoalService.GetDebtGoal(budget.DebtGoalId);
+            if (dbDG is null) { throw new NullReferenceException(); }
+            var dbMG = _mortgageGoalService.GetMortgageGoal(budget.MortgageGoalId);
+            if (dbMG is null) { throw new NullReferenceException(); }
 
-            return total;
+            var savingMonth = _savingGoalLogic.GetSavingTotals(budget.SavingGoalId).MonthsToTarget;
+            var savingAllocation = dbSG.AdditionalBudgetAllocation;
+            var debtMonth = _debtGoalLogic.GetDebtTotals(budget.DebtGoalId).MonthsToPayoff;
+            var debtAllocation = dbDG.AdditionalBudgetAllocation;
+            var debtPayments = _debtService.GetDebtsByDebtGoalId(budget.DebtGoalId).Select(x => x.MinimumPayment).Sum();
+            var mortgageMonth = _mortgageGoalLogic.GetMortgageTotals(budget.MortgageGoalId).MonthsToPayoff;
+            var mortgageAllocation = dbMG.AdditionalBudgetAllocation;
+
+            for (int iMonth = 0; iMonth < investmentGoal.YearsToTarget * 12; iMonth++)
+            {
+                rolloverDict[iMonth] = 0;
+                if (!investmentGoal.RolloverCompletedGoals) { continue; }
+
+                // Saving
+                if (iMonth > savingMonth) { rolloverDict[iMonth] += savingAllocation; }
+
+                // Debt
+                if (iMonth > debtMonth)
+                {
+                    rolloverDict[iMonth] += debtAllocation;
+                    rolloverDict[iMonth] += debtPayments;
+                }
+
+                // Mortgage
+                if (iMonth > mortgageMonth) { rolloverDict[iMonth] += mortgageAllocation; }
+            }
+
+            return rolloverDict;
         }
 
-        private (Dictionary<int, double>, InvestmentGoalTotals) CalculateInvestmentsOverTime(UserInvestmentGoal investmentGoal)
+        private (Dictionary<int, double>, InvestmentGoalTotals) CalculateInvestmentsOverTime(InvestmentGoal investmentGoal)
         {
             var investmentList = _investmentService.GetInvestmentsByInvestmentGoalId(investmentGoal.Id);
             var startingBalance = investmentList.Select(x => x.CurrentBalance).Sum();
@@ -83,9 +133,8 @@ namespace WhatIfBudget.Logic
         {
             var dbInvestmentGoal = _investmentGoalService.GetInvestmentGoal(investmentGoalId);
             if (dbInvestmentGoal is null) { throw new NullReferenceException(); }
-            UserInvestmentGoal investmentGoal = UserInvestmentGoal.FromInvestmentGoal(dbInvestmentGoal);
 
-            (_, var totals) = CalculateInvestmentsOverTime(investmentGoal);
+            (_, var totals) = CalculateInvestmentsOverTime(dbInvestmentGoal);
             return totals;
         }
 
@@ -93,8 +142,7 @@ namespace WhatIfBudget.Logic
         {
             var dbInvestmentGoal = _investmentGoalService.GetInvestmentGoal(investmentGoalId);
             if (dbInvestmentGoal is null) { throw new NullReferenceException(); }
-            UserInvestmentGoal investmentGoal = UserInvestmentGoal.FromInvestmentGoal(dbInvestmentGoal);
-            (var dict, _) = CalculateInvestmentsOverTime(investmentGoal);
+            (var dict, _) = CalculateInvestmentsOverTime(dbInvestmentGoal);
             return dict;
         }
 

@@ -23,6 +23,13 @@ namespace WhatIfBudget.Logic.Test
         {
             var mockIGS = new Mock<IInvestmentGoalService>();
             var mockIS = new Mock<IInvestmentService>();
+            var mockSGS = new Mock<ISavingGoalService>();
+            var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+            var mockMGS = new Mock<IMortgageGoalService>();
+            var mockSGL = new Mock<ISavingGoalLogic>();
+            var mockDGL = new Mock<IDebtGoalLogic>();
+            var mockMGL = new Mock<IMortgageGoalLogic>();
 
             mockIGS.Setup(x => x.GetInvestmentGoal(It.IsAny<int>())).Returns(
                 new InvestmentGoal()
@@ -61,7 +68,11 @@ namespace WhatIfBudget.Logic.Test
                     }
     });
 
-            var investmentGoalLogic = new InvestmentGoalLogic(mockIGS.Object, mockIS.Object);
+            var investmentGoalLogic = new InvestmentGoalLogic(mockIGS.Object, mockIS.Object,
+                                                              mockSGS.Object, mockDGS.Object,
+                                                              mockDS.Object,  mockMGS.Object,
+                                                              mockSGL.Object, mockDGL.Object,
+                                                              mockMGL.Object);
 
             var expected = new UserInvestmentGoal() 
             {
@@ -81,6 +92,13 @@ namespace WhatIfBudget.Logic.Test
         {
             var mockIGS = new Mock<IInvestmentGoalService>();
             var mockIS = new Mock<IInvestmentService>();
+            var mockSGS = new Mock<ISavingGoalService>();
+            var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+            var mockMGS = new Mock<IMortgageGoalService>();
+            var mockSGL = new Mock<ISavingGoalLogic>();
+            var mockDGL = new Mock<IDebtGoalLogic>();
+            var mockMGL = new Mock<IMortgageGoalLogic>();
 
             mockIGS.Setup(x => x.UpdateInvestmentGoal(It.IsAny<InvestmentGoal>())).Returns(
                     new InvestmentGoal()
@@ -94,7 +112,11 @@ namespace WhatIfBudget.Logic.Test
                     }
                 );
 
-            var investmentGoalLogic = new InvestmentGoalLogic(mockIGS.Object, mockIS.Object);
+            var investmentGoalLogic = new InvestmentGoalLogic(mockIGS.Object, mockIS.Object,
+                                                              mockSGS.Object, mockDGS.Object,
+                                                              mockDS.Object, mockMGS.Object,
+                                                              mockSGL.Object, mockDGL.Object,
+                                                              mockMGL.Object);
 
             var expected = new UserInvestmentGoal()
             {
@@ -120,6 +142,13 @@ namespace WhatIfBudget.Logic.Test
         {
             var mockIGS = new Mock<IInvestmentGoalService>();
             var mockIS = new Mock<IInvestmentService>();
+            var mockSGS = new Mock<ISavingGoalService>();
+            var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+            var mockMGS = new Mock<IMortgageGoalService>();
+            var mockSGL = new Mock<ISavingGoalLogic>();
+            var mockDGL = new Mock<IDebtGoalLogic>();
+            var mockMGL = new Mock<IMortgageGoalLogic>();
 
             mockIGS.Setup(x => x.GetInvestmentGoal(It.IsAny<int>())).Returns(
                 new InvestmentGoal()
@@ -159,7 +188,11 @@ namespace WhatIfBudget.Logic.Test
                     }
                 });
 
-            var investmentGoalLogic = new InvestmentGoalLogic(mockIGS.Object, mockIS.Object);
+            var investmentGoalLogic = new InvestmentGoalLogic(mockIGS.Object, mockIS.Object,
+                                                              mockSGS.Object, mockDGS.Object,
+                                                              mockDS.Object, mockMGS.Object,
+                                                              mockSGL.Object, mockDGL.Object,
+                                                              mockMGL.Object);
 
             var expected = new InvestmentGoalTotals()
             {
@@ -178,6 +211,13 @@ namespace WhatIfBudget.Logic.Test
         {
             var mockIGS = new Mock<IInvestmentGoalService>();
             var mockIS = new Mock<IInvestmentService>();
+            var mockSGS = new Mock<ISavingGoalService>();
+            var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+            var mockMGS = new Mock<IMortgageGoalService>();
+            var mockSGL = new Mock<ISavingGoalLogic>();
+            var mockDGL = new Mock<IDebtGoalLogic>();
+            var mockMGL = new Mock<IMortgageGoalLogic>();
 
             mockIGS.Setup(x => x.GetInvestmentGoal(It.IsAny<int>())).Returns(
                 new InvestmentGoal()
@@ -217,7 +257,11 @@ namespace WhatIfBudget.Logic.Test
                     }
                 });
 
-            var investmentGoalLogic = new InvestmentGoalLogic(mockIGS.Object, mockIS.Object);
+            var investmentGoalLogic = new InvestmentGoalLogic(mockIGS.Object, mockIS.Object,
+                                                              mockSGS.Object, mockDGS.Object,
+                                                              mockDS.Object, mockMGS.Object,
+                                                              mockSGL.Object, mockDGL.Object,
+                                                              mockMGL.Object);
 
             var expected = new Dictionary<int, double>
             {

@@ -335,6 +335,9 @@ namespace WhatIfBudget.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("RolloverCompletedGoals")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
 
@@ -541,7 +544,7 @@ namespace WhatIfBudget.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("WhatIfBudget.Data.Models.Investment", "Investment")
-                        .WithMany()
+                        .WithMany("InvestmentGoalInvestments")
                         .HasForeignKey("InvestmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -564,6 +567,11 @@ namespace WhatIfBudget.Data.Migrations
             modelBuilder.Entity("WhatIfBudget.Data.Models.Income", b =>
                 {
                     b.Navigation("BudgetIncomes");
+                });
+
+            modelBuilder.Entity("WhatIfBudget.Data.Models.Investment", b =>
+                {
+                    b.Navigation("InvestmentGoalInvestments");
                 });
 
             modelBuilder.Entity("WhatIfBudget.Data.Models.InvestmentGoal", b =>
