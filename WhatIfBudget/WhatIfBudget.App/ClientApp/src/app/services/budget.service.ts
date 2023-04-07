@@ -102,6 +102,21 @@ export class BudgetService {
     );
   }
 
+  public getCurrentNetWorth(budgetId: number): Observable<number> {
+    return this.http.get<number>(environment.URL + `/api/budgets/${budgetId}/currentNetWorth`).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<number>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
   public getAvailableFreeCash(budgetId: number): Observable<number> {
     return this.http.get<number>(environment.URL + `/api/budgets/${budgetId}/availableFreeCash`).pipe(
       retry(3),
