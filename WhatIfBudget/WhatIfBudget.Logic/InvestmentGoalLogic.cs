@@ -11,6 +11,7 @@ using WhatIfBudget.Data.Models;
 using WhatIfBudget.Logic;
 using System.Dynamic;
 using System.Globalization;
+using System.Security.Cryptography;
 
 namespace WhatIfBudget.Logic
 {
@@ -45,9 +46,16 @@ namespace WhatIfBudget.Logic
             _mortgageGoalLogic = mortgageGoalLogic;
         }
 
-        private Dictionary<int, double> GetCompletedGoalContributions(InvestmentGoal investmentGoal)
+        private List<double> GetCompletedGoalContributions(InvestmentGoal investmentGoal)
         {
-            var rolloverDict = new Dictionary<int, double>();
+            if (!investmentGoal.RolloverCompletedGoals)
+            {
+                // Return a dict of correct size with all 0
+                return Enumerable.Repeat(0.0, investmentGoal.YearsToTarget * 12).ToList();
+            }
+
+            var rolloverList = Enumerable.Repeat(0.0, investmentGoal.YearsToTarget * 12).ToList();
+
             var budget = investmentGoal.Budget;
             if (budget is null) { throw new NullReferenceException(); }
             var dbSG = _savingGoalService.GetSavingGoal(budget.SavingGoalId);
@@ -64,27 +72,29 @@ namespace WhatIfBudget.Logic
             var debtPayments = _debtService.GetDebtsByDebtGoalId(budget.DebtGoalId).Select(x => x.MinimumPayment).Sum();
             var mortgageMonth = _mortgageGoalLogic.GetMortgageTotals(budget.MortgageGoalId).MonthsToPayoff;
             var mortgageAllocation = dbMG.AdditionalBudgetAllocation;
+            var mortgagePayment = dbMG.MonthlyPayment;
 
             for (int iMonth = 0; iMonth < investmentGoal.YearsToTarget * 12; iMonth++)
             {
-                rolloverDict[iMonth] = 0;
-                if (!investmentGoal.RolloverCompletedGoals) { continue; }
-
                 // Saving
-                if (iMonth > savingMonth) { rolloverDict[iMonth] += savingAllocation; }
+                if (iMonth > savingMonth) { rolloverList[iMonth] += savingAllocation; }
 
                 // Debt
                 if (iMonth > debtMonth)
                 {
-                    rolloverDict[iMonth] += debtAllocation;
-                    rolloverDict[iMonth] += debtPayments;
+                    rolloverList[iMonth] += debtAllocation;
+                    rolloverList[iMonth] += debtPayments;
                 }
 
                 // Mortgage
-                if (iMonth > mortgageMonth) { rolloverDict[iMonth] += mortgageAllocation; }
+                if (iMonth > mortgageMonth)
+                {
+                    rolloverList[iMonth] += mortgageAllocation;
+                    rolloverList[iMonth] += mortgagePayment;
+                }
             }
 
-            return rolloverDict;
+            return rolloverList;
         }
 
         private (Dictionary<int, double>, InvestmentGoalTotals) CalculateInvestmentsOverTime(InvestmentGoal investmentGoal)
@@ -102,6 +112,7 @@ namespace WhatIfBudget.Logic
             var baseContribution = investmentGoal.AdditionalBudgetAllocation;
             baseContribution += investmentList.Select(x => x.MonthlyPersonalContribution).Sum();
             baseContribution += investmentList.Select(x => x.MonthlyEmployerContribution).Sum();
+            var rolloverContribution = GetCompletedGoalContributions(investmentGoal);
 
             while (investmentStepper.NumberOfSteps < investmentGoal.YearsToTarget * 12)
             {
@@ -109,7 +120,7 @@ namespace WhatIfBudget.Logic
                 {
                     balanceDict[investmentStepper.NumberOfSteps / 12] = investmentStepper.Balance;
                 }
-                var iContribution = baseContribution; // + GetCompletedGoalContributions(investmentGoal, iMonth);
+                var iContribution = baseContribution + rolloverContribution[investmentStepper.NumberOfSteps];
                 _ = investmentStepper.Step(iContribution);
                 _ = contributionStepper.Step(investmentGoal.AdditionalBudgetAllocation);
             }
