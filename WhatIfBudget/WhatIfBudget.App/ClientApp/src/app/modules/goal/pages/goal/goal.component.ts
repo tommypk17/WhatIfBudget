@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BudgetService } from '../../../../services/budget.service';
-import { InvestmentService } from '../../../../services/investment.service';
+import { InvestmentGoalService } from '../../../../services/investment.goal.service';
 import { SharedService } from '../../../../services/shared.service';
 import { AdditionalContributions, Budget } from '../../../../shared/models/budget';
-import { Investment } from '../../../../shared/models/investment';
 
 @Component({
   selector: 'app-goal',
@@ -27,7 +26,7 @@ export class GoalComponent implements OnInit {
   @Output('updated') updated: EventEmitter<void> = new EventEmitter();
   @Input('contributions') model: AdditionalContributions = new AdditionalContributions();
 
-  constructor(private sharedService: SharedService, private budgetService: BudgetService, private investmentService: InvestmentService) { }
+  constructor(private sharedService: SharedService, private budgetService: BudgetService, private investmentGoalService: InvestmentGoalService) { }
 
   ngOnInit(): void {
     this.sharedService.budgetLoadedEmit.subscribe(() => {
@@ -47,7 +46,6 @@ export class GoalComponent implements OnInit {
           this.mortgageContribution = res.mortgageGoal;
           this.savingContribution = res.savingGoal;
           this.investmentContribution = res.investmentGoal;
-          this.checkDisables(this.debtContribution!, this.investmentContribution!, this.mortgageContribution!, this.savingContribution!);
         }
       });
     }
@@ -56,7 +54,6 @@ export class GoalComponent implements OnInit {
   sliderEvent() {
     let goals: AdditionalContributions = this.model as AdditionalContributions;
     if ((goals.debtGoal! + goals.investmentGoal! + goals.mortgageGoal! + goals.savingGoal!) <= this.availableFreeCash!) {
-      this.checkDisables(goals.debtGoal!, goals.investmentGoal!, goals.mortgageGoal!, goals.savingGoal!);
       this.budgetService.updateAdditionalContributions(this.sharedService.budget.id!, goals).subscribe((res: AdditionalContributions) => {
         this.sharedService.reloadCharts();
         this.budgetService.getNetAvailable(this.sharedService.budget.id!).subscribe((res: number) => {
@@ -75,28 +72,5 @@ export class GoalComponent implements OnInit {
         }
       });
     }
-  }
-
-  checkDisables(debtGoal: number, investmentGoal: number, mortgageGoal: number, savingGoal: number): void {
-    if ((debtGoal! + investmentGoal! + mortgageGoal! + savingGoal!) == this.availableFreeCash!) {
-        if (debtGoal == 0) {
-          this.isDebtDisabled = true;
-        }
-        if (mortgageGoal == 0) {
-          this.isMortgageDisabled = true;
-        }
-        if (savingGoal == 0) {
-          this.isSavingDisabled = true;
-        }
-        if (investmentGoal == 0) {
-          this.isInvestmentDisabled = true;
-        }
-      }
-      else {
-        this.isDebtDisabled = false;
-        this.isMortgageDisabled = false;
-        this.isSavingDisabled = false;
-        this.isInvestmentDisabled = false;
-      }
   }
 }
