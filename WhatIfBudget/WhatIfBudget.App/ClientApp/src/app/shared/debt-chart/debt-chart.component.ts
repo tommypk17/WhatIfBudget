@@ -14,6 +14,13 @@ export class DebtChartComponent implements OnInit {
   constructor(private debtService: DebtService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
+    this.loadChartInfo();
+    this.sharedService.chartReloadEmit.subscribe(() => {
+      this.loadChartInfo();
+    });
+  }
+
+  loadChartInfo(): void {
     let months: string[] = [];
     let balances: number[] = [];
 
@@ -24,14 +31,16 @@ export class DebtChartComponent implements OnInit {
             if (v.key % 12 == 0) {
               months.push('Year ' + v.key / 12)
               balances.push(v.value);
-            } else {
+            }
+            else {
               if (i == res.length - 1) {
                 months.push('Year ' + (v.key / 12).toFixed(2))
                 balances.push(v.value);
               }
             }
           });
-        } else {
+        }
+        else {
           res.forEach((v) => {
             months.push('Month ' + v.key)
             balances.push(v.value);
@@ -52,6 +61,5 @@ export class DebtChartComponent implements OnInit {
         };
       }
     });
-
   }
 }

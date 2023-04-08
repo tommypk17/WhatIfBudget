@@ -16,6 +16,7 @@ export class SharedService {
   isLoadingEmit: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loggedInEmit: EventEmitter<void> = new EventEmitter<void>();
   budgetLoadedEmit: EventEmitter<void> = new EventEmitter<void>();
+  chartReloadEmit: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(private msalService: MsalService) { }
 
@@ -86,5 +87,9 @@ export class SharedService {
       return this.msalService.instance.getAllAccounts()[0];
     }
     return undefined;
+  }
+
+  reloadCharts(): void {
+    this.chartReloadEmit.emit();
   }
 }

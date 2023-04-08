@@ -73,7 +73,7 @@ export class BudgetService {
     );
   }
 
-  public getAditionalContributions(budgetId: number): Observable<AdditionalContributions> {
+  public getAdditionalContributions(budgetId: number): Observable<AdditionalContributions> {
     return this.http.get<AdditionalContributions>(environment.URL + `/api/budgets/${budgetId}/additionalContributions`).pipe(
       retry(3),
       catchError((err, caught) => {
@@ -88,8 +88,8 @@ export class BudgetService {
     );
   }
 
-  public updateAditionalContributions(budgetId: number): Observable<AdditionalContributions> {
-    return this.http.put<AdditionalContributions>(environment.URL + `/api/incomes/budgets/${budgetId}/aditionalContributions`, AdditionalContributions).pipe(
+  public updateAdditionalContributions(budgetId: number, additionalContributions: AdditionalContributions): Observable<AdditionalContributions> {
+    return this.http.put<AdditionalContributions>(environment.URL + `/api/budgets/${budgetId}/additionalContributions`, additionalContributions).pipe(
       catchError((err, caught) => {
         this.handleError(err);
         return new Observable<AdditionalContributions>((subscriber) => {

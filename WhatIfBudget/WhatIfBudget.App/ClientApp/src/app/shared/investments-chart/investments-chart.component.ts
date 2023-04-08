@@ -15,35 +15,11 @@ export class InvestmentsChartComponent implements OnInit {
   constructor(private investmentGoalService: InvestmentGoalService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
-    let years: string[] = [];
-    let values: number[] = []
-
-
-    this.investmentGoalService.getBalanceOverTime(this.sharedService.budget.investmentGoalId!).subscribe((res: KeyValue<number, number>[]) => {
-      if (res) {
-        res.forEach((v) => {
-          years.push('Year ' + v.key)
-          values.push(v.value);
-        });
-
-        this.basicData = {
-          labels: years,
-          datasets: [
-            {
-              label: '$',
-              data: values,
-              fill: false,
-              backgroundColor: 'rgba(16,124,16,1)',
-              tension: .4
-            }
-          ]
-        };
-      }
+    this.loadChartInfo();
+    this.sharedService.chartReloadEmit.subscribe(() => {
+      this.loadChartInfo();
     });
-
-
-
-
+    
     this.basicOptions = {
       plugins: {
         legend: {
@@ -73,4 +49,30 @@ export class InvestmentsChartComponent implements OnInit {
     };
   }
 
+  loadChartInfo(): void {
+    let years: string[] = [];
+    let values: number[] = []
+
+    this.investmentGoalService.getBalanceOverTime(this.sharedService.budget.investmentGoalId!).subscribe((res: KeyValue<number, number>[]) => {
+      if (res) {
+        res.forEach((v) => {
+          years.push('Year ' + v.key)
+          values.push(v.value);
+        });
+
+        this.basicData = {
+          labels: years,
+          datasets: [
+            {
+              label: '$',
+              data: values,
+              fill: false,
+              backgroundColor: 'rgba(16,124,16,1)',
+              tension: .4
+            }
+          ]
+        };
+      }
+    });
+  }
 }
