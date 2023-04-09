@@ -18,10 +18,7 @@ export class GoalComponent implements OnInit {
   mortgageContribution: number | undefined = 0;
   savingContribution: number | undefined = 0;
   investmentContribution: number | undefined = 0;
-  isDebtDisabled: boolean = false;
-  isMortgageDisabled: boolean = false;
-  isSavingDisabled: boolean = false;
-  isInvestmentDisabled: boolean = false;
+
 
   @Output('updated') updated: EventEmitter<void> = new EventEmitter();
   @Input('contributions') model: AdditionalContributions = new AdditionalContributions();
