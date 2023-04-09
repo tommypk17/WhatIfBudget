@@ -15,8 +15,9 @@ export class MortgageChartComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadChartInfo();
-    this.sharedService.chartReloadEmit.subscribe(() => {
-      this.loadChartInfo();
+    this.sharedService.chartReloadEmit.subscribe((type: string) => {
+      if (type == 'mortgage')
+        this.loadChartInfo();
     });
   }
 

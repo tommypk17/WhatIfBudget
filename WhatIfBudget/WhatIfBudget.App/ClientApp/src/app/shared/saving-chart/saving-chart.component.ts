@@ -16,7 +16,8 @@ export class SavingChartComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadChartInfo();
-    this.sharedService.chartReloadEmit.subscribe(() => {
+    this.sharedService.chartReloadEmit.subscribe((type: string) => {
+      if(type == 'savings')
       this.loadChartInfo();
     });
 

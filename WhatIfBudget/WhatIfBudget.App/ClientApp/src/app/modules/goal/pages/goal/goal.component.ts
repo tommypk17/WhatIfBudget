@@ -51,11 +51,11 @@ export class GoalComponent implements OnInit {
     }
   }
 
-  sliderEvent() {
+  sliderEvent(type: string) {
     let goals: AdditionalContributions = this.model as AdditionalContributions;
     if ((goals.debtGoal! + goals.investmentGoal! + goals.mortgageGoal! + goals.savingGoal!) <= this.availableFreeCash!) {
       this.budgetService.updateAdditionalContributions(this.sharedService.budget.id!, goals).subscribe((res: AdditionalContributions) => {
-        this.sharedService.reloadCharts();
+        this.sharedService.reloadCharts(type);
         this.budgetService.getNetAvailable(this.sharedService.budget.id!).subscribe((res: number) => {
           if (res !== null) this.availableMonthlyNet = res;
         });

@@ -16,8 +16,9 @@ export class InvestmentsChartComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadChartInfo();
-    this.sharedService.chartReloadEmit.subscribe(() => {
-      this.loadChartInfo();
+    this.sharedService.chartReloadEmit.subscribe((type: string) => {
+      if (type == 'investments')
+        this.loadChartInfo();
     });
     
     this.basicOptions = {
