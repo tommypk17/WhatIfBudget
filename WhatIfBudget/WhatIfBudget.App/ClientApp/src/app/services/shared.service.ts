@@ -90,6 +90,12 @@ export class SharedService {
   }
 
   reloadCharts(type: string): void {
-    this.chartReloadEmit.emit(type);
+    if (type == 'all') {
+      this.chartReloadEmit.emit('mortgage');
+      this.chartReloadEmit.emit('investments');
+      this.chartReloadEmit.emit('savings');
+      this.chartReloadEmit.emit('debt');
+    }
+    else this.chartReloadEmit.emit(type);
   }
 }

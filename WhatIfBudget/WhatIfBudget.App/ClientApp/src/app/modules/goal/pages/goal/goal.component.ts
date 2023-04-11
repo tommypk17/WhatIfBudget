@@ -60,6 +60,7 @@ export class GoalComponent implements OnInit {
   toggleRolloverContributions(): void {
     this.investmentGoalService.toggleRolloverContributions(this.sharedService.budget.investmentGoalId!).subscribe((res: InvestmentGoal) => {
       this.loadCharts();
+      this.sharedService.reloadCharts('all');
     });
   }
 
