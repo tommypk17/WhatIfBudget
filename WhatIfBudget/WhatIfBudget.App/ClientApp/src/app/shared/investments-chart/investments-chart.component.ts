@@ -51,18 +51,34 @@ export class InvestmentsChartComponent implements OnInit {
   }
 
   loadChartInfo(): void {
-    let years: string[] = [];
+    let months: string[] = [];
     let values: number[] = []
 
     this.investmentGoalService.getBalanceOverTime(this.sharedService.budget.investmentGoalId!).subscribe((res: KeyValue<number, number>[]) => {
       if (res) {
-        res.forEach((v) => {
-          years.push('Year ' + v.key)
-          values.push(v.value);
-        });
+        if (res.length > 12) {
+          res.forEach((v, i) => {
+            if (v.key % 12 == 0) {
+              months.push('Year ' + v.key / 12)
+              values.push(v.value);
+            }
+            else {
+              if (i == res.length - 1) {
+                months.push('Year ' + (v.key / 12).toFixed(2))
+                values.push(v.value);
+              }
+            }
+          });
+        }
+        else {
+          res.forEach((v) => {
+            months.push('Month ' + v.key)
+            values.push(v.value);
+          });
+        }
 
         this.basicData = {
-          labels: years,
+          labels: months,
           datasets: [
             {
               label: '$',

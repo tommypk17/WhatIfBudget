@@ -29,12 +29,32 @@ export class MortgageChartComponent implements OnInit {
 
     this.mortgageService.getMortgageAmortization(this.sharedService.budget.mortgageGoalId!).subscribe((res: KeyValue<number, number[]>[]) => {
       if (res) {
-        res.forEach((v) => {
-          months.push('Year ' + v.key)
-          balances.push(v.value[0]);
-          principalPaid.push(v.value[1]);
-          interestPaid.push(v.value[2]);
-        });
+        if (res.length > 12) {
+          res.forEach((v, i) => {
+            if (v.key % 12 == 0) {
+              months.push('Year ' + v.key / 12)
+              balances.push(v.value[0]);
+              principalPaid.push(v.value[1]);
+              interestPaid.push(v.value[2]);
+            }
+            else {
+              if (i == res.length - 1) {
+                months.push('Year ' + (v.key / 12).toFixed(2))
+                balances.push(v.value[0]);
+                principalPaid.push(v.value[1]);
+                interestPaid.push(v.value[2]);
+              }
+            }
+          });
+        }
+        else {
+          res.forEach((v) => {
+            months.push('Month ' + v.key)
+            balances.push(v.value[0]);
+            principalPaid.push(v.value[1]);
+            interestPaid.push(v.value[2]);
+          });
+        }
 
         this.basicData = {
           labels: months,
