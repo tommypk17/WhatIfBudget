@@ -3,6 +3,7 @@ import { BudgetService } from '../../../../services/budget.service';
 import { InvestmentGoalService } from '../../../../services/investment.goal.service';
 import { SharedService } from '../../../../services/shared.service';
 import { AdditionalContributions, Budget } from '../../../../shared/models/budget';
+import { InvestmentGoal } from '../../../../shared/models/investment-goal';
 
 @Component({
   selector: 'app-goal',
@@ -19,6 +20,7 @@ export class GoalComponent implements OnInit {
   savingContribution: number | undefined = 0;
   investmentContribution: number | undefined = 0;
 
+  rolloverContributions: boolean = false;
 
   @Output('updated') updated: EventEmitter<void> = new EventEmitter();
   @Input('contributions') model: AdditionalContributions = new AdditionalContributions();
@@ -29,23 +31,7 @@ export class GoalComponent implements OnInit {
     this.sharedService.budgetLoadedEmit.subscribe(() => {
       if (this.sharedService.budgetLoaded) this._budget = this.sharedService.budget;
     });
-    if (this.sharedService.budget.id) {
-      this.budgetService.getNetAvailable(this.sharedService.budget.id).subscribe((res: number) => {
-        if (res !== null) this.availableMonthlyNet = res;
-      });
-      this.budgetService.getAvailableFreeCash(this.sharedService.budget.id).subscribe((res: number) => {
-        if (res !== null) this.availableFreeCash = res;
-      });
-      this.budgetService.getAdditionalContributions(this.sharedService.budget.id).subscribe((res: AdditionalContributions) => {
-        if (res) {
-          this.model = res;
-          this.debtContribution = res.debtGoal;
-          this.mortgageContribution = res.mortgageGoal;
-          this.savingContribution = res.savingGoal;
-          this.investmentContribution = res.investmentGoal;
-        }
-      });
-    }
+    this.loadCharts();
   }
 
   sliderEvent(type: string) {
@@ -67,6 +53,35 @@ export class GoalComponent implements OnInit {
         if (res) {
           this.model = res;
         }
+      });
+    }
+  }
+
+  toggleRolloverContributions(): void {
+    this.investmentGoalService.toggleRolloverContributions(this.sharedService.budget.investmentGoalId!).subscribe((res: InvestmentGoal) => {
+      this.loadCharts();
+    });
+  }
+
+  loadCharts(): void {
+    if (this.sharedService.budget.id) {
+      this.budgetService.getNetAvailable(this.sharedService.budget.id).subscribe((res: number) => {
+        if (res !== null) this.availableMonthlyNet = res;
+      });
+      this.budgetService.getAvailableFreeCash(this.sharedService.budget.id).subscribe((res: number) => {
+        if (res !== null) this.availableFreeCash = res;
+      });
+      this.budgetService.getAdditionalContributions(this.sharedService.budget.id).subscribe((res: AdditionalContributions) => {
+        if (res) {
+          this.model = res;
+          this.debtContribution = res.debtGoal;
+          this.mortgageContribution = res.mortgageGoal;
+          this.savingContribution = res.savingGoal;
+          this.investmentContribution = res.investmentGoal;
+        }
+      });
+      this.investmentGoalService.getInvestmentGoal(this.sharedService.budget.investmentGoalId!).subscribe((res: InvestmentGoal) => {
+        if (res) this.rolloverContributions = res.rolloverCompletedGoals;
       });
     }
   }
