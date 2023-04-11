@@ -197,9 +197,66 @@ namespace WhatIfBudget.API.Test
 
             var actual = budgetController.GetCurrentNetWorth(2);
 
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public void Get_NetWorthOverTime()
+        {
+            //mock budget logic
+            var mockBL = new Mock<IBudgetLogic>();
+            mockBL.Setup(x => x.GetNetWorthOverTime(It.IsAny<int>())).Returns(
+                new NetWorthTotals()
+                {
+                    Balance = new Dictionary<int, double>
+                    {
+                        {0, 0 },
+                        {1, 10000.0},
+                        {2, 25000.0},
+                        {3, 50000.0},
+                        {4, 85000.0},
+                        {5, 125000.0},
+                    },
+                    SavingGoalMonth = 6,
+                    DebtGoalMonth = 12,
+                    MortgageGoalMonth = 48
+                });
+
+            //Setup the http context (for auth)
+            var budgetController = new BudgetsController(mockBL.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = Helper_MockHttpContext().Object
+                }
+            };
+
+            var expectedValue = new NetWorthTotals()
+            {
+                Balance = new Dictionary<int, double>
+                    {
+                        {0, 0 },
+                        {1, 10000.0},
+                        {2, 25000.0},
+                        {3, 50000.0},
+                        {4, 85000.0},
+                        {5, 125000.0},
+                    },
+                SavingGoalMonth = 6,
+                DebtGoalMonth = 12,
+                MortgageGoalMonth = 48
+            };
+
+            var expected = new ObjectResult(expectedValue)
+            {
+                StatusCode = 200,
+            };
+
+            var actual = budgetController.GetNetWorthOverTime(2);
 
             actual.Should().BeEquivalentTo(expected);
         }
+
 
         [TestMethod]
         public void Post_UserBudgetCreated()

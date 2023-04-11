@@ -30,7 +30,11 @@ namespace WhatIfBudget.Logic
 
         private readonly IIncomeLogic _incomeLogic;
         private readonly IExpenseLogic _expenseLogic;
-        
+        private readonly ISavingGoalLogic _savingGoalLogic;
+        private readonly IDebtGoalLogic _debtGoalLogic;
+        private readonly IMortgageGoalLogic _mortgageGoalLogic;
+        private readonly IInvestmentGoalLogic _investmentGoalLogic;
+
         public BudgetLogic(IBudgetService budgetService,
                            IIncomeService incomeService,
                            IExpenseService expenseService,
@@ -45,12 +49,16 @@ namespace WhatIfBudget.Logic
                            IDebtGoalDebtService debtGoalDebtService,
                            ISavingGoalService savingGoalService,
                            IIncomeLogic incomeLogic,
-                           IExpenseLogic expenseLogic) { 
+                           IExpenseLogic expenseLogic,
+                           ISavingGoalLogic savingGoalLogic,
+                           IDebtGoalLogic debtGoalLogic,
+                           IMortgageGoalLogic mortgageGoalLogic,
+                           IInvestmentGoalLogic investmentGoalLogic) { 
             _budgetService = budgetService;
             _incomeService = incomeService;
             _expenseService = expenseService;
-            _budgetIncomeService= budgetIncomeService;
-            _budgetExpenseService= budgetExpenseService;
+            _budgetIncomeService = budgetIncomeService;
+            _budgetExpenseService = budgetExpenseService;
             _investmentGoalService = investmentGoalService;
             _investmentService = investmentService;
             _igiService = investmentGoalInvestmentService;
@@ -61,6 +69,10 @@ namespace WhatIfBudget.Logic
             _mortgageGoalService = mortgageGoalService;
             _incomeLogic = incomeLogic;
             _expenseLogic = expenseLogic;
+            _savingGoalLogic = savingGoalLogic;
+            _debtGoalLogic = debtGoalLogic;
+            _mortgageGoalLogic = mortgageGoalLogic;
+            _investmentGoalLogic = investmentGoalLogic;
         }
 
         public IList<UserBudget> GetUserBudgets(Guid userId)
@@ -134,6 +146,60 @@ namespace WhatIfBudget.Logic
             }
 
             return netWorth;
+        }
+
+        public NetWorthTotals GetNetWorthOverTime(int budgetId)
+        {
+            var dbBudget = _budgetService.GetBudget(budgetId);
+            if (dbBudget == null) { throw new NullReferenceException(); }
+
+            var nwTotals = new NetWorthTotals();
+            nwTotals.SavingGoalMonth = _savingGoalLogic.GetSavingTotals(dbBudget.SavingGoalId).MonthsToTarget;
+            nwTotals.DebtGoalMonth = _debtGoalLogic.GetDebtTotals(dbBudget.DebtGoalId).MonthsToPayoff;
+            nwTotals.MortgageGoalMonth = _mortgageGoalLogic.GetMortgageTotals(dbBudget.MortgageGoalId).MonthsToPayoff;
+
+            var savingBalance = _savingGoalLogic.GetBalanceOverTime(dbBudget.SavingGoalId);
+            var debtBalance = _debtGoalLogic.GetBalanceOverTime(dbBudget.DebtGoalId);
+            var mortBalance = _mortgageGoalLogic.GetNetValueOverTime(dbBudget.MortgageGoalId);
+            var investBalance = _investmentGoalLogic.GetBalanceOverTime(dbBudget.InvestmentGoalId);
+ 
+            foreach (int iMonth in investBalance.Keys.ToList())
+            {
+                var netWorth = 0.0;
+
+                if (savingBalance.ContainsKey(iMonth))
+                {
+                    netWorth += savingBalance[iMonth];
+                }
+                else
+                {
+                    netWorth += savingBalance.Values.Last();
+                }
+
+                if (debtBalance.ContainsKey(iMonth))
+                {
+                    netWorth += debtBalance[iMonth];
+                }
+                else
+                {
+                    netWorth += debtBalance.Values.Last();
+                }
+
+                if (mortBalance.ContainsKey(iMonth))
+                {
+                    netWorth += mortBalance[iMonth];
+                }
+                else
+                {
+                    netWorth += mortBalance.Values.Last();
+                }
+
+                netWorth += investBalance[iMonth];
+
+                nwTotals.Balance[iMonth] = netWorth;
+            }
+
+            return nwTotals;
         }
 
         public UserBudget? CreateUserBudget(Guid userId, UserBudget budget)

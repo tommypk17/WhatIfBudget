@@ -114,18 +114,13 @@ namespace WhatIfBudget.Logic
             baseContribution += investmentList.Select(x => x.MonthlyEmployerContribution).Sum();
             var rolloverContribution = GetCompletedGoalContributions(investmentGoal);
 
-            while (investmentStepper.NumberOfSteps < investmentGoal.YearsToTarget * 12)
+            while (investmentStepper.NumberOfSteps <= investmentGoal.YearsToTarget * 12)
             {
-                if (investmentStepper.NumberOfSteps % 12 == 0)
-                {
-                    balanceDict[investmentStepper.NumberOfSteps / 12] = investmentStepper.Balance;
-                }
+                balanceDict[investmentStepper.NumberOfSteps] = investmentStepper.Balance;
                 var iContribution = baseContribution + rolloverContribution[investmentStepper.NumberOfSteps];
                 _ = investmentStepper.Step(iContribution);
                 _ = contributionStepper.Step(investmentGoal.AdditionalBudgetAllocation);
             }
-            // Populate the last dict entry
-            balanceDict[investmentStepper.NumberOfSteps / 12] = investmentStepper.Balance;
 
             investmentGoalTotals.BalanceAtTarget = investmentStepper.Balance;
             investmentGoalTotals.TotalInterestAccrued = investmentStepper.InterestAccumulated;

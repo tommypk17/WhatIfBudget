@@ -85,6 +85,15 @@ namespace WhatIfBudget.API.Controllers
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
+        [HttpGet("{budgetId}/netWorthOverTime")]
+        public IActionResult GetNetWorthOverTime([FromRoute] int budgetId)
+        {
+            //pass the budget ID from the route to the logic function
+            var res = _budgetLogic.GetNetWorthOverTime(budgetId);
+            //return a status of 200 with all the current user's budget
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
         [HttpGet("{budgetId}/availableFreeCash")]
         public IActionResult GetAvailableFreeCash([FromRoute] int budgetId)
         {

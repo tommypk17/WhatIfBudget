@@ -18,6 +18,8 @@ namespace WhatIfBudget.Logic.Interfaces
 
         public double GetCurrentNetWorth(int budgetId);
 
+        public NetWorthTotals GetNetWorthOverTime(int budgetId);
+
         public UserBudget? CreateUserBudget(Guid userId, UserBudget budget);
 
         public UserBudget? ModifyUserBudget(Guid userId, UserBudget budget);

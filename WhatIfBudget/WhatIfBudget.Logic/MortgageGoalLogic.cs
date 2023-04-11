@@ -69,15 +69,10 @@ namespace WhatIfBudget.Logic
             {
                 _ = balanceStepper.Step(-1 * (res.MonthlyPayment + res.AdditionalBudgetAllocation));
                 _ = valueStepper.Step(0.0);
-                if (balanceStepper.NumberOfSteps % 12 == 0)
-                {
-                    netDict[balanceStepper.NumberOfSteps / 12] = valueStepper.Balance - balanceStepper.Balance;
-                }
+                netDict[balanceStepper.NumberOfSteps] = valueStepper.Balance - balanceStepper.Balance;
             }
             // Final dictionary entry is home value
-            var endYear = Math.Ceiling(balanceStepper.NumberOfSteps / 12.0);
-            netDict[(int)endYear] = valueStepper.Balance;
-            Console.WriteLine("Balance steps: {0} Value steps: {1}", balanceStepper.NumberOfSteps, valueStepper.NumberOfSteps);
+            netDict[balanceStepper.NumberOfSteps] = valueStepper.Balance;
 
             return netDict;
         }
@@ -99,18 +94,14 @@ namespace WhatIfBudget.Logic
             while (stepper.Balance > 0.0)
             {
                  _ = stepper.Step(-1 * (res.MonthlyPayment + res.AdditionalBudgetAllocation));
-                if (stepper.NumberOfSteps % 12 == 0)
-                {
-                    amorDict[stepper.NumberOfSteps / 12] = new List<double>()
+                    amorDict[stepper.NumberOfSteps] = new List<double>()
                     {
                         stepper.Balance, // Balance
                         stepper.CumulativeContribution - stepper.InterestAccumulated, // Principle paid down so far
                         stepper.InterestAccumulated // Interest paid so far
                     };
-                 }
             }
-            var endYear = Math.Ceiling(stepper.NumberOfSteps / 12.0);
-            amorDict[(int)endYear] = new List<double>()
+            amorDict[stepper.NumberOfSteps] = new List<double>()
                     {
                         stepper.Balance, // Balance
                         stepper.CumulativeContribution - stepper.InterestAccumulated, // Principle paid down so far

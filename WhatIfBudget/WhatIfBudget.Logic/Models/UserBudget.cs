@@ -47,4 +47,12 @@ namespace WhatIfBudget.Logic.Models
         public double SavingGoal { get; set; } = 0;
         public double InvestmentGoal { get; set; } = 0;
     }
+
+    public class NetWorthTotals
+    {
+        public Dictionary<int, double> Balance { get; set; }
+        public int SavingGoalMonth { get; set; }
+        public int DebtGoalMonth { get; set; }
+        public int MortgageGoalMonth { get; set; }
+    }
 }
