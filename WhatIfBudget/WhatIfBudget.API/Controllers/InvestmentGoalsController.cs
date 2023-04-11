@@ -64,5 +64,19 @@ namespace WhatIfBudget.API.Controllers
                 return StatusCode(StatusCodes.Status200OK, res);
             }
         }
+
+        [HttpPut("{investmentGoalId}/rollover")]
+        public IActionResult Put(int investmentGoalId)
+        {
+            var res = _investmentGoalLogic.ToggleUserInvestmentGoalRollover(investmentGoalId);
+            if (res == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, res);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status200OK, res);
+            }
+        }
     }
 }

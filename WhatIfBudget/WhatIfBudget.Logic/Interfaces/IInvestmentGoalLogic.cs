@@ -13,5 +13,6 @@ namespace WhatIfBudget.Logic.Interfaces
         public InvestmentGoalTotals GetInvestmentTotals(int investmentGoalId);
         public Dictionary<int, double> GetBalanceOverTime(int investmentGoalId);
         public UserInvestmentGoal? ModifyUserInvestmentGoal(UserInvestmentGoal investmentGoal);
+        public UserInvestmentGoal? ToggleUserInvestmentGoalRollover(int investmentGoalId);
     }
 }

@@ -51,10 +51,10 @@ namespace WhatIfBudget.Logic
             if (!investmentGoal.RolloverCompletedGoals)
             {
                 // Return a dict of correct size with all 0
-                return Enumerable.Repeat(0.0, investmentGoal.YearsToTarget * 12).ToList();
+                return Enumerable.Repeat(0.0, investmentGoal.YearsToTarget * 12 + 1).ToList();
             }
 
-            var rolloverList = Enumerable.Repeat(0.0, investmentGoal.YearsToTarget * 12).ToList();
+            var rolloverList = Enumerable.Repeat(0.0, investmentGoal.YearsToTarget * 12 + 1).ToList();
 
             var budget = investmentGoal.Budget;
             if (budget is null) { throw new NullReferenceException(); }
@@ -161,6 +161,19 @@ namespace WhatIfBudget.Logic
             {
                 throw new NullReferenceException();
             }
+            return UserInvestmentGoal.FromInvestmentGoal(dbInvestmentGoal);
+        }
+
+        public UserInvestmentGoal? ToggleUserInvestmentGoalRollover(int investmentGoalId)
+        {
+            var investmentGoal = _investmentGoalService.GetInvestmentGoal(investmentGoalId);
+            if(investmentGoal is null) { throw new NullReferenceException(); }
+
+            investmentGoal.RolloverCompletedGoals = !investmentGoal.RolloverCompletedGoals;
+
+            var dbInvestmentGoal = _investmentGoalService.UpdateInvestmentGoal(investmentGoal);
+            if(dbInvestmentGoal is null) { throw new NullReferenceException() ; }
+
             return UserInvestmentGoal.FromInvestmentGoal(dbInvestmentGoal);
         }
     }
