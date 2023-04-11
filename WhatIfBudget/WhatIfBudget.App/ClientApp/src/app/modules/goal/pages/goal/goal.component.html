@@ -5,14 +5,18 @@
     <app-saving-chart></app-saving-chart>
     <div class="mt-4">
       <h3>Budget Allocation</h3>
-      <p-slider></p-slider>
+      <p-inputNumber [(ngModel)]="model.savingGoal" class="w-100" styleClass="w-100" (change)="sliderEvent('savings')"  [minFractionDigits]="2" [maxFractionDigits]="2" prefix="$"></p-inputNumber>
+      <p-slider *ngIf="(savingContribution! + availableMonthlyNet) > 0" [(ngModel)]="model.savingGoal" class="w-100" [step]="0.01" (onSlideEnd)="sliderEvent('savings')" [max]="(savingContribution! + availableMonthlyNet)"></p-slider>
+      <p-slider *ngIf="(savingContribution! + availableMonthlyNet) <= 0" class="w-100" [disabled]="true"></p-slider>
     </div>
   </p-card>
   <p-card styleClass="m-2" class="w-md-50" header="Investments">
     <app-investments-chart></app-investments-chart>
     <div class="mt-4">
       <h3>Budget Allocation</h3>
-      <p-slider></p-slider>
+      <p-inputNumber [(ngModel)]="model.investmentGoal" class="w-100" styleClass="w-100" (change)="sliderEvent('investments')" [minFractionDigits]="2" [maxFractionDigits]="2" prefix="$"></p-inputNumber>
+      <p-slider *ngIf="(investmentContribution! + availableMonthlyNet) > 0" [(ngModel)]="model.investmentGoal" class="w-100" [step]="0.01" (onSlideEnd)="sliderEvent('investments')" [max]="(investmentContribution! + availableMonthlyNet)"></p-slider>
+      <p-slider *ngIf="(investmentContribution! + availableMonthlyNet) <= 0" class="w-100" [disabled]="true"></p-slider>
     </div>
   </p-card>
 
@@ -20,7 +24,9 @@
     <app-debt-chart></app-debt-chart>
     <div class="mt-4">
       <h3>Budget Allocation</h3>
-      <p-slider></p-slider>
+      <p-inputNumber [(ngModel)]="model.debtGoal" class="w-100" styleClass="w-100" (change)="sliderEvent('debt')"  [minFractionDigits]="2" [maxFractionDigits]="2" prefix="$"></p-inputNumber>
+      <p-slider *ngIf="(debtContribution! + availableMonthlyNet) > 0" [(ngModel)]="model.debtGoal" class="w-100" [step]="0.01" (onSlideEnd)="sliderEvent('debt')" [max]="(debtContribution! + availableMonthlyNet)"></p-slider>
+      <p-slider *ngIf="(debtContribution! + availableMonthlyNet) <= 0" class="w-100" [disabled]="true"></p-slider>
     </div>
   </p-card>
 
@@ -28,15 +34,33 @@
     <app-mortgage-chart></app-mortgage-chart>
     <div class="mt-4">
       <h3>Budget Allocation</h3>
-      <p-slider></p-slider>
+      <p-inputNumber [(ngModel)]="model.mortgageGoal" class="w-100" styleClass="w-100" (change)="sliderEvent('mortgage')" [minFractionDigits]="2" [maxFractionDigits]="2" prefix="$"></p-inputNumber>
+      <p-slider *ngIf="(mortgageContribution! + availableMonthlyNet) > 0" [(ngModel)]="model.mortgageGoal" class="w-100" [step]="0.01" (onSlideEnd)="sliderEvent('mortgage')" [max]="(mortgageContribution! + availableMonthlyNet)"></p-slider>
+      <p-slider *ngIf="(mortgageContribution! + availableMonthlyNet) <= 0" class="w-100" [disabled]="true" ></p-slider>
     </div>
   </p-card>
 
 </div>
 <div class="d-flex w-100 mt-2">
-  <p-card class="w-100 mx-2" header="Do You Have Enough?">
-    <p class="breakdown">
-      ${{availableMonthlyNet  | number : '.2-2'}}
-    </p>
+  <p-card class="w-100 mx-2" header="Available Monthly Funds">
+    <div class="d-flex justify-content-center">
+      <div class="d-flex flex-column">
+        <p class="breakdown text-center m-0">
+          ${{availableMonthlyNet | number : '.2-2'}}
+        </p>
+        <small class="text-center">Remaining</small>
+      </div>
+      <div class="d-flex flex-column">
+        <p class="breakdown mx-2 my-0">
+          /
+        </p>
+      </div>
+      <div class="d-flex flex-column">
+        <p class="breakdown text-center m-0">
+          ${{availableFreeCash  | number : '.2-2'}}
+        </p>
+        <small class="text-center">Available</small>
+      </div>
+    </div>
   </p-card>
 </div>

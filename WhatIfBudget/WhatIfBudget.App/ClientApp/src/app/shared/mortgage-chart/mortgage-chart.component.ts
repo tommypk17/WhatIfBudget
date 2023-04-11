@@ -14,6 +14,14 @@ export class MortgageChartComponent implements OnInit {
   constructor(private mortgageService: MortgageService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
+    this.loadChartInfo();
+    this.sharedService.chartReloadEmit.subscribe((type: string) => {
+      if (type == 'mortgage')
+        this.loadChartInfo();
+    });
+  }
+
+  loadChartInfo(): void {
     let months: string[] = [];
     let balances: number[] = [];
     let principalPaid: number[] = [];
@@ -56,6 +64,5 @@ export class MortgageChartComponent implements OnInit {
         };
       }
     });
-
   }
 }
