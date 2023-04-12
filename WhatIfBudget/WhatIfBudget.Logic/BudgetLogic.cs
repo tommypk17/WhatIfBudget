@@ -157,7 +157,7 @@ namespace WhatIfBudget.Logic
             nwTotals.SavingGoalMonth = _savingGoalLogic.GetSavingTotals(dbBudget.SavingGoalId).MonthsToTarget;
             nwTotals.DebtGoalMonth = _debtGoalLogic.GetDebtTotals(dbBudget.DebtGoalId).MonthsToPayoff;
             nwTotals.MortgageGoalMonth = _mortgageGoalLogic.GetMortgageTotals(dbBudget.MortgageGoalId).MonthsToPayoff;
-            nwTotals.Balance = new Dictionary<int, double>();
+            nwTotals.Balance = new List<KeyValuePair<int, double>>();
 
             var savingBalance = _savingGoalLogic.GetBalanceOverTime(dbBudget.SavingGoalId);
             var debtBalance = _debtGoalLogic.GetBalanceOverTime(dbBudget.DebtGoalId);
@@ -197,7 +197,7 @@ namespace WhatIfBudget.Logic
 
                 netWorth += investBalance[iMonth];
 
-                nwTotals.Balance[iMonth] = netWorth;
+                nwTotals.Balance.Add(new KeyValuePair<int, double> (iMonth, netWorth));
             }
 
             return nwTotals;
