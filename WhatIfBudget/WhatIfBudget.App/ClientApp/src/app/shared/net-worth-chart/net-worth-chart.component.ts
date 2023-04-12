@@ -22,7 +22,7 @@ export class NetWorthChartComponent implements OnInit {
     let months: string[] = [];
     let balances: number[] = [];
 
-    this.budgetService.getNetWorthOverTime(this.sharedService.budget.debtGoalId!).subscribe((res: NetValue) => {
+    this.budgetService.getNetWorthOverTime(this.sharedService.budget.id!).subscribe((res: NetValue) => {
       if (res) {
         if (res.balance.length > 12) {
           res.balance.forEach((v, i) => {
