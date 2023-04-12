@@ -1,8 +1,9 @@
+import { KeyValue } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, finalize, Observable, retry } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { AdditionalContributions, Budget } from '../shared/models/budget';
+import { AdditionalContributions, Budget, NetValue } from '../shared/models/budget';
 
 @Injectable({
   providedIn: 'root'
@@ -108,6 +109,21 @@ export class BudgetService {
       catchError((err, caught) => {
         this.handleError(err);
         return new Observable<number>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('saveIncome');
+      })
+    );
+  }
+
+  public getNetWorthOverTime(budgetId: number): Observable<NetValue> {
+    return this.http.get<NetValue>(environment.URL + `/api/budgets/${budgetId}/netWorthOverTime`).pipe(
+      retry(3),
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<NetValue>((subscriber) => {
           subscriber.next(undefined);
         })
       }),

@@ -50,7 +50,7 @@ namespace WhatIfBudget.Logic.Models
 
     public class NetWorthTotals
     {
-        public Dictionary<int, double> Balance { get; set; }
+        public List<KeyValuePair<int, double>> Balance { get; set; }
         public int SavingGoalMonth { get; set; }
         public int DebtGoalMonth { get; set; }
         public int MortgageGoalMonth { get; set; }
