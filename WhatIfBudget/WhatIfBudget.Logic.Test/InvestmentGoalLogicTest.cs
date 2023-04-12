@@ -196,9 +196,9 @@ namespace WhatIfBudget.Logic.Test
 
             var expected = new InvestmentGoalTotals()
             {
-                BalanceAtTarget = 86729.87,
-                TotalInterestAccrued = 24329.87,
-                AddedDueToContribution = 43985.91
+                BalanceAtTarget = 88336.11,
+                TotalInterestAccrued = 25096.11,
+                AddedDueToContribution = 43662.69
             };
 
             var actual = investmentGoalLogic.GetInvestmentTotals(1);
@@ -224,7 +224,7 @@ namespace WhatIfBudget.Logic.Test
                 {
                     Id = 1,
                     AnnualReturnRate_Percent = 10.5,
-                    YearsToTarget = 5,
+                    YearsToTarget = 1,
                     AdditionalBudgetAllocation = 540.0,
                     CreatedOn = DateTime.MinValue,
                     UpdatedOn = DateTime.MinValue
@@ -266,11 +266,18 @@ namespace WhatIfBudget.Logic.Test
             var expected = new Dictionary<int, double>
             {
                 { 0, 12000.0 },
-                { 1, 23994.54 },
-                { 2, 37310.94 },
-                { 3, 52094.83 },
-                { 4, 68507.97 },
-                { 5, 86729.87 }
+                { 1, 12952.35 },
+                { 2, 13913.03 },
+                { 3, 14882.12 },
+                { 4, 15859.69 },
+                { 5, 16845.81 },
+                { 6, 17840.56 },
+                { 7, 18844.01 },
+                { 8, 19856.25 },
+                { 9, 20877.34 },
+                { 10, 21907.37 },
+                { 11, 22946.41 },
+                { 12, 23994.54 }
             };
 
             var actual = investmentGoalLogic.GetBalanceOverTime(1);
@@ -296,7 +303,7 @@ namespace WhatIfBudget.Logic.Test
                 {
                     Id = 1,
                     AnnualReturnRate_Percent = 10.5,
-                    YearsToTarget = 5,
+                    YearsToTarget = 1,
                     RolloverCompletedGoals = true,
                     AdditionalBudgetAllocation = 540.0,
                     CreatedOn = DateTime.MinValue,
@@ -349,12 +356,12 @@ namespace WhatIfBudget.Logic.Test
             mockSGL.Setup(x => x.GetSavingTotals(It.IsAny<int>())).Returns(
                 new SavingGoalTotals()
                 {
-                    MonthsToTarget = 6
+                    MonthsToTarget = 3
                 });
             mockDGL.Setup(x => x.GetDebtTotals(It.IsAny<int>())).Returns(
                 new DebtGoalTotals()
                 {
-                    MonthsToPayoff = 12
+                    MonthsToPayoff = 6
                 });
             mockDS.Setup(x => x.GetDebtsByDebtGoalId(It.IsAny<int>())).Returns(
                 (IList<Debt>)new List<Debt>()
@@ -371,7 +378,7 @@ namespace WhatIfBudget.Logic.Test
             mockMGL.Setup(x => x.GetMortgageTotals(It.IsAny<int>())).Returns(
                 new MortgageGoalTotals()
                 {
-                    MonthsToPayoff = 48
+                    MonthsToPayoff = 9
                 });
 
 
@@ -384,11 +391,18 @@ namespace WhatIfBudget.Logic.Test
             var expected = new Dictionary<int, double>
             {
                 { 0, 12000.0 },
-                { 1, 26560.93 },
-                { 2, 49759.10 },
-                { 3, 75824.63 },
-                { 4, 104762.68 },
-                { 5, 157180.49 }
+                { 1, 12952.35 },
+                { 2, 13913.03 },
+                { 3, 14882.12 },
+                { 4, 15859.69 },
+                { 5, 17350.19 },
+                { 6, 18853.73 },
+                { 7, 20370.43 },
+                { 8, 22182.85 },
+                { 9, 24011.12 },
+                { 10, 25855.39 },
+                { 11, 29481.11 },
+                { 12, 33138.56 }
             };
 
             var actual = investmentGoalLogic.GetBalanceOverTime(1);

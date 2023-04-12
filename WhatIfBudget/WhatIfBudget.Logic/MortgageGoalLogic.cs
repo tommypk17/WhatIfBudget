@@ -69,7 +69,7 @@ namespace WhatIfBudget.Logic
             {
                 _ = balanceStepper.Step(-1 * (res.MonthlyPayment + res.AdditionalBudgetAllocation));
                 _ = valueStepper.Step(0.0);
-                netDict[balanceStepper.NumberOfSteps] = valueStepper.Balance - balanceStepper.Balance;
+                netDict[balanceStepper.NumberOfSteps] = Math.Round(valueStepper.Balance - balanceStepper.Balance, 2);
             }
             // Final dictionary entry is home value
             netDict[balanceStepper.NumberOfSteps] = valueStepper.Balance;

@@ -124,7 +124,7 @@ namespace WhatIfBudget.Logic
 
             investmentGoalTotals.BalanceAtTarget = investmentStepper.Balance;
             investmentGoalTotals.TotalInterestAccrued = investmentStepper.InterestAccumulated;
-            investmentGoalTotals.AddedDueToContribution = Math.Round(investmentGoalTotals.BalanceAtTarget - contributionStepper.Balance,2);
+            investmentGoalTotals.AddedDueToContribution = Math.Round(contributionStepper.Balance,2);
             return (balanceDict, investmentGoalTotals);
         }
 
