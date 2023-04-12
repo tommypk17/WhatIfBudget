@@ -208,14 +208,14 @@ namespace WhatIfBudget.API.Test
             mockBL.Setup(x => x.GetNetWorthOverTime(It.IsAny<int>())).Returns(
                 new NetWorthTotals()
                 {
-                    Balance = new Dictionary<int, double>
+                    Balance = new List<KeyValuePair<int, double>>()
                     {
-                        {0, 0 },
-                        {1, 10000.0},
-                        {2, 25000.0},
-                        {3, 50000.0},
-                        {4, 85000.0},
-                        {5, 125000.0},
+                        new KeyValuePair<int, double>(0, 0 ),
+                        new KeyValuePair<int, double>(1, 10000.0),
+                        new KeyValuePair<int, double>(2, 25000.0),
+                        new KeyValuePair<int, double>(3, 50000.0),
+                        new KeyValuePair<int, double>(4, 85000.0),
+                        new KeyValuePair<int, double>(5, 125000.0),
                     },
                     SavingGoalMonth = 6,
                     DebtGoalMonth = 12,
@@ -233,14 +233,14 @@ namespace WhatIfBudget.API.Test
 
             var expectedValue = new NetWorthTotals()
             {
-                Balance = new Dictionary<int, double>
+                Balance = new List<KeyValuePair<int, double>>()
                     {
-                        {0, 0 },
-                        {1, 10000.0},
-                        {2, 25000.0},
-                        {3, 50000.0},
-                        {4, 85000.0},
-                        {5, 125000.0},
+                        new KeyValuePair<int, double>(0, 0 ),
+                        new KeyValuePair<int, double>(1, 10000.0),
+                        new KeyValuePair<int, double>(2, 25000.0),
+                        new KeyValuePair<int, double>(3, 50000.0),
+                        new KeyValuePair<int, double>(4, 85000.0),
+                        new KeyValuePair<int, double>(5, 125000.0),
                     },
                 SavingGoalMonth = 6,
                 DebtGoalMonth = 12,
