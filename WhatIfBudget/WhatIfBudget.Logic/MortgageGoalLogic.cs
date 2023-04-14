@@ -71,10 +71,10 @@ namespace WhatIfBudget.Logic
             // Further dictionary entries are just home value
             netDict[balanceStepper.NumberOfSteps] = valueStepper.Balance;
 
-            while (balanceStepper.NumberOfSteps < totalMonths)
+            while (valueStepper.NumberOfSteps < totalMonths)
             {
                 _ = valueStepper.Step(0.0);
-                netDict[balanceStepper.NumberOfSteps] = balanceStepper.Balance;
+                netDict[valueStepper.NumberOfSteps] = valueStepper.Balance;
             }
             return netDict;
         }
