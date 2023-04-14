@@ -37,23 +37,20 @@ namespace WhatIfBudget.Logic
             var res = UserMortgageGoal.FromMortgageGoal(dbMortgageGoal);
 
             var balanceStepper = new BalanceStepUtility(res.TotalBalance, res.InterestRate_Percent / 12);
-            var allocationStepper = new BalanceStepUtility(res.TotalBalance, res.InterestRate_Percent / 12);
 
             // Return Values
             var MortgageGoalTotals = new MortgageGoalTotals();
 
             // Allocation stepper will always equal or lag balance stepper
-            balanceStepper.StepToZero(-1 * (res.MonthlyPayment + res.AdditionalBudgetAllocation));
-            allocationStepper.StepToZero(-1 * res.MonthlyPayment);
+            balanceStepper.StepToTarget(-1 * (res.MonthlyPayment + res.AdditionalBudgetAllocation), 0.0);
 
             MortgageGoalTotals.MonthsToPayoff = balanceStepper.NumberOfSteps;
             MortgageGoalTotals.TotalInterestAccrued = balanceStepper.InterestAccumulated;
             MortgageGoalTotals.TotalCostToPayoff = balanceStepper.CumulativeContribution;
-            MortgageGoalTotals.AllocationSavings = Math.Round(allocationStepper.CumulativeContribution - balanceStepper.CumulativeContribution, 2);
             return MortgageGoalTotals;
         }
 
-        public Dictionary<int, double> GetNetValueOverTime(int MortgageGoalId)
+        public Dictionary<int, double> GetNetValueOverTime(int MortgageGoalId, int totalMonths = 0)
         {
             var dbMortgageGoal = _mortgageGoalService.GetMortgageGoal(MortgageGoalId);
             if (dbMortgageGoal is null) { throw new NullReferenceException(); }
@@ -71,9 +68,14 @@ namespace WhatIfBudget.Logic
                 _ = valueStepper.Step(0.0);
                 netDict[balanceStepper.NumberOfSteps] = Math.Round(valueStepper.Balance - balanceStepper.Balance, 2);
             }
-            // Final dictionary entry is home value
+            // Further dictionary entries are just home value
             netDict[balanceStepper.NumberOfSteps] = valueStepper.Balance;
 
+            while (balanceStepper.NumberOfSteps < totalMonths)
+            {
+                _ = valueStepper.Step(0.0);
+                netDict[balanceStepper.NumberOfSteps] = balanceStepper.Balance;
+            }
             return netDict;
         }
 

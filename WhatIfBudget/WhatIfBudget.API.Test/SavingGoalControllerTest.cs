@@ -149,7 +149,7 @@ namespace WhatIfBudget.API.Test
         {
             //mock saving goal logic
             var mockSGL = new Mock<ISavingGoalLogic>();
-            mockSGL.Setup(x => x.GetBalanceOverTime(It.IsAny<int>())).Returns
+            mockSGL.Setup(x => x.GetBalanceOverTime(It.IsAny<int>(), 0)).Returns
                 (new Dictionary<int, double>()
                 {
                     {0, 1000.0 },

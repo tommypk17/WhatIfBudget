@@ -121,7 +121,6 @@ namespace WhatIfBudget.Logic.Test
                 MonthsToPayoff = 44,
                 TotalInterestAccrued = 9123.11,
                 TotalCostToPayoff= 109123.11,
-                AllocationSavings = 2720.81
             };
 
             var actual = mortgageGoalLogic.GetMortgageTotals(1);

@@ -42,6 +42,5 @@ namespace WhatIfBudget.Logic.Models
         public int MonthsToPayoff { get; set; } = 0;
         public double TotalInterestAccrued { get; set; } = 0;
         public double TotalCostToPayoff { get; set; } = 0;
-        public double AllocationSavings { get; set; } = 0;
     }
 }
