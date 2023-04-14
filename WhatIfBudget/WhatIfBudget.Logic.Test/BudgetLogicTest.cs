@@ -1036,5 +1036,169 @@ namespace WhatIfBudget.Logic.Test
 
             actual.Should().Be(expected);
         }
+        [TestMethod]
+        public void GET_NetWorthOverTime()
+        {
+            var mockBS = new Mock<IBudgetService>();
+            var mockIS = new Mock<IIncomeService>();
+            var mockES = new Mock<IExpenseService>();
+            var mockBIS = new Mock<IBudgetIncomeService>();
+            var mockBES = new Mock<IBudgetExpenseService>();
+            var mockIGS = new Mock<IInvestmentGoalService>();
+            var mockInvS = new Mock<IInvestmentService>();
+            var mockIGIS = new Mock<IInvestmentGoalInvestmentService>();
+            var mockSGS = new Mock<ISavingGoalService>();
+            var mockDGS = new Mock<IDebtGoalService>();
+            var mockDS = new Mock<IDebtService>();
+            var mockDGDS = new Mock<IDebtGoalDebtService>();
+            var mockMGS = new Mock<IMortgageGoalService>();
+            var mockIL = new Mock<IIncomeLogic>();
+            var mockEL = new Mock<IExpenseLogic>();
+            var mockSGL = new Mock<ISavingGoalLogic>();
+            var mockDGL = new Mock<IDebtGoalLogic>();
+            var mockMGL = new Mock<IMortgageGoalLogic>();
+            var mockIGL = new Mock<IInvestmentGoalLogic>();
+
+
+            mockBS.Setup(x => x.GetBudget(It.IsAny<int>())).Returns(
+                    new Budget()
+                    {
+                        Id = 1,
+                        Name = "test",
+                        UserId = Guid.Empty,
+                        SavingGoalId = 1,
+                        DebtGoalId = 1,
+                        MortgageGoalId = 1,
+                        InvestmentGoalId = 1,
+                        CreatedOn = DateTime.MinValue,
+                        UpdatedOn = DateTime.MinValue
+                    });
+            mockIGS.Setup(x => x.GetInvestmentGoal(It.IsAny<int>())).Returns(
+                new InvestmentGoal()
+                {
+                    Id = 1,
+                    AnnualReturnRate_Percent = 10.5,
+                    YearsToTarget = 1,
+                    AdditionalBudgetAllocation = 540.0,
+                    CreatedOn = DateTime.MinValue,
+                    UpdatedOn = DateTime.MinValue
+                });
+            mockSGL.Setup(x => x.GetSavingTotals(It.IsAny<int>())).Returns(
+                new SavingGoalTotals()
+                {
+                    MonthsToTarget = 3
+                });
+            mockDGL.Setup(x => x.GetDebtTotals(It.IsAny<int>())).Returns(
+                new DebtGoalTotals()
+                {
+                    MonthsToPayoff = 6
+                });
+            mockMGL.Setup(x => x.GetMortgageTotals(It.IsAny<int>())).Returns(
+                new MortgageGoalTotals()
+                {
+                    MonthsToPayoff = 9
+                });
+            mockSGL.Setup(x => x.GetBalanceOverTime(It.IsAny<int>(), It.IsAny<int>())).Returns(
+                new Dictionary<int, double>()
+                {
+                    {0, 1000.0 },
+                    {1, 2003.33 },
+                    {2, 3008.34 },
+                    {3, 4015.02 },
+                    {4, 4021.71 },
+                    {5, 4028.41 },
+                    {6, 4035.13 },
+                    {7, 4041.85 },
+                    {8, 4048.59 },
+                    {9, 4055.34 },
+                    {10, 4062.10 },
+                    {11, 4068.87 },
+                    {12, 4075.65 }
+                });
+            mockDGL.Setup(x => x.GetBalanceOverTime(It.IsAny<int>())).Returns(
+                new Dictionary<int, double>()
+                {
+                    {0, 4500.0 },
+                    {1, 3721.58 },
+                    {2, 2938.63 },
+                    {3, 2151.10 },
+                    {4, 1358.98 },
+                    {5, 562.24 },
+                    {6, 0.0 }
+                });
+            mockMGL.Setup(x => x.GetNetValueOverTime(It.IsAny<int>(), It.IsAny<int>())).Returns(
+                new Dictionary<int, double>()
+                {
+                    {0, 25000.0 },
+                    {1, 28075.0 },
+                    {2, 31162.67 },
+                    {3, 34263.07 },
+                    {4, 37376.25 },
+                    {5, 40502.26 },
+                    {6, 43641.15 },
+                    {7, 46792.99 },
+                    {8, 49957.81 },
+                    {9, 51520.16 },
+                    {10, 51691.89 },
+                    {11, 51864.20 },
+                    {12, 52037.08 }
+                });
+            mockIGL.Setup(x => x.GetBalanceOverTime(It.IsAny<int>())).Returns(
+                new Dictionary<int, double>()
+                {
+                    {0, 12000 },
+                    {1, 12952.35 },
+                    {2, 13913.03 },
+                    {3, 14882.12 },
+                    {4, 15859.69 },
+                    {5, 16845.81 },
+                    {6, 17840.56 },
+                    {7, 18844.02 },
+                    {8, 19856.25 },
+                    {9, 20877.35 },
+                    {10, 21907.37 },
+                    {11, 22946.41 },
+                    {12, 23994.54 }
+                });
+
+            //==================================================================================
+            var budgetLogic = new BudgetLogic(mockBS.Object, mockIS.Object,
+                                              mockES.Object, mockBIS.Object,
+                                              mockBES.Object, mockIGS.Object,
+                                              mockInvS.Object, mockIGIS.Object,
+                                              mockMGS.Object, mockDGS.Object,
+                                              mockDS.Object, mockDGDS.Object,
+                                              mockSGS.Object, mockIL.Object,
+                                              mockEL.Object, mockSGL.Object,
+                                              mockDGL.Object, mockMGL.Object,
+                                              mockIGL.Object
+                                              );
+            var expected = new NetWorthTotals()
+            {
+                Balance = new List<KeyValuePair<int, double>>()
+                    {
+                        new KeyValuePair<int, double>(0, 33500.0 ),
+                        new KeyValuePair<int, double>(1, 39309.10),
+                        new KeyValuePair<int, double>(2, 45145.41),
+                        new KeyValuePair<int, double>(3, 51009.11),
+                        new KeyValuePair<int, double>(4, 55898.67),
+                        new KeyValuePair<int, double>(5, 60814.24),
+                        new KeyValuePair<int, double>(6, 65516.84),
+                        new KeyValuePair<int, double>(7, 69678.86),
+                        new KeyValuePair<int, double>(8, 73862.65),
+                        new KeyValuePair<int, double>(9, 76452.85),
+                        new KeyValuePair<int, double>(10, 77661.36),
+                        new KeyValuePair<int, double>(11, 78879.48),
+                        new KeyValuePair<int, double>(12, 80107.27),
+                    },
+                SavingGoalMonth = 3,
+                DebtGoalMonth = 6,
+                MortgageGoalMonth = 9
+            };
+
+            var actual = budgetLogic.GetNetWorthOverTime(1);
+
+            actual.Should().BeEquivalentTo(expected);
+        }
     }
 }

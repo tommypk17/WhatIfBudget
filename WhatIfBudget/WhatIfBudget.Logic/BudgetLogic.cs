@@ -105,9 +105,11 @@ namespace WhatIfBudget.Logic
             monthlyNet -= dbSavingGoal.AdditionalBudgetAllocation;
 
             var dbDebtGoal = _debtGoalService.GetDebtGoal(dbBudget.DebtGoalId);
+            if (dbDebtGoal == null) { throw new NullReferenceException(); }
             monthlyNet -= dbDebtGoal.AdditionalBudgetAllocation;
 
             var dbMortgageGoal = _mortgageGoalService.GetMortgageGoal(dbBudget.MortgageGoalId);
+            if (dbMortgageGoal == null) { throw new NullReferenceException(); }
             monthlyNet -= dbMortgageGoal.AdditionalBudgetAllocation;
 
             var dbInvestmentGoal = _investmentGoalService.GetInvestmentGoal(dbBudget.InvestmentGoalId);
@@ -152,6 +154,8 @@ namespace WhatIfBudget.Logic
         {
             var dbBudget = _budgetService.GetBudget(budgetId);
             if (dbBudget == null) { throw new NullReferenceException(); }
+            var dbIG = _investmentGoalService.GetInvestmentGoal(dbBudget.InvestmentGoalId);
+            if (dbIG == null) { throw new NullReferenceException(); }
 
             var nwTotals = new NetWorthTotals();
             nwTotals.SavingGoalMonth = _savingGoalLogic.GetSavingTotals(dbBudget.SavingGoalId).MonthsToTarget;
@@ -159,45 +163,28 @@ namespace WhatIfBudget.Logic
             nwTotals.MortgageGoalMonth = _mortgageGoalLogic.GetMortgageTotals(dbBudget.MortgageGoalId).MonthsToPayoff;
             nwTotals.Balance = new List<KeyValuePair<int, double>>();
 
-            var savingBalance = _savingGoalLogic.GetBalanceOverTime(dbBudget.SavingGoalId);
+            var savingBalance = _savingGoalLogic.GetBalanceOverTime(dbBudget.SavingGoalId, dbIG.YearsToTarget * 12);
             var debtBalance = _debtGoalLogic.GetBalanceOverTime(dbBudget.DebtGoalId);
-            var mortBalance = _mortgageGoalLogic.GetNetValueOverTime(dbBudget.MortgageGoalId);
+            var mortBalance = _mortgageGoalLogic.GetNetValueOverTime(dbBudget.MortgageGoalId, dbIG.YearsToTarget * 12);
             var investBalance = _investmentGoalLogic.GetBalanceOverTime(dbBudget.InvestmentGoalId);
  
             foreach (int iMonth in investBalance.Keys.ToList())
             {
                 var netWorth = 0.0;
 
-                if (savingBalance.ContainsKey(iMonth))
-                {
-                    netWorth += savingBalance[iMonth];
-                }
-                else
-                {
-                    netWorth += savingBalance.Values.Last();
-                }
+                netWorth += savingBalance[iMonth];
 
                 if (debtBalance.ContainsKey(iMonth))
                 {
-                    netWorth += debtBalance[iMonth];
+                    netWorth -= debtBalance[iMonth];
                 }
-                else
-                {
-                    netWorth += debtBalance.Values.Last();
-                }
+                // Debt will be 0 when no key is found
 
-                if (mortBalance.ContainsKey(iMonth))
-                {
-                    netWorth += mortBalance[iMonth];
-                }
-                else
-                {
-                    netWorth += mortBalance.Values.Last();
-                }
+                netWorth += mortBalance[iMonth];
 
                 netWorth += investBalance[iMonth];
 
-                nwTotals.Balance.Add(new KeyValuePair<int, double> (iMonth, netWorth));
+                nwTotals.Balance.Add(new KeyValuePair<int, double> (iMonth, Math.Round(netWorth, 2)));
             }
 
             return nwTotals;
