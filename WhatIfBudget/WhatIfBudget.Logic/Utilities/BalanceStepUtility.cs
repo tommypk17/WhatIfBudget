@@ -85,7 +85,7 @@ namespace WhatIfBudget.Logic.Utilities
             // Incrementing up
             else
             {
-                if (monthlyContribution > 0)
+                if (monthlyContribution >= 0)
                 {
                     while (balance < target)
                     {
