@@ -16,6 +16,7 @@ export class SharedService {
   isLoadingEmit: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loggedInEmit: EventEmitter<void> = new EventEmitter<void>();
   budgetLoadedEmit: EventEmitter<void> = new EventEmitter<void>();
+  chartReloadEmit: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(private msalService: MsalService) { }
 
@@ -86,5 +87,15 @@ export class SharedService {
       return this.msalService.instance.getAllAccounts()[0];
     }
     return undefined;
+  }
+
+  reloadCharts(type: string): void {
+    if (type == 'all') {
+      this.chartReloadEmit.emit('mortgage');
+      this.chartReloadEmit.emit('investments');
+      this.chartReloadEmit.emit('savings');
+      this.chartReloadEmit.emit('debt');
+    }
+    else this.chartReloadEmit.emit(type);
   }
 }

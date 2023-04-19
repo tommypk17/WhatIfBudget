@@ -19,6 +19,7 @@ import { MortgageChartComponent } from './mortgage-chart/mortgage-chart.componen
 import { SavingChartComponent } from './saving-chart/saving-chart.component';
 import { InvestmentsChartComponent } from './investments-chart/investments-chart.component';
 import { DebtChartComponent } from './debt-chart/debt-chart.component';
+import { NetWorthChartComponent } from './net-worth-chart/net-worth-chart.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { DebtChartComponent } from './debt-chart/debt-chart.component';
     SavingChartComponent,
     InvestmentsChartComponent,
     DebtChartComponent,
+    NetWorthChartComponent,
   ],
   imports: [
     CommonModule,
@@ -51,6 +53,7 @@ import { DebtChartComponent } from './debt-chart/debt-chart.component';
     SavingChartComponent,
     InvestmentsChartComponent,
     DebtChartComponent,
+    NetWorthChartComponent,
   ]
 })
 export class SharedModule { }

@@ -4,6 +4,7 @@ export class InvestmentGoal {
   additionalBudgetAllocation: number | undefined;
   annualReturnRate_Percent: number | undefined;
   totalBalance: number | undefined
+  rolloverCompletedGoals: boolean = false;
 }
 
 export class InvestmentTotals {

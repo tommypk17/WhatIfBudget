@@ -106,6 +106,21 @@ export class InvestmentGoalService {
     );
   }
 
+  public toggleRolloverContributions(investmentGoalId: number): Observable<InvestmentGoal> {
+    //this.sharedService.queueLoading('updateIncome');
+    return this.http.put<InvestmentGoal>(environment.URL + `/api/investmentGoals/${investmentGoalId}/rollover`, null).pipe(
+      catchError((err, caught) => {
+        this.handleError(err);
+        return new Observable<InvestmentGoal>((subscriber) => {
+          subscriber.next(undefined);
+        })
+      }),
+      finalize(() => {
+        //this.sharedService.dequeueLoading('updateIncome');
+      })
+    );
+  }
+
   private handleError(err: any): void {
     console.log('Error: ' + err)
     //this.sharedService.clearLoading();

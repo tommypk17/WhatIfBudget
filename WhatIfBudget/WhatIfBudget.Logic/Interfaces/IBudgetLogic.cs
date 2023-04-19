@@ -16,10 +16,18 @@ namespace WhatIfBudget.Logic.Interfaces
 
         public double GetAvailableMonthlyNet(int budgetId);
 
+        public double GetCurrentNetWorth(int budgetId);
+
+        public NetWorthTotals GetNetWorthOverTime(int budgetId);
+
         public UserBudget? CreateUserBudget(Guid userId, UserBudget budget);
 
         public UserBudget? ModifyUserBudget(Guid userId, UserBudget budget);
 
-        public UserBudget? DeleteUserBudget(UserBudget budget);
+        public UserBudget? DeleteUserBudget(int budgetId);
+        public UserBudgetAllocations? GetUserBudgetAllocations(int budgetId);
+        public UserBudgetAllocations? UpdateUserBudgetAllocations(int budgetId, UserBudgetAllocations budgetAllocations);
+        public double GetBudgetAvailableFreeCash(int budgetId);
+
     }
 }

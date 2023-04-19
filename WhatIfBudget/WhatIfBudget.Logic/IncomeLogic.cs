@@ -8,6 +8,8 @@ using WhatIfBudget.Logic.Models;
 using WhatIfBudget.Services.Interfaces;
 using WhatIfBudget.Data.Models;
 using WhatIfBudget.Common.Enumerations;
+using WhatIfBudget.Services;
+using System.Collections;
 
 namespace WhatIfBudget.Logic
 {
@@ -105,20 +107,18 @@ namespace WhatIfBudget.Logic
 
         public UserIncome? DeleteBudgetIncome(int incomeId, int budgetId)
         {
-            // De-associate income element from current budget
-            var idToDelete = _budgetIncomeService.GetAllBudgetIncomes()
-                    .Where(x => x.IncomeId == incomeId && x.BudgetId == budgetId)
-                    .Select(x => x.Id)
-                    .FirstOrDefault();
-            var dbBudgetIncome = _budgetIncomeService.DeleteBudgetIncome(idToDelete);
-            if (dbBudgetIncome == null)
-            {
-                throw new NullReferenceException();
-            }
+            // Get all instances of this income being used
+            var biList = _budgetIncomeService.GetAllBudgetIncomes()
+                .Where(x => x.IncomeId == incomeId)
+                .ToList();
+            // Remove this budget income from the database
+            var thisBI = biList.Where(x => x.BudgetId == budgetId).FirstOrDefault();
+            if (thisBI == null) { throw new NullReferenceException(); }
+            var dbBudgetIncome = _budgetIncomeService.DeleteBudgetIncome(thisBI.Id);
+            if (dbBudgetIncome == null) { throw new NullReferenceException(); }
             // Delete income element if it is not associated with any other budget Id
-            if (!_budgetIncomeService.GetAllBudgetIncomes()
-                    .Where(x => x.IncomeId == incomeId)
-                    .Any())
+            biList.Remove(thisBI);
+            if (!biList.Where(x => x.IncomeId == incomeId).Any())
             {
                 var dbDeleteIncome = _incomeService.DeleteIncome(dbBudgetIncome.IncomeId);
                 if (dbDeleteIncome == null)

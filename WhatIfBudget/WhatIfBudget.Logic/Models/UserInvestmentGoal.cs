@@ -19,7 +19,8 @@ namespace WhatIfBudget.Logic.Models
                 Id = Id,
                 AnnualReturnRate_Percent = AnnualReturnRate_Percent,
                 YearsToTarget = YearsToTarget,
-                AdditionalBudgetAllocation = AdditionalBudgetAllocation
+                AdditionalBudgetAllocation = AdditionalBudgetAllocation,
+                RolloverCompletedGoals = RolloverCompletedGoals
             };
         }
 
@@ -30,7 +31,8 @@ namespace WhatIfBudget.Logic.Models
                 Id = investmentGoal.Id,
                 AnnualReturnRate_Percent = investmentGoal.AnnualReturnRate_Percent,
                 YearsToTarget = investmentGoal.YearsToTarget,
-                AdditionalBudgetAllocation = investmentGoal.AdditionalBudgetAllocation
+                AdditionalBudgetAllocation = investmentGoal.AdditionalBudgetAllocation,
+                RolloverCompletedGoals = investmentGoal.RolloverCompletedGoals
             };
         }
     }

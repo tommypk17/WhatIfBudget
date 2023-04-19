@@ -77,7 +77,7 @@ namespace WhatIfBudget.Logic
             var debtList = _debtService.GetDebtsByDebtGoalId(debtGoal.Id);
 
             // Return Values
-            Dictionary<int, double> balanceDict = new Dictionary<int, double>();
+            var balanceDict = new Dictionary<int, double>();
             var debtGoalTotals = new DebtGoalTotals();
 
             var orderedDebtList = OrderDebtAvalanche(debtList);
@@ -94,7 +94,6 @@ namespace WhatIfBudget.Logic
             {
                 var currentBalance = debt.CurrentBalance;
                 var interestRate = debt.InterestRate / 12;
-                var interestAccrued = 0.0;
 
                 var balanceStepper = new BalanceStepUtility(currentBalance, interestRate);
                 var allocationStepper = new BalanceStepUtility(currentBalance, interestRate);

@@ -69,11 +69,29 @@ namespace WhatIfBudget.Logic.Utilities
             NumberOfSteps++;
             return Math.Round(interestAccrued, 2);
         }
-        public void StepToZero(double monthlyContribution)
+        public void StepToTarget(double monthlyContribution, double target)
         {
-            while (Balance > 0)
+            // Incrementing down
+            if (target < balance)
             {
-                Step(monthlyContribution);
+                if (monthlyContribution < 0)
+                {
+                    while (balance > target)
+                    {
+                        Step(monthlyContribution);
+                    }
+                }
+            }
+            // Incrementing up
+            else
+            {
+                if (monthlyContribution >= 0)
+                {
+                    while (balance < target)
+                    {
+                        Step(monthlyContribution);
+                    }
+                }
             }
         }
 

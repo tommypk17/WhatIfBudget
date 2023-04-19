@@ -26,6 +26,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService } from 'primeng/api';
 import { MortgageEntryFormComponent } from './components/mortgage-entry-form/mortgage-entry-form.component';
 import { ChartModule } from 'primeng/chart';
+import { CheckboxModule } from 'primeng/checkbox';
 import { SavingEntryFormComponent } from './components/saving-entry-form/saving-entry-form.component';
 import { SharedModule } from '../../shared/shared.module';
 import { DebtEntryFormComponent } from './components/debt-entry-form/debt-entry-form.component';
@@ -64,7 +65,8 @@ import { DebtListingComponent } from './components/debt-listing/debt-listing.com
     TableModule,
     DialogModule,
     ConfirmPopupModule,
-    ChartModule
+    ChartModule,
+    CheckboxModule
   ],
   exports: [
     GoalNavigationComponent

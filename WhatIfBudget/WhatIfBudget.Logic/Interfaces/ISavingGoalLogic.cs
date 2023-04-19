@@ -11,7 +11,7 @@ namespace WhatIfBudget.Logic.Interfaces
     {
         public UserSavingGoal? GetSavingGoal(int savingGoalId);
         public SavingGoalTotals GetSavingTotals(int savingGoalId);
-        public Dictionary<int, double> GetBalanceOverTime(int savingGoalId);
+        public Dictionary<int, double> GetBalanceOverTime(int savingGoalId, int totalMonths = 0);
         public UserSavingGoal? ModifyUserSavingGoal(UserSavingGoal savingGoal);
     }
 }

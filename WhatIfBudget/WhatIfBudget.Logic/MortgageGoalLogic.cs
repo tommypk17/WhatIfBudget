@@ -37,23 +37,20 @@ namespace WhatIfBudget.Logic
             var res = UserMortgageGoal.FromMortgageGoal(dbMortgageGoal);
 
             var balanceStepper = new BalanceStepUtility(res.TotalBalance, res.InterestRate_Percent / 12);
-            var allocationStepper = new BalanceStepUtility(res.TotalBalance, res.InterestRate_Percent / 12);
 
             // Return Values
             var MortgageGoalTotals = new MortgageGoalTotals();
 
             // Allocation stepper will always equal or lag balance stepper
-            balanceStepper.StepToZero(-1 * (res.MonthlyPayment + res.AdditionalBudgetAllocation));
-            allocationStepper.StepToZero(-1 * res.MonthlyPayment);
+            balanceStepper.StepToTarget(-1 * (res.MonthlyPayment + res.AdditionalBudgetAllocation), 0.0);
 
             MortgageGoalTotals.MonthsToPayoff = balanceStepper.NumberOfSteps;
             MortgageGoalTotals.TotalInterestAccrued = balanceStepper.InterestAccumulated;
             MortgageGoalTotals.TotalCostToPayoff = balanceStepper.CumulativeContribution;
-            MortgageGoalTotals.AllocationSavings = Math.Round(allocationStepper.CumulativeContribution - balanceStepper.CumulativeContribution, 2);
             return MortgageGoalTotals;
         }
 
-        public Dictionary<int, double> GetNetValueOverTime(int MortgageGoalId)
+        public Dictionary<int, double> GetNetValueOverTime(int MortgageGoalId, int totalMonths = 0)
         {
             var dbMortgageGoal = _mortgageGoalService.GetMortgageGoal(MortgageGoalId);
             if (dbMortgageGoal is null) { throw new NullReferenceException(); }
@@ -69,16 +66,16 @@ namespace WhatIfBudget.Logic
             {
                 _ = balanceStepper.Step(-1 * (res.MonthlyPayment + res.AdditionalBudgetAllocation));
                 _ = valueStepper.Step(0.0);
-                if (balanceStepper.NumberOfSteps % 12 == 0)
-                {
-                    netDict[balanceStepper.NumberOfSteps / 12] = valueStepper.Balance - balanceStepper.Balance;
-                }
+                netDict[balanceStepper.NumberOfSteps] = Math.Round(valueStepper.Balance - balanceStepper.Balance, 2);
             }
-            // Final dictionary entry is home value
-            var endYear = Math.Ceiling(balanceStepper.NumberOfSteps / 12.0);
-            netDict[(int)endYear] = valueStepper.Balance;
-            Console.WriteLine("Balance steps: {0} Value steps: {1}", balanceStepper.NumberOfSteps, valueStepper.NumberOfSteps);
+            // Further dictionary entries are just home value
+            netDict[balanceStepper.NumberOfSteps] = valueStepper.Balance;
 
+            while (valueStepper.NumberOfSteps < totalMonths)
+            {
+                _ = valueStepper.Step(0.0);
+                netDict[valueStepper.NumberOfSteps] = valueStepper.Balance;
+            }
             return netDict;
         }
 
@@ -99,18 +96,14 @@ namespace WhatIfBudget.Logic
             while (stepper.Balance > 0.0)
             {
                  _ = stepper.Step(-1 * (res.MonthlyPayment + res.AdditionalBudgetAllocation));
-                if (stepper.NumberOfSteps % 12 == 0)
-                {
-                    amorDict[stepper.NumberOfSteps / 12] = new List<double>()
+                    amorDict[stepper.NumberOfSteps] = new List<double>()
                     {
                         stepper.Balance, // Balance
                         stepper.CumulativeContribution - stepper.InterestAccumulated, // Principle paid down so far
                         stepper.InterestAccumulated // Interest paid so far
                     };
-                 }
             }
-            var endYear = Math.Ceiling(stepper.NumberOfSteps / 12.0);
-            amorDict[(int)endYear] = new List<double>()
+            amorDict[stepper.NumberOfSteps] = new List<double>()
                     {
                         stepper.Balance, // Balance
                         stepper.CumulativeContribution - stepper.InterestAccumulated, // Principle paid down so far

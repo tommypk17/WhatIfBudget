@@ -15,9 +15,44 @@ export class SavingChartComponent implements OnInit {
   constructor(private savingGoalService: SavingGoalService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
-    let months: string[] = [];
-    let values: number[] = []
+    this.loadChartInfo();
+    this.sharedService.chartReloadEmit.subscribe((type: string) => {
+      if(type == 'savings')
+      this.loadChartInfo();
+    });
 
+    this.basicOptions = {
+      plugins: {
+        legend: {
+          labels: {
+            color: '#495057'
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: '#495057'
+          },
+          grid: {
+            color: '#ebedef'
+          }
+        },
+        y: {
+          ticks: {
+            color: '#495057'
+          },
+          grid: {
+            color: '#ebedef'
+          }
+        }
+      }
+    };
+  }
+
+  loadChartInfo(): void {
+    let months: string[] = [];
+    let values: number[] = [];
 
     this.savingGoalService.getBalanceOverTime(this.sharedService.budget.savingGoalId!).subscribe((res: KeyValue<number, number>[]) => {
       if (res) {
@@ -54,37 +89,5 @@ export class SavingChartComponent implements OnInit {
         };
       }
     });
-
-
-
-
-    this.basicOptions = {
-      plugins: {
-        legend: {
-          labels: {
-            color: '#495057'
-          }
-        }
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: '#495057'
-          },
-          grid: {
-            color: '#ebedef'
-          }
-        },
-        y: {
-          ticks: {
-            color: '#495057'
-          },
-          grid: {
-            color: '#ebedef'
-          }
-        }
-      }
-    };
   }
-
 }

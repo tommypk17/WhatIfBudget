@@ -15,35 +15,12 @@ export class InvestmentsChartComponent implements OnInit {
   constructor(private investmentGoalService: InvestmentGoalService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
-    let years: string[] = [];
-    let values: number[] = []
-
-
-    this.investmentGoalService.getBalanceOverTime(this.sharedService.budget.investmentGoalId!).subscribe((res: KeyValue<number, number>[]) => {
-      if (res) {
-        res.forEach((v) => {
-          years.push('Year ' + v.key)
-          values.push(v.value);
-        });
-
-        this.basicData = {
-          labels: years,
-          datasets: [
-            {
-              label: '$',
-              data: values,
-              fill: false,
-              backgroundColor: 'rgba(16,124,16,1)',
-              tension: .4
-            }
-          ]
-        };
-      }
+    this.loadChartInfo();
+    this.sharedService.chartReloadEmit.subscribe((type: string) => {
+      if (type == 'investments')
+        this.loadChartInfo();
     });
-
-
-
-
+    
     this.basicOptions = {
       plugins: {
         legend: {
@@ -73,4 +50,46 @@ export class InvestmentsChartComponent implements OnInit {
     };
   }
 
+  loadChartInfo(): void {
+    let months: string[] = [];
+    let values: number[] = []
+
+    this.investmentGoalService.getBalanceOverTime(this.sharedService.budget.investmentGoalId!).subscribe((res: KeyValue<number, number>[]) => {
+      if (res) {
+        if (res.length > 12) {
+          res.forEach((v, i) => {
+            if (v.key % 12 == 0) {
+              months.push('Year ' + v.key / 12)
+              values.push(v.value);
+            }
+            else {
+              if (i == res.length - 1) {
+                months.push('Year ' + (v.key / 12).toFixed(2))
+                values.push(v.value);
+              }
+            }
+          });
+        }
+        else {
+          res.forEach((v) => {
+            months.push('Month ' + v.key)
+            values.push(v.value);
+          });
+        }
+
+        this.basicData = {
+          labels: months,
+          datasets: [
+            {
+              label: '$',
+              data: values,
+              fill: false,
+              backgroundColor: 'rgba(16,124,16,1)',
+              tension: .4
+            }
+          ]
+        };
+      }
+    });
+  }
 }

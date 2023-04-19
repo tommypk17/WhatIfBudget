@@ -11,7 +11,7 @@ namespace WhatIfBudget.Logic.Interfaces
     {
         public UserMortgageGoal? GetMortgageGoal(int MortgageGoalId);
         public MortgageGoalTotals GetMortgageTotals(int MortgageGoalId);
-        public Dictionary<int, double> GetNetValueOverTime(int MortgageGoalId);
+        public Dictionary<int, double> GetNetValueOverTime(int MortgageGoalId, int totalMonths = 0);
         public Dictionary<int, List<double>> GetAmortizationTable(int MortgageGoalId);
         public UserMortgageGoal? ModifyUserMortgageGoal(UserMortgageGoal MortgageGoal);
     }

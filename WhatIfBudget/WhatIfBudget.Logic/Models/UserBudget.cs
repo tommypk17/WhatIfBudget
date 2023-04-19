@@ -39,4 +39,20 @@ namespace WhatIfBudget.Logic.Models
             };
         }
     }
+
+    public class UserBudgetAllocations
+    {
+        public double DebtGoal { get; set; } = 0;
+        public double MortgageGoal { get; set; } = 0;
+        public double SavingGoal { get; set; } = 0;
+        public double InvestmentGoal { get; set; } = 0;
+    }
+
+    public class NetWorthTotals
+    {
+        public List<KeyValuePair<int, double>> Balance { get; set; } = new List<KeyValuePair<int, double>>();
+        public int SavingGoalMonth { get; set; } = 0;
+        public int DebtGoalMonth { get; set; } = 0;
+        public int MortgageGoalMonth { get; set; } = 0;
+    }
 }

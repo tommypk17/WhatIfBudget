@@ -79,18 +79,18 @@ namespace WhatIfBudget.Logic
 
         public UserInvestment? DeleteInvestment(int investmentId, int investmentGoalId)
         {
-            // De-associate investment from current goal
-            var idToDelete = _igiService.GetAllInvestmentGoalInvestments()
-                .Where(x => x.InvestmentId == investmentId && x.InvestmentGoalId == investmentGoalId)
-                .Select(x => x.Id)
-                .FirstOrDefault();
-            var dbIGI = _igiService.DeleteInvestmentGoalInvestment(idToDelete);
-            if (dbIGI == null) { throw new NullReferenceException() ; }
-
-            // Delete investment if it has no remaining associations
-            if (!_igiService.GetAllInvestmentGoalInvestments()
-                    .Where(x => x.InvestmentId == investmentId)
-                    .Any())
+            // Get all instances of this investment being used
+            var igiList = _igiService.GetAllInvestmentGoalInvestments()
+                            .Where(x => x.InvestmentId == investmentId)
+                            .ToList();
+            // Remove this investment goal investment from the database
+            var thisIGI = igiList.Where(x => x.InvestmentGoalId == investmentGoalId).FirstOrDefault();
+            if (thisIGI == null) { throw new NullReferenceException(); }
+            var dbIGI = _igiService.DeleteInvestmentGoalInvestment(thisIGI.Id);
+            if (dbIGI == null) { throw new NullReferenceException(); }
+            // Delete investment element if it is not associated with any other investment goal ID
+            igiList.Remove(thisIGI);
+            if (!igiList.Where(x => x.InvestmentId == investmentId).Any())
             {
                 var dbDeleteInvestment = _investmentService.DeleteInvestment(dbIGI.InvestmentId);
                 if (dbDeleteInvestment == null) { throw new NullReferenceException(); }

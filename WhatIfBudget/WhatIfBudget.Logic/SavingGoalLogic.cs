@@ -21,26 +21,6 @@ namespace WhatIfBudget.Logic
             _savingGoalService = savingGoalService;
         }
 
-        private (Dictionary<int, double>, SavingGoalTotals) CalculateSavingsOverTime(UserSavingGoal savingGoal)
-        {
-            var stepper = new BalanceStepUtility(savingGoal.CurrentBalance, savingGoal.AnnualReturnRate_Percent / 12);
-
-            // Return Values
-            var balanceDict = new Dictionary<int, double> { { 0, 0.0 } };
-            var savingGoalTotals = new SavingGoalTotals();
-
-            balanceDict[0] = stepper.Balance;
-            while (stepper.Balance < savingGoal.TargetBalance)
-            {
-                _ = stepper.Step(savingGoal.AdditionalBudgetAllocation);
-                balanceDict[stepper.NumberOfSteps] = stepper.Balance;
-            }
-            // Final dictionary entry is full balance
-            savingGoalTotals.MonthsToTarget = stepper.NumberOfSteps;
-            savingGoalTotals.TotalInterestAccrued = stepper.InterestAccumulated;
-            return (balanceDict, savingGoalTotals);
-        }
-
         public UserSavingGoal? GetSavingGoal(int savingGoalId)
         {
             var dbSavingGoal = _savingGoalService.GetSavingGoal(savingGoalId);
@@ -55,16 +35,38 @@ namespace WhatIfBudget.Logic
             var dbSavingGoal = _savingGoalService.GetSavingGoal(savingGoalId);
             if (dbSavingGoal is null) { throw new NullReferenceException(); }
             var res = UserSavingGoal.FromSavingGoal(dbSavingGoal);
-            (_, var totals) = CalculateSavingsOverTime(res);
-            return totals;
+
+            var stepper = new BalanceStepUtility(dbSavingGoal.CurrentBalance, dbSavingGoal.AnnualReturnRate_Percent / 12);
+            var savingGoalTotals = new SavingGoalTotals();
+            stepper.StepToTarget(dbSavingGoal.AdditionalBudgetAllocation, dbSavingGoal.TargetBalance);
+            savingGoalTotals.MonthsToTarget = stepper.NumberOfSteps;
+            savingGoalTotals.TotalInterestAccrued = stepper.InterestAccumulated;
+
+            return savingGoalTotals;
         }
 
-        public Dictionary<int, double> GetBalanceOverTime(int savingGoalId)
+        public Dictionary<int, double> GetBalanceOverTime(int savingGoalId, int totalMonths = 0)
         {
             var dbSavingGoal = _savingGoalService.GetSavingGoal(savingGoalId);
             if (dbSavingGoal is null) { throw new NullReferenceException(); }
             var res = UserSavingGoal.FromSavingGoal(dbSavingGoal);
-            (var balanceDict, _) = CalculateSavingsOverTime(res);
+
+            var stepper = new BalanceStepUtility(dbSavingGoal.CurrentBalance, dbSavingGoal.AnnualReturnRate_Percent / 12);
+            var balanceDict = new Dictionary<int, double> { { 0, 0.0 } };
+
+            balanceDict[0] = stepper.Balance;
+            while (stepper.Balance < dbSavingGoal.TargetBalance)
+            {
+                _ = stepper.Step(dbSavingGoal.AdditionalBudgetAllocation);
+                balanceDict[stepper.NumberOfSteps] = stepper.Balance;
+            }
+            // Further dictionary entries only accumulate interest
+            while (stepper.NumberOfSteps < totalMonths)
+            {
+                _ = stepper.Step(0.0);
+                balanceDict[stepper.NumberOfSteps] = stepper.Balance;
+            }
+
             return balanceDict;
         }
 

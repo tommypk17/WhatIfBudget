@@ -21,6 +21,7 @@
     "@azure/msal-angular": "^2.5.2",
     "@azure/msal-browser": "^2.32.2",
     "chart.js": "^3.9.1",
+    "chartjs-plugin-annotation": "^2.2.1",
     "primeicons": "^6.0.1",
     "primeng": "^14.2.3",
     "rxjs": "~7.5.0",

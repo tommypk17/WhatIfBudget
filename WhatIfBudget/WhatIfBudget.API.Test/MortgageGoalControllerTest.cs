@@ -123,7 +123,6 @@ namespace WhatIfBudget.API.Test
                     MonthsToPayoff = 240,
                     TotalInterestAccrued = 50000.0,
                     TotalCostToPayoff = 250000.0,
-                    AllocationSavings = 60000.0
                 });
 
             //Setup the http context (for auth)
@@ -140,7 +139,6 @@ namespace WhatIfBudget.API.Test
                 MonthsToPayoff = 240,
                 TotalInterestAccrued = 50000.0,
                 TotalCostToPayoff = 250000.0,
-                AllocationSavings = 60000.0
             };
             var expected = new ObjectResult(expectedValue)
             {
@@ -157,8 +155,8 @@ namespace WhatIfBudget.API.Test
         public void Get_MortgageNetOverTime()
         {
             //mock Mortgage goal logic
-            var mockSGL = new Mock<IMortgageGoalLogic>();
-            mockSGL.Setup(x => x. GetNetValueOverTime(It.IsAny<int>())).Returns
+            var mockMGL = new Mock<IMortgageGoalLogic>();
+            mockMGL.Setup(x => x. GetNetValueOverTime(It.IsAny<int>(), 0)).Returns
                 (new Dictionary<int, double>()
                 {
                     {0, 100000.0 },
@@ -169,7 +167,7 @@ namespace WhatIfBudget.API.Test
                 });
 
             //Setup the http context (for auth)
-            var MortgageController = new MortgageGoalsController(mockSGL.Object)
+            var MortgageController = new MortgageGoalsController(mockMGL.Object)
             {
                 ControllerContext = new ControllerContext()
                 {
