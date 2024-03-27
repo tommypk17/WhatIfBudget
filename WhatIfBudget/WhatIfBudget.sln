@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatIfBudget.Logic.Test", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatIfBudget.Common.Test", "WhatIfBudget.Common.Test\WhatIfBudget.Common.Test.csproj", "{C9AD1198-D3C5-4C76-827C-02D06614412D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatIfBudget.Mongo.Data", "WhatIfBudget.Mongo.Data\WhatIfBudget.Mongo.Data.csproj", "{4664BAD2-ED7B-4282-818D-23589DE14056}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{C9AD1198-D3C5-4C76-827C-02D06614412D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9AD1198-D3C5-4C76-827C-02D06614412D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9AD1198-D3C5-4C76-827C-02D06614412D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4664BAD2-ED7B-4282-818D-23589DE14056}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4664BAD2-ED7B-4282-818D-23589DE14056}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4664BAD2-ED7B-4282-818D-23589DE14056}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4664BAD2-ED7B-4282-818D-23589DE14056}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
